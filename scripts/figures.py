@@ -1357,6 +1357,42 @@ def fol_quant_order():
     return svg(640, 248, "".join(body), "Quantifier order in first-order logic")
 
 
+# ---------------------------------------------------------------- AI: Bayesian networks
+
+
+@fig("bn-structures", "The three ways two variables A and C can connect through B. In a chain and a fork, A and C are dependent "
+     "until B is observed, and observing B blocks the path. In a collider (common effect), A and C are independent until B "
+     "(or any descendant of B) is observed; observing it opens the path ('explaining away').")
+def bn_structures():
+    body = []
+    panels = [("chain  A → B → C", [("A", "B"), ("B", "C")], "observe B → blocked"),
+              ("fork  A ← B → C", [("B", "A"), ("B", "C")], "observe B → blocked"),
+              ("collider  A → B ← C", [("A", "B"), ("C", "B")], "observe B → OPENED")]
+    for k, (title, edges, rule) in enumerate(panels):
+        ox = 15 + k * 205
+        nodes = {"A": (ox + 35, 100), "B": (ox + 95, 60 if k else 100), "C": (ox + 155, 100)}
+        if k == 0:
+            nodes = {"A": (ox + 30, 100), "B": (ox + 95, 100), "C": (ox + 160, 100)}
+        body.append(f'<text class="title" x="{ox + 95}" y="20" text-anchor="middle">{title}</text>')
+        body += _graph(nodes, [(a, b, "") for a, b in edges], hl_path=("B",), r=16)
+        body.append(f'<text class="{"t-warn" if k == 2 else "t-mut"}" x="{ox + 95}" y="150" text-anchor="middle">{rule}</text>')
+        body.append(f'<text class="t-mut" x="{ox + 95}" y="170" text-anchor="middle">{"A ⊥ C unconditionally" if k == 2 else "A, C dependent if B unseen"}</text>')
+    return svg(630, 185, "".join(body), "Chain, fork and collider structures")
+
+
+@fig("bn-q24", "The network for 2024 Q24: P(U)P(V)P(W | U, V)P(X | W)P(Y | W). W is a collider for U and V, and a fork for X and Y. "
+     "Given W: X ⊥ U, Y ⊥ V and X ⊥ Y all hold, but U and V become dependent.")
+def bn_q24():
+    nodes = {"U": (90, 40), "V": (250, 40), "W": (170, 110), "X": (100, 180), "Y": (240, 180)}
+    edges = [("U", "W", ""), ("V", "W", ""), ("W", "X", ""), ("W", "Y", "")]
+    body = _graph(nodes, edges, hl_path=("W",), r=17)
+    notes = [("given W:", "t-mut"), ("X ⊥ U  ✓", "t-ink"), ("Y ⊥ V  ✓", "t-ink"), ("X ⊥ Y  ✓ (fork blocked)", "t-ink"),
+             ("U ⊥ V  ✗ (collider opened)", "t-warn")]
+    for i, (t, c) in enumerate(notes):
+        body.append(f'<text class="{c}" x="320" y="{50 + i * 30}">{t}</text>')
+    return svg(560, 215, "".join(body), "Bayesian network of 2024 Q24")
+
+
 # ---------------------------------------------------------------- injection
 
 
