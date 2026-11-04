@@ -396,6 +396,60 @@ def linear_boundary():
     return svg(500, 320, "".join(body), "Linear decision boundary with normal vector")
 
 
+# ---------------------------------------------------------------- evaluation metrics
+
+
+@fig("cm-layout", "The confusion matrix for a binary problem. Rows are the truth, columns the prediction. Precision reads down "
+     "the 'predicted positive' column; recall reads across the 'actually positive' row.")
+def cm_layout():
+    x0, y0, cw, ch = 150, 60, 180, 70
+    cells = [("TP", "true positive", "box-ink", "on-ink"), ("FN", "false negative (missed)", "box", ""),
+             ("FP", "false positive (false alarm)", "box", ""), ("TN", "true negative", "box", "")]
+    body = [f'<text class="title" x="{x0 + cw}" y="22" text-anchor="middle">predicted</text>',
+            f'<text class="t-mut" x="{x0 + cw / 2}" y="{y0 - 10}" text-anchor="middle">positive</text>',
+            f'<text class="t-mut" x="{x0 + 1.5 * cw}" y="{y0 - 10}" text-anchor="middle">negative</text>',
+            f'<text class="title" x="40" y="{y0 + ch}" text-anchor="middle" transform="rotate(-90 40 {y0 + ch})">actual</text>',
+            f'<text class="t-mut" x="{x0 - 10}" y="{y0 + ch / 2 + 4}" text-anchor="end">positive</text>',
+            f'<text class="t-mut" x="{x0 - 10}" y="{y0 + 1.5 * ch + 4}" text-anchor="end">negative</text>']
+    for i, (abbr, desc, cls, tcls) in enumerate(cells):
+        r, c = divmod(i, 2)
+        x = x0 + c * cw; y = y0 + r * ch
+        body.append(f'<rect class="{cls}" x="{x + 3}" y="{y + 3}" width="{cw - 6}" height="{ch - 6}" rx="6"/>')
+        body.append(f'<text class="{tcls or "title"}" x="{x + cw / 2}" y="{y + 30}" text-anchor="middle" style="font-size:16px;font-weight:700">{abbr}</text>')
+        body.append(f'<text class="{tcls or "t-mut"}" x="{x + cw / 2}" y="{y + 50}" text-anchor="middle">{desc}</text>')
+    body.append(f'<rect x="{x0 - 2}" y="{y0 - 2}" width="{cw + 4}" height="{2 * ch + 4}" rx="8" class="hl" style="fill:none;stroke-width:2"/>')
+    body.append(f'<text class="t-hl" x="{x0 + cw / 2}" y="{y0 + 2 * ch + 22}" text-anchor="middle">precision = TP/(TP+FP)</text>')
+    body.append(f'<rect x="{x0 - 2}" y="{y0 - 2}" width="{2 * cw + 4}" height="{ch + 4}" rx="8" class="warn" style="fill:none;stroke-width:2;stroke-dasharray:6 4"/>')
+    body.append(f'<text class="t-warn" x="{x0 + 2 * cw + 12}" y="{y0 + ch / 2 + 4}">recall = TP/(TP+FN)</text>')
+    return svg(700, y0 + 2 * ch + 34, "".join(body), "Confusion matrix layout")
+
+
+@fig("roc-example", "ROC curve for 3 positives scored 0.9, 0.7, 0.4 and 4 negatives scored 0.8, 0.3, 0.2, 0.1. Lowering the threshold "
+     "past each score moves up (a positive) or right (a negative). The shaded area is AUC = 10/12 ≈ 0.833; "
+     "the dashed diagonal is a random classifier (AUC = 0.5).")
+def roc_example():
+    pts = [(0, 0), (0, 1 / 3), (0.25, 1 / 3), (0.25, 2 / 3), (0.25, 1), (0.5, 1), (0.75, 1), (1, 1)]
+    p = Plot(70, 20, 300, 260, (0, 1), (0, 1))
+    body = [p.axes("false positive rate (1 − specificity)", "true positive rate (recall)", xoff=34, yoff=40)]
+    for t in (0, 0.25, 0.5, 0.75, 1):
+        body.append(f'<text class="t-mut" x="{p.X(t):.1f}" y="{p.Y(0) + 15:.1f}" text-anchor="middle">{t:g}</text>')
+    for t in (0, 1 / 3, 2 / 3, 1):
+        body.append(f'<text class="t-mut" x="{p.X(0) - 6:.1f}" y="{p.Y(t) + 4:.1f}" text-anchor="end">{t:.2f}</text>')
+    poly = pts + [(1, 0)]
+    body.append('<polygon style="fill:var(--gd-ink);fill-opacity:.14" points="' + " ".join(f"{p.X(a):.1f},{p.Y(b):.1f}" for a, b in poly) + '"/>')
+    body.append(f'<line class="mut" x1="{p.X(0):.1f}" y1="{p.Y(0):.1f}" x2="{p.X(1):.1f}" y2="{p.Y(1):.1f}"/>')
+    body.append(p.path([a for a, _ in pts], [b for _, b in pts], "ink"))
+    labels = ["0.9 (+)", "0.8 (−)", "0.7 (+)", "0.4 (+)", "0.3 (−)", "0.2 (−)", "0.1 (−)"]
+    for (a, b), lab in zip(pts[1:], labels):
+        body.append(f'<circle class="dot-ink" cx="{p.X(a):.1f}" cy="{p.Y(b):.1f}" r="3.5"/>')
+    body.append(f'<text class="t-ink" x="{p.X(0.55):.1f}" y="{p.Y(0.45):.1f}">AUC = 0.833</text>')
+    body.append(f'<text class="t-mut" x="{p.X(0.62):.1f}" y="{p.Y(0.66):.1f}">random (0.5)</text>')
+    body.append(f'<text class="t-mut" x="{p.X(1) + 18:.1f}" y="{p.Y(1) + 4:.1f}">threshold steps:</text>')
+    for i, lab in enumerate(labels):
+        body.append(f'<text class="{"t-ink" if "+" in lab else "t-mut"}" x="{p.X(1) + 18:.1f}" y="{p.Y(1) + 22 + i * 17:.1f}">{lab} → {"up" if "+" in lab else "right"}</text>')
+    return svg(560, 320, "".join(body), "ROC curve of a worked example")
+
+
 # ---------------------------------------------------------------- injection
 
 

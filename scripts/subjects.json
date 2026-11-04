@@ -356,7 +356,8 @@
     "title": "Evaluation metrics",
     "priority": "high",
     "pyqs": 1,
-    "blurb": "Confusion matrix, accuracy, precision, recall, F1, ROC and AUC, imbalanced classes."
+    "blurb": "Confusion matrix, accuracy, precision, recall, F1, ROC and AUC, imbalanced classes.",
+    "page": "evaluation-metrics"
    },
    {
     "title": "k-NN & naive Bayes",
