@@ -32,4 +32,4 @@ Fixed order of sections:
 - `npm run build` must pass before committing.
 
 ## 4. Commit
-Commit as the user (repo-local git config `user.name = ash_you09`). No co-author trailer.
+Commit as the user (repo-local git config `user.name = ash_you09`). No co-author trailer. Push straight to `main`.
