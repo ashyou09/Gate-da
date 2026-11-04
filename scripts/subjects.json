@@ -325,48 +325,78 @@
   "syllabus": "Supervised learning: regression and classification problems, simple linear regression, multiple linear regression, ridge regression, logistic regression, k-nearest neighbour, naive Bayes classifier, linear discriminant analysis, support vector machine, decision trees, bias-variance trade-off, cross-validation methods such as leave-one-out (LOO) and k-folds cross-validation, multi-layer perceptron, feed-forward neural network. Unsupervised learning: clustering algorithms, k-means/k-medoid, hierarchical clustering, top-down, bottom-up: single-linkage, multiple-linkage, dimensionality reduction, principal component analysis.",
   "topics": [
    {
-    "title": "ML basics, bias-variance, overfitting & cross-validation",
-    "priority": "high"
+    "title": "ML foundations: learning types, bias–variance, cross-validation",
+    "priority": "high",
+    "page": "ml-foundations",
+    "pyqs": 4,
+    "blurb": "Supervised vs unsupervised, generative vs discriminative, overfitting, the bias–variance trade-off, k-fold and leave-one-out CV."
    },
    {
-    "title": "Linear regression: simple, multiple, ridge (and lasso)",
-    "priority": "high"
+    "title": "Linear regression & gradient descent",
+    "priority": "high",
+    "page": "linear-regression",
+    "pyqs": 2,
+    "blurb": "Least squares from scratch, the normal equation, R², and one-step gradient / SGD updates."
    },
    {
-    "title": "Logistic regression",
-    "priority": "high"
+    "title": "Ridge & lasso regularization",
+    "priority": "high",
+    "pyqs": 2,
+    "blurb": "L2 vs L1 penalties, shrinkage vs sparsity, effect of λ on bias and variance, regularized loss numericals."
    },
    {
-    "title": "Evaluation metrics: confusion matrix, precision, recall, F1, ROC",
-    "priority": "high"
+    "title": "Logistic regression & linear classifiers",
+    "priority": "high",
+    "pyqs": 4,
+    "blurb": "Sigmoid and its derivative, cross-entropy, decision boundaries, the perceptron update, linear separability."
+   },
+   {
+    "title": "Evaluation metrics",
+    "priority": "high",
+    "pyqs": 1,
+    "blurb": "Confusion matrix, accuracy, precision, recall, F1, ROC and AUC, imbalanced classes."
    },
    {
     "title": "k-NN & naive Bayes",
-    "priority": "med"
+    "priority": "high",
+    "pyqs": 3,
+    "blurb": "Distance-based voting and the effect of k; Bayes-rule classification, parameter counting, misclassification probability."
    },
    {
     "title": "Linear discriminant analysis",
-    "priority": "med"
+    "priority": "med",
+    "pyqs": 2,
+    "blurb": "Fisher's criterion, between- and within-class scatter, the generalized eigenvalue equation, nearest-mean classifiers."
    },
    {
     "title": "Support vector machines",
-    "priority": "med"
+    "priority": "high",
+    "pyqs": 2,
+    "blurb": "Maximum margin, support vectors, hard vs soft margin, hinge loss and kernels."
    },
    {
-    "title": "Decision trees: entropy, information gain, Gini",
-    "priority": "high"
+    "title": "Decision trees",
+    "priority": "med",
+    "pyqs": 1,
+    "blurb": "Entropy, information gain and Gini, building splits by hand, overfitting and pruning."
    },
    {
-    "title": "Neural networks: MLP, activations, backpropagation",
-    "priority": "med"
+    "title": "Neural networks: MLP & backpropagation",
+    "priority": "high",
+    "pyqs": 4,
+    "blurb": "Forward pass with ReLU and sigmoid, parameter counting, gradients by the chain rule."
    },
    {
     "title": "Clustering: k-means, k-medoid, hierarchical",
-    "priority": "high"
+    "priority": "high",
+    "pyqs": 5,
+    "blurb": "Lloyd's algorithm, medoids, single / complete / average linkage, dendrograms."
    },
    {
     "title": "PCA & dimensionality reduction",
-    "priority": "high"
+    "priority": "high",
+    "pyqs": 3,
+    "blurb": "Covariance, eigenvectors as directions of maximum variance, explained variance, link to SVD."
    }
   ],
   "note": "Rising every year (11 → 14 → 16)."

@@ -15,7 +15,7 @@ Rising every year (11 → 14 → 16).
 
 Hub page: `src/content/docs/machine-learning/index.md` (site URL `/machine-learning/`)
 
-- _Not started yet._
+- 1. Foundations — `src/content/docs/machine-learning/ml-foundations.md`
 
 ## Official syllabus
 

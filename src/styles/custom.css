@@ -182,3 +182,28 @@
 /* Home (splash) page: no empty title panel above the custom hero */
 .content-panel:has(> .sl-container:empty) { display: none; }
 .content-panel:has(> .sl-container:empty) + .content-panel { border-top: none; }
+
+/* ---------- Diagrams: <figure class="diagram"><svg class="dg">…</svg><figcaption> ---------- */
+.sl-markdown-content figure.diagram { margin: 1.6rem 0; padding: 1rem 1rem 0.75rem; border: 1px solid var(--gd-line); border-radius: 0.7rem; background: var(--gd-surface); overflow-x: auto; }
+.sl-markdown-content figure.diagram svg { display: block; width: 100%; height: auto; max-width: 44rem; margin: 0 auto; }
+.sl-markdown-content figure.diagram figcaption { margin-top: 0.6rem; font-size: 0.85rem; line-height: 1.5; color: var(--sl-color-gray-3); text-align: center; }
+.dg { font-family: var(--gd-mono); font-size: 11px; }
+.dg text { fill: var(--sl-color-gray-2); }
+.dg .title { fill: var(--sl-color-white); font-family: var(--gd-display); font-weight: 650; font-size: 13px; }
+.dg .ax { stroke: var(--sl-color-gray-3); stroke-width: 1.2; fill: none; }
+.dg .grid { stroke: var(--gd-line); stroke-width: 1; fill: none; }
+.dg .ink { stroke: var(--gd-ink); stroke-width: 2.4; fill: none; }
+.dg .hl { stroke: var(--gd-hl-strong); stroke-width: 2.4; fill: none; }
+.dg .warn { stroke: var(--gd-trap); stroke-width: 2.4; fill: none; }
+.dg .mut { stroke: var(--sl-color-gray-3); stroke-width: 1.6; fill: none; stroke-dasharray: 5 4; }
+.dg .dot { fill: var(--sl-color-white); }
+.dg .dot-ink { fill: var(--gd-ink); }
+.dg .dot-hl { fill: var(--gd-hl-strong); }
+.dg .dot-warn { fill: var(--gd-trap); }
+.dg .box { fill: var(--gd-chip); stroke: var(--gd-line); }
+.dg .box-ink { fill: var(--gd-ink); stroke: var(--gd-ink); }
+.dg .on-ink { fill: var(--gd-on-ink); }
+.dg .t-ink { fill: var(--gd-ink); }
+.dg .t-hl { fill: var(--gd-hl-ink); }
+.dg .t-warn { fill: var(--gd-trap); }
+.dg .t-mut { fill: var(--sl-color-gray-3); }
