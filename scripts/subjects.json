@@ -384,7 +384,8 @@
     "title": "Decision trees",
     "priority": "med",
     "pyqs": 1,
-    "blurb": "Entropy, information gain and Gini, building splits by hand, overfitting and pruning."
+    "blurb": "Entropy, information gain and Gini, building splits by hand, overfitting and pruning.",
+    "page": "decision-trees"
    },
    {
     "title": "Neural networks: MLP & backpropagation",

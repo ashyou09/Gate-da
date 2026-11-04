@@ -621,6 +621,56 @@ def svm_losses():
     return svg(560, 285, "".join(body), "Hinge, logistic and zero-one losses")
 
 
+# ---------------------------------------------------------------- decision trees
+
+
+@fig("dt-impurity", "Impurity of a two-class node as a function of p = fraction of class 1. All three measures are 0 for a pure "
+     "node and largest at p = 0.5: entropy reaches 1 bit, Gini and misclassification error reach 0.5. Entropy and Gini are "
+     "smooth and strictly concave, which is why they are preferred for choosing splits.")
+def dt_impurity():
+    q = np.linspace(0.001, 0.999, 300)
+    ent = -(q * np.log2(q) + (1 - q) * np.log2(1 - q))
+    gini = 1 - q ** 2 - (1 - q) ** 2
+    mis = 1 - np.maximum(q, 1 - q)
+    p = Plot(60, 20, 460, 220, (0, 1), (0, 1.08))
+    body = [p.axes("p = P(class 1) in the node", "impurity", xoff=32, yoff=34)]
+    for t in (0, 0.25, 0.5, 0.75, 1):
+        body.append(f'<text class="t-mut" x="{p.X(t):.1f}" y="{p.Y(0) + 15:.1f}" text-anchor="middle">{t:g}</text>')
+    for v in (0.5, 1.0):
+        body.append(f'<line class="grid" x1="{p.X(0):.1f}" y1="{p.Y(v):.1f}" x2="{p.X(1):.1f}" y2="{p.Y(v):.1f}"/>')
+        body.append(f'<text class="t-mut" x="{p.X(0) - 6:.1f}" y="{p.Y(v) + 4:.1f}" text-anchor="end">{v:g}</text>')
+    body.append(p.path(q, ent, "ink"))
+    body.append(p.path(q, gini, "hl"))
+    body.append(p.path(q, mis, "mut"))
+    body.append(f'<text class="t-ink" x="{p.X(0.5):.1f}" y="{p.Y(1.0) - 6:.1f}" text-anchor="middle">entropy (max 1)</text>')
+    body.append(f'<text class="t-hl" x="{p.X(0.5):.1f}" y="{p.Y(0.5) - 8:.1f}" text-anchor="middle">Gini (max 0.5)</text>')
+    body.append(f'<text class="t-mut" x="{p.X(0.27):.1f}" y="{p.Y(0.12):.1f}" text-anchor="start">misclassification</text>')
+    return svg(560, 285, "".join(body), "Entropy, Gini and misclassification impurity")
+
+
+@fig("dt-cricket", "The first split for the 2024 Q62 cricket data (Green G / Blue B). The root has 4 G, 6 B (entropy 0.971). "
+     "Splitting on Pitch gives S: 3 G, 2 B (0.971) and F: 1 G, 4 B (0.722). Weighted child entropy = 0.846, so "
+     "IG(Pitch) = 0.971 − 0.846 = 0.125. Splitting on Format would gain only 0.020.")
+def dt_cricket():
+    def node(x, y, title, counts, h, cls="box"):
+        w, hh = 170, 62
+        out = [f'<rect class="{cls}" x="{x - w / 2}" y="{y}" width="{w}" height="{hh}" rx="8"/>',
+               f'<text class="title" x="{x}" y="{y + 20}" text-anchor="middle">{title}</text>',
+               f'<text x="{x}" y="{y + 38}" text-anchor="middle">{counts}</text>',
+               f'<text class="t-ink" x="{x}" y="{y + 54}" text-anchor="middle">H = {h}</text>']
+        return out
+    body = []
+    body += node(300, 10, "all 10 matches", "4 G · 6 B", "0.971")
+    body += node(150, 150, "Pitch = S", "3 G · 2 B", "0.971")
+    body += node(450, 150, "Pitch = F", "1 G · 4 B", "0.722")
+    for x2 in (150, 450):
+        body.append(f'<line class="ax" x1="300" y1="72" x2="{x2}" y2="150"/>')
+    body.append('<text class="t-mut" x="205" y="112" text-anchor="end">5/10</text>')
+    body.append('<text class="t-mut" x="395" y="112">5/10</text>')
+    body.append('<text class="t-hl" x="300" y="245" text-anchor="middle">IG = 0.971 − (0.5·0.971 + 0.5·0.722) = 0.125</text>')
+    return svg(600, 260, "".join(body), "Information gain of the first split")
+
+
 # ---------------------------------------------------------------- injection
 
 
