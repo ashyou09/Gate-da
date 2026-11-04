@@ -1016,6 +1016,29 @@ def sql_order():
     return svg(640, 244, "".join(body), "Logical evaluation order of an SQL query")
 
 
+# ---------------------------------------------------------------- DBMS: normalization
+
+
+@fig("nf-ladder", "Each normal form is stricter than the one outside it: every BCNF relation is in 3NF, every 3NF relation "
+     "is in 2NF, and so on. For each non-trivial FD X → A, the rule at each level says what is allowed.")
+def nf_ladder():
+    levels = [("1NF", "every attribute value is atomic (no lists or repeating groups)"),
+              ("2NF", "no non-prime A depends on a proper part of a candidate key"),
+              ("3NF", "X is a superkey, or A is prime (part of some candidate key)"),
+              ("BCNF", "X is a superkey, for every non-trivial X → A")]
+    body = []
+    W, H = 600, 250
+    for i, (name, rule) in enumerate(levels):
+        pad = i * 32
+        x, y, w, h = 10 + pad, 10 + pad * 0.85, W - 2 * pad, H - 2 * pad * 0.85
+        cls = "box-ink" if name == "BCNF" else "box"
+        body.append(f'<rect class="{cls}" x="{x}" y="{y:.1f}" width="{w}" height="{h:.1f}" rx="10" style="{"opacity:.9" if cls == "box-ink" else ""}"/>')
+        tc = "on-ink" if cls == "box-ink" else "t-ink"
+        body.append(f'<text class="{tc}" x="{x + 14}" y="{y + 22:.1f}" style="font-weight:700">{name}</text>')
+        body.append(f'<text class="{"on-ink" if cls == "box-ink" else "t-mut"}" x="{x + 70}" y="{y + 22:.1f}">{rule}</text>')
+    return svg(620, 270, "".join(body), "Nested normal forms")
+
+
 # ---------------------------------------------------------------- injection
 
 
