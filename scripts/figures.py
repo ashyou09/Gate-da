@@ -671,6 +671,91 @@ def dt_cricket():
     return svg(600, 260, "".join(body), "Information gain of the first split")
 
 
+# ---------------------------------------------------------------- neural networks
+
+
+@fig("nn-activations", "Common activation functions (solid) and their derivatives (dashed). Sigmoid's slope is at most 0.25 and "
+     "tanh's at most 1, and both flatten for large |z| (vanishing gradients). ReLU's slope is exactly 1 for z > 0 and 0 for "
+     "z < 0; it is continuous everywhere but has a kink (no derivative) at z = 0.")
+def nn_activations():
+    z = np.linspace(-4, 4, 300)
+    sg = 1 / (1 + np.exp(-z))
+    funcs = [("sigmoid", sg, sg * (1 - sg), (-0.1, 1.1)), ("tanh", np.tanh(z), 1 - np.tanh(z) ** 2, (-1.1, 1.1)),
+             ("ReLU", np.maximum(z, 0), (z > 0).astype(float), (-0.4, 4.1))]
+    body = []
+    for k, (name, f, df, yr) in enumerate(funcs):
+        ox = 10 + k * 205
+        p = Plot(ox + 10, 30, 180, 150, (-4, 4), yr)
+        body.append(f'<text class="title" x="{ox + 100}" y="18" text-anchor="middle">{name}</text>')
+        body.append(f'<line class="grid" x1="{p.X(-4):.1f}" y1="{p.Y(0):.1f}" x2="{p.X(4):.1f}" y2="{p.Y(0):.1f}"/>')
+        body.append(f'<line class="grid" x1="{p.X(0):.1f}" y1="{p.Y(yr[0]):.1f}" x2="{p.X(0):.1f}" y2="{p.Y(yr[1]):.1f}"/>')
+        body.append(p.path(z, f, "ink"))
+        if name == "ReLU":
+            body.append(p.path(z[z < 0], df[z < 0], "mut"))
+            body.append(p.path(z[z > 0], df[z > 0], "mut"))
+            body.append(f'<circle class="dot-warn" cx="{p.X(0):.1f}" cy="{p.Y(0):.1f}" r="3.5"/>')
+            body.append(f'<text class="t-warn" x="{p.X(0.3):.1f}" y="{p.Y(-0.25):.1f}">kink at 0</text>')
+        else:
+            body.append(p.path(z, df, "mut"))
+        mx = {"sigmoid": "max slope 0.25", "tanh": "max slope 1", "ReLU": "slope 0 or 1"}[name]
+        body.append(f'<text class="t-mut" x="{ox + 100}" y="198" text-anchor="middle">{mx}</text>')
+    return svg(625, 208, "".join(body), "Activation functions and derivatives")
+
+
+@fig("nn-mlp-count", "The MLP of 2026 Q56: 30 inputs → 4 → 3 → 1, fully connected, no biases. Each layer contributes "
+     "(neurons in) × (neurons out) weights: 30·4 + 4·3 + 3·1 = 120 + 12 + 3 = 135. With biases you would add 4 + 3 + 1 = 8.")
+def nn_mlp_count():
+    layers = [(30, 6, "input · 30"), (4, 4, "hidden · 4"), (3, 3, "hidden · 3"), (1, 1, "output · 1")]
+    xs = [70, 230, 390, 540]
+    pos = []
+    for (n, shown, _), x in zip(layers, xs):
+        ys = np.linspace(40, 230, shown + 2)[1:-1] if shown > 1 else [135]
+        pos.append([(x, y) for y in ys])
+    body = []
+    for a, b in zip(pos, pos[1:]):
+        for (x1, y1) in a:
+            for (x2, y2) in b:
+                body.append(f'<line class="grid" x1="{x1}" y1="{y1:.1f}" x2="{x2}" y2="{y2:.1f}"/>')
+    for k, nodes in enumerate(pos):
+        for i, (x, y) in enumerate(nodes):
+            body.append(f'<circle class="box" cx="{x}" cy="{y:.1f}" r="11"/>')
+        if k == 0:
+            body.append(f'<text class="t-mut" x="{xs[0]}" y="{(nodes[2][1] + nodes[3][1]) / 2 + 4:.1f}" text-anchor="middle">⋮</text>')
+        body.append(f'<text class="title" x="{xs[k]}" y="258" text-anchor="middle">{layers[k][2]}</text>')
+    for (a, b, w), x in zip([(30, 4, 120), (4, 3, 12), (3, 1, 3)], [150, 310, 465]):
+        body.append(f'<text class="t-ink" x="{x}" y="20" text-anchor="middle">{a}×{b} = {w}</text>')
+    body.append('<text class="t-hl" x="305" y="285" text-anchor="middle">total weights = 120 + 12 + 3 = 135</text>')
+    return svg(610, 295, "".join(body), "Multi-layer perceptron parameter count")
+
+
+@fig("nn-q42-backprop", "2025 Q42 with the numbers filled in. Under each unit is its forward pass: h₁ = R(1·2 + 1·3) = 5, h₂ = R(1·2 − 1·3) = R(−1) = 0, "
+     "y = R(4·5 − 1·0) = 20. The gradients are on the right: ∂y/∂a = R′(20)·e·R′(5)·u = 1·4·1·2 = 8; ∂y/∂f = R′(20)·h₂ = 0. "
+     "The bottom unit is inactive (dashed edges), so no gradient flows through it.")
+def nn_q42():
+    N = {"u": (60, 70), "v": (60, 210), "h1": (260, 70), "h2": (260, 210), "y": (450, 140)}
+    E = [("u", "h1", "a=1"), ("v", "h1", "b=1"), ("u", "h2", "c=1"), ("v", "h2", "d=−1"), ("h1", "y", "e=4"), ("h2", "y", "f=−1")]
+    body = []
+    for a, b, lab in E:
+        (x1, y1), (x2, y2) = N[a], N[b]
+        dead = "h2" in (a, b)
+        body.append(f'<line class="{"mut" if dead else "ax"}" x1="{x1 + 20}" y1="{y1}" x2="{x2 - 20}" y2="{y2}"/>')
+        frac = {("u", "h2"): 0.25, ("v", "h1"): 0.25}.get((a, b), 0.5)
+        mx, my = x1 + (x2 - x1) * frac, y1 + (y2 - y1) * frac
+        dy = 16 if (a, b) == ("v", "h2") else -8
+        body.append(f'<text class="t-mut" x="{mx + 14:.0f}" y="{my + dy:.0f}" text-anchor="middle">{lab}</text>')
+    vals = {"u": ("u", "2"), "v": ("v", "3"), "h1": ("R", "z=5 → 5"), "h2": ("R", "z=−1 → 0"), "y": ("R", "z=20 → 20")}
+    for k, (x, y) in N.items():
+        cls = "box-ink" if k in ("h1", "y") else "box"
+        body.append(f'<circle class="{cls}" cx="{x}" cy="{y}" r="20"/>')
+        body.append(f'<text class="{"on-ink" if cls == "box-ink" else "title"}" x="{x}" y="{y + 4}" text-anchor="middle">{vals[k][0]}</text>')
+        body.append(f'<text x="{x}" y="{y + 38}" text-anchor="middle">{vals[k][1]}</text>')
+    body.append('<text class="t-ink" x="510" y="80">∂y/∂a = 1·4·1·2 = 8</text>')
+    body.append('<text class="t-ink" x="510" y="104">∂y/∂f = 1·h₂ = 0</text>')
+    body.append('<text class="t-warn" x="510" y="128">R′(−1) = 0: bottom</text>')
+    body.append('<text class="t-warn" x="510" y="146">path carries no gradient</text>')
+    return svg(700, 270, "".join(body), "Forward and backward pass of a small ReLU network")
+
+
 # ---------------------------------------------------------------- injection
 
 

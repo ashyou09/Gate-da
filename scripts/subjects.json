@@ -391,7 +391,8 @@
     "title": "Neural networks: MLP & backpropagation",
     "priority": "high",
     "pyqs": 4,
-    "blurb": "Forward pass with ReLU and sigmoid, parameter counting, gradients by the chain rule."
+    "blurb": "Forward pass with ReLU and sigmoid, parameter counting, gradients by the chain rule.",
+    "page": "neural-networks"
    },
    {
     "title": "Clustering: k-means, k-medoid, hierarchical",
