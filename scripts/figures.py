@@ -756,6 +756,106 @@ def nn_q42():
     return svg(700, 270, "".join(body), "Forward and backward pass of a small ReLU network")
 
 
+# ---------------------------------------------------------------- clustering
+
+
+@fig("km-iterations", "k-means (k = 3) on 45 points from a deliberately bad start: all three centroids begin in the bottom-left. "
+     "Each round assigns every point to its nearest centroid (colours), then moves each centroid ✕ to the mean of its points. "
+     "The within-cluster sum of squares (WCSS) never increases, and here the centroids settle on the three groups by round 4.")
+def km_iterations():
+    rng = np.random.default_rng(4)
+    centers = np.array([[1.0, 1.0], [4.5, 1.5], [2.6, 4.2]])
+    X = np.vstack([c + rng.normal(0, 0.45, (15, 2)) for c in centers])
+    C = np.array([[0.6, 0.6], [1.2, 0.5], [0.8, 1.3]])
+    snaps = []
+    for it in range(8):
+        lab = np.argmin(((X[:, None] - C[None]) ** 2).sum(-1), 1)
+        wcss = sum(((X[lab == k] - C[k]) ** 2).sum() for k in range(3))
+        snaps.append((C.copy(), lab.copy(), wcss))
+        C = np.array([X[lab == k].mean(0) if (lab == k).any() else C[k] for k in range(3)])
+    show = [(0, "round 1: assign"), (1, "round 2"), (3, "round 4: converged")]
+    cls_pt = ["dot-ink", "dot-warn", "dot-hl"]
+    body = []
+    for k, (i, title) in enumerate(show):
+        Cc, lab, wcss = snaps[i]
+        ox = 10 + k * 205
+        p = Plot(ox + 6, 30, 185, 165, (-0.2, 5.8), (-0.2, 5.6))
+        body.append(f'<text class="title" x="{ox + 98}" y="18" text-anchor="middle">{title}</text>')
+        body.append(f'<rect class="grid" x="{p.x0}" y="{p.y0}" width="{p.w}" height="{p.h}" rx="6"/>')
+        for (a, b), l in zip(X, lab):
+            body.append(f'<circle class="{cls_pt[l]}" cx="{p.X(a):.1f}" cy="{p.Y(b):.1f}" r="3.2" style="opacity:.85"/>')
+        for (a, b) in Cc:
+            x, y = p.X(a), p.Y(b)
+            body.append(f'<path class="ax" style="stroke:var(--sl-color-white);stroke-width:3" d="M{x - 6:.1f},{y - 6:.1f} L{x + 6:.1f},{y + 6:.1f} M{x - 6:.1f},{y + 6:.1f} L{x + 6:.1f},{y - 6:.1f}"/>')
+        body.append(f'<text class="t-mut" x="{ox + 98}" y="212" text-anchor="middle">WCSS = {wcss:.1f}</text>')
+    return svg(625, 222, "".join(body), "k-means iterations")
+
+
+def _dendrogram(merges, labels, x0, y0, w, h, hmax, title):
+    """merges: list of (clusterA, clusterB, height) with clusters as lists of leaf labels."""
+    order = []
+    # leaf order: follow the final merge structure
+    def leaves(c):
+        return c
+    final = merges[-1][0] + merges[-1][1]
+    order = final
+    xs = {lab: x0 + (i + 0.5) * w / len(order) for i, lab in enumerate(order)}
+    Y = lambda v: y0 + h - v / hmax * h
+    pos = {(lab,): (xs[lab], Y(0)) for lab in order}
+    body = [f'<text class="title" x="{x0 + w / 2}" y="{y0 - 14}" text-anchor="middle">{title}</text>']
+    for t in range(0, int(hmax) + 1):
+        body.append(f'<line class="grid" x1="{x0 - 4}" y1="{Y(t):.1f}" x2="{x0 + w}" y2="{Y(t):.1f}"/>')
+        body.append(f'<text class="t-mut" x="{x0 - 8}" y="{Y(t) + 4:.1f}" text-anchor="end">{t}</text>')
+    for a, b, d in merges:
+        ka, kb = tuple(a), tuple(b)
+        (xa, ya), (xb, yb) = pos[ka], pos[kb]
+        yd = Y(d)
+        body.append(f'<path class="ink" style="stroke-width:2" d="M{xa:.1f},{ya:.1f} V{yd:.1f} H{xb:.1f} V{yb:.1f}"/>')
+        pos[tuple(a + b)] = ((xa + xb) / 2, yd)
+    for lab in order:
+        body.append(f'<text x="{xs[lab]:.1f}" y="{Y(0) + 16:.1f}" text-anchor="middle">x{lab}</text>')
+    return body
+
+
+@fig("hc-dendrograms", "The 2024 Q42 distance table clustered two ways. Single linkage (left) merges x1–x2 and x4–x5 at 1, "
+     "then x3 joins {x4, x5} at 2 (its nearest member is x4), then everything joins at 3. Complete linkage (right) uses the "
+     "farthest pair, so x3 joins {x1, x2} at 4 and the final merge is at 6. Same data, different trees.")
+def hc_dendrograms():
+    single = [([1], [2], 1), ([4], [5], 1), ([3], [4, 5], 2), ([1, 2], [3, 4, 5], 3)]
+    complete = [([1], [2], 1), ([4], [5], 1), ([1, 2], [3], 4), ([1, 2, 3], [4, 5], 6)]
+    body = _dendrogram(single, None, 50, 40, 230, 190, 6, "single linkage (min)")
+    body += _dendrogram(complete, None, 360, 40, 230, 190, 6, "complete linkage (max)")
+    body.append('<text class="t-mut" x="20" y="135" text-anchor="middle" transform="rotate(-90 20 135)">merge distance</text>')
+    return svg(620, 265, "".join(body), "Single and complete linkage dendrograms")
+
+
+@fig("hc-linkage", "Distance between two clusters. Single linkage uses the closest pair (min), complete linkage the farthest "
+     "pair (max), average linkage the mean over all pairs. Single linkage can 'chain' long thin clusters together; "
+     "complete linkage prefers compact, round clusters.")
+def hc_linkage():
+    A = [(60, 90), (95, 140), (70, 175)]
+    B = [(250, 110), (300, 70), (320, 160)]
+    body = []
+    body.append('<ellipse class="grid" cx="75" cy="135" rx="45" ry="70"/>')
+    body.append('<ellipse class="grid" cx="290" cy="115" rx="55" ry="70"/>')
+    for x, y in A:
+        body.append(f'<circle class="dot-ink" cx="{x}" cy="{y}" r="6"/>')
+    for x, y in B:
+        body.append(f'<rect class="dot-warn" x="{x - 6}" y="{y - 6}" width="12" height="12"/>')
+    body.append('<line class="hl" x1="95" y1="140" x2="250" y2="110"/>')
+    body.append('<text class="t-hl" x="172" y="112" text-anchor="middle">single = min</text>')
+    body.append('<line class="ink" style="stroke-dasharray:6 4" x1="60" y1="90" x2="320" y2="160"/>')
+    body.append('<text class="t-ink" x="215" y="158" text-anchor="middle">complete = max</text>')
+    body.append('<text class="title" x="75" y="225" text-anchor="middle">cluster C₁</text>')
+    body.append('<text class="title" x="290" y="205" text-anchor="middle">cluster C₂</text>')
+    rows = [("single", "min over pairs", "t-hl"), ("complete", "max over pairs", "t-ink"), ("average", "mean over all pairs", "t-mut"),
+            ("centroid", "distance between means", "t-mut"), ("Ward", "increase in WCSS", "t-mut")]
+    for i, (a, b, c) in enumerate(rows):
+        body.append(f'<text class="{c}" x="400" y="{50 + i * 34}" style="font-weight:600">{a}</text>')
+        body.append(f'<text x="480" y="{50 + i * 34}">{b}</text>')
+    return svg(640, 240, "".join(body), "Single versus complete linkage")
+
+
 # ---------------------------------------------------------------- injection
 
 

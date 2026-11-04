@@ -398,7 +398,8 @@
     "title": "Clustering: k-means, k-medoid, hierarchical",
     "priority": "high",
     "pyqs": 5,
-    "blurb": "Lloyd's algorithm, medoids, single / complete / average linkage, dendrograms."
+    "blurb": "Lloyd's algorithm, medoids, single / complete / average linkage, dendrograms.",
+    "page": "clustering"
    },
    {
     "title": "PCA & dimensionality reduction",
