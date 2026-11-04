@@ -1039,6 +1039,47 @@ def nf_ladder():
     return svg(620, 270, "".join(body), "Nested normal forms")
 
 
+# ---------------------------------------------------------------- DBMS: B+ trees
+
+
+def _bnode(x, y, keys, leaf=False, hot=False):
+    w = 30 * max(len(keys), 1) + 10
+    cls = "box-ink" if hot else "box"
+    out = [f'<rect class="{cls}" x="{x - w / 2:.1f}" y="{y}" width="{w}" height="26" rx="4" style="{"" if leaf else "stroke:var(--gd-ink);stroke-width:1.4"}"/>']
+    for i, k in enumerate(keys):
+        kx = x - w / 2 + 5 + 30 * i + 15
+        out.append(f'<text class="{"on-ink" if hot else "title"}" x="{kx:.1f}" y="{y + 18}" text-anchor="middle">{k}</text>')
+        if i:
+            out.append(f'<line class="grid" x1="{kx - 15:.1f}" y1="{y + 3}" x2="{kx - 15:.1f}" y2="{y + 23}"/>')
+    return out, w
+
+
+@fig("bpt-q41", "2026 Q41. Leaves hold at most 2 keys and internal nodes at most 3 pointers; a key equal to a separator goes "
+     "left (the convention of the figure in the paper). Inserting 3 overflows leaf [1, 5] → split into [1, 3] and [5], "
+     "separator 3 goes up. The root [3, 5, 8] now has 4 pointers → split: the middle key 5 moves up and becomes the new root.")
+def bpt_q41():
+    body = ['<text class="title" x="150" y="16" text-anchor="middle">before</text>',
+            '<text class="title" x="470" y="16" text-anchor="middle">after inserting 3</text>']
+    def tree(nodes, edges):
+        out = []
+        pos = {}
+        for name, (x, y, keys, leaf, hot) in nodes.items():
+            o, w = _bnode(x, y, keys, leaf, hot); out += o; pos[name] = (x, y)
+        for a, b in edges:
+            (x1, y1), (x2, y2) = pos[a], pos[b]
+            out.insert(0, f'<line class="ax" x1="{x1}" y1="{y1 + 26}" x2="{x2}" y2="{y2}"/>')
+        return out
+    body += tree({"r": (150, 40, [5, 8], False, False), "a": (55, 130, [1, 5], True, False), "b": (150, 130, [7, 8], True, False),
+                  "c": (245, 130, [9, 12], True, False)}, [("r", "a"), ("r", "b"), ("r", "c")])
+    body += tree({"r": (470, 40, [5], False, True), "L": (400, 100, [3], False, False), "R": (545, 100, [8], False, False),
+                  "a": (350, 170, [1, 3], True, False), "a2": (425, 170, [5], True, False), "b": (505, 170, [7, 8], True, False),
+                  "c": (590, 170, [9, 12], True, False)},
+                 [("r", "L"), ("r", "R"), ("L", "a"), ("L", "a2"), ("R", "b"), ("R", "c")])
+    body.append('<text class="t-mut" x="150" y="190" text-anchor="middle">leaf [1, 5] receives 3 → overflow</text>')
+    body.append('<line class="mut" x1="300" y1="100" x2="330" y2="100"/>')
+    return svg(640, 210, "".join(body), "B+ tree before and after an insertion with splits")
+
+
 # ---------------------------------------------------------------- injection
 
 
