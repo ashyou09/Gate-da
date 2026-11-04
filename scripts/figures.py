@@ -1080,6 +1080,40 @@ def bpt_q41():
     return svg(640, 210, "".join(body), "B+ tree before and after an insertion with splits")
 
 
+# ---------------------------------------------------------------- DBMS: data transformation
+
+
+@fig("binning", "The same nine sorted values 4, 8, 15, 21, 21, 24, 25, 28, 34 discretized into 3 bins two ways. Equal-width bins "
+     "have the same range (width (34 − 4)/3 = 10) but unequal counts (2, 3, 4). Equal-frequency bins have the same count "
+     "(3 each) but unequal ranges. Smoothing by bin means replaces each value by its bin's mean.")
+def binning():
+    d = [4, 8, 15, 21, 21, 24, 25, 28, 34]
+    X = lambda v: 40 + (v - 0) / 38 * 540
+    body = []
+    rows = [("equal width (width 10)", [(4, 14), (14, 24), (24, 34)], [[4, 8], [15, 21, 21], [24, 25, 28, 34]]),
+            ("equal frequency (3 per bin)", [(4, 15), (21, 24), (25, 34)], [[4, 8, 15], [21, 21, 24], [25, 28, 34]])]
+    fills = ["var(--gd-ink)", "var(--gd-hl-strong)", "var(--gd-ink)"]
+    for r, (title, ranges, bins) in enumerate(rows):
+        y = 40 + r * 120
+        body.append(f'<text class="title" x="40" y="{y - 14}">{title}</text>')
+        base = y + 62
+        body.append(f'<line class="ax" x1="{X(0)}" y1="{base}" x2="{X(38)}" y2="{base}"/>')
+        for i, ((a, b), items) in enumerate(zip(ranges, bins)):
+            x1, x2 = X(a) - 3, X(b) + 3
+            body.append(f'<rect x="{x1:.1f}" y="{y + 26}" width="{x2 - x1:.1f}" height="22" rx="5" style="fill:{fills[i]};fill-opacity:.22;stroke:{fills[i]}"/>')
+            m = sum(items) / len(items)
+            cx = (x1 + x2) / 2
+            body.append(f'<text class="t-ink" x="{cx:.1f}" y="{y + 4}" text-anchor="middle">n = {len(items)}</text>')
+            body.append(f'<text class="t-mut" x="{cx:.1f}" y="{y + 19}" text-anchor="middle">mean {m:g}</text>')
+        seen = {}
+        for v in d:
+            k = seen.get(v, 0); seen[v] = k + 1
+            body.append(f'<circle class="dot" cx="{X(v):.1f}" cy="{base - 7 * k:.1f}" r="4"/>')
+        for t in (0, 10, 20, 30):
+            body.append(f'<text class="t-mut" x="{X(t):.1f}" y="{base + 16}" text-anchor="middle">{t}</text>')
+    return svg(620, 275, "".join(body), "Equal-width versus equal-frequency binning")
+
+
 # ---------------------------------------------------------------- injection
 
 
