@@ -48,15 +48,15 @@ class Plot:
         pts = " ".join(f"{self.X(x):.1f},{self.Y(y):.1f}" for x, y in zip(xs, ys))
         return f'<polyline class="{cls}" points="{pts}"/>'
 
-    def axes(self, xlabel="", ylabel=""):
+    def axes(self, xlabel="", ylabel="", xoff=22, yoff=12):
         x0, y0, w, h = self.x0, self.y0, self.w, self.h
         out = [f'<path class="ax" d="M{x0},{y0} V{y0 + h} H{x0 + w}"/>']
         if xlabel:
-            out.append(f'<text x="{x0 + w / 2}" y="{y0 + h + 22}" text-anchor="middle">{xlabel}</text>')
+            out.append(f'<text x="{x0 + w / 2}" y="{y0 + h + xoff}" text-anchor="middle">{xlabel}</text>')
         if ylabel:
             out.append(
-                f'<text x="{x0 - 12}" y="{y0 + h / 2}" text-anchor="middle" '
-                f'transform="rotate(-90 {x0 - 12} {y0 + h / 2})">{ylabel}</text>'
+                f'<text x="{x0 - yoff}" y="{y0 + h / 2}" text-anchor="middle" '
+                f'transform="rotate(-90 {x0 - yoff} {y0 + h / 2})">{ylabel}</text>'
             )
         return "".join(out)
 
@@ -171,6 +171,60 @@ def kfold():
     y = y0 + k * (bh + gap) + 18
     body.append(f'<text x="{x0}" y="{y}" class="title">CV score = (score 1 + … + score 5) / 5</text>')
     return svg(640, y + 10, "".join(body), "Five-fold cross-validation diagram")
+
+
+# ---------------------------------------------------------------- linear regression
+
+
+@fig("lr-residuals", "Least squares on the worked example: points (1,2), (2,4), (3,5), (4,4), (5,5). "
+     "The fitted line is ŷ = 2.2 + 0.6x. Each dashed segment is a residual eᵢ = yᵢ − ŷᵢ; OLS chooses the line that "
+     "makes the sum of their squares (RSS = 2.4) as small as possible. The line passes through (x̄, ȳ) = (3, 4).")
+def lr_residuals():
+    xs = np.array([1, 2, 3, 4, 5.0]); ys = np.array([2, 4, 5, 4, 5.0])
+    b0, b1 = 2.2, 0.6
+    p = Plot(60, 20, 460, 250, (0, 6), (0, 6.5))
+    body = [p.axes("x", "y", xoff=32, yoff=30)]
+    for t in range(1, 6):
+        body.append(f'<text class="t-mut" x="{p.X(t):.1f}" y="{p.Y(0) + 14:.1f}" text-anchor="middle">{t}</text>')
+        body.append(f'<text class="t-mut" x="{p.X(0) - 8:.1f}" y="{p.Y(t) + 4:.1f}" text-anchor="end">{t}</text>')
+    gx = np.array([0.3, 5.7])
+    body.append(p.path(gx, b0 + b1 * gx, "ink"))
+    for x, y in zip(xs, ys):
+        yh = b0 + b1 * x
+        body.append(f'<line class="warn" style="stroke-width:1.6;stroke-dasharray:4 3" x1="{p.X(x):.1f}" y1="{p.Y(y):.1f}" x2="{p.X(x):.1f}" y2="{p.Y(yh):.1f}"/>')
+        body.append(f'<text class="t-warn" x="{p.X(x) + 6:.1f}" y="{p.Y((y + yh) / 2) + 4:.1f}">{y - yh:+.1f}</text>')
+        body.append(f'<circle class="dot" cx="{p.X(x):.1f}" cy="{p.Y(y):.1f}" r="4"/>')
+    body.append(f'<circle class="dot-hl" cx="{p.X(3):.1f}" cy="{p.Y(4):.1f}" r="5"/>')
+    body.append(f'<text class="t-hl" x="{p.X(3) - 8:.1f}" y="{p.Y(4) - 10:.1f}" text-anchor="end">(x̄, ȳ)</text>')
+    body.append(f'<text class="t-ink" x="{p.X(5.6):.1f}" y="{p.Y(b0 + b1 * 5.6) - 10:.1f}" text-anchor="end">ŷ = 2.2 + 0.6x</text>')
+    return svg(540, 310, "".join(body), "Least squares line with residuals")
+
+
+@fig("lr-gd-steps", "Gradient descent on L(w) = w², starting at w = 1. With η = 0.25 each step multiplies w by (1 − 2η) = 0.5 and "
+     "slides smoothly to the minimum. With η = 0.95 the factor is −0.9: w flips sign every step and barely shrinks; "
+     "any η > 1 would make it diverge.")
+def gd_steps():
+    body = []
+    for k, (eta, title, cls) in enumerate([(0.25, "η = 0.25 (good)", "ink"), (0.95, "η = 0.95 (too large)", "warn")]):
+        ox = 10 + k * 300
+        p = Plot(ox + 30, 34, 250, 190, (-1.15, 1.15), (0, 1.35))
+        g = np.linspace(-1.1, 1.1, 120)
+        body.append(f'<text class="title" x="{ox + 155}" y="18" text-anchor="middle">{title}</text>')
+        body.append(p.axes("", ""))
+        body.append(f'<text x="{p.X(1.12):.1f}" y="{p.Y(0) + 14:.1f}" text-anchor="end">w</text>')
+        body.append(p.path(g, g ** 2, "mut"))
+        w = 1.0
+        pts = [w]
+        for _ in range(6):
+            w = w - eta * 2 * w
+            pts.append(w)
+        for a, b in zip(pts, pts[1:]):
+            body.append(f'<line class="{cls}" style="stroke-width:1.6" x1="{p.X(a):.1f}" y1="{p.Y(a * a):.1f}" x2="{p.X(b):.1f}" y2="{p.Y(b * b):.1f}"/>')
+        for i, a in enumerate(pts):
+            body.append(f'<circle class="{"dot-ink" if cls == "ink" else "dot-warn"}" cx="{p.X(a):.1f}" cy="{p.Y(a * a):.1f}" r="{4.2 if i == 0 else 3.2}"/>')
+        body.append(f'<text class="t-mut" x="{p.X(1):.1f}" y="{p.Y(1) - 8:.1f}" text-anchor="middle">start</text>')
+        body.append(f'<text class="t-mut" x="{p.X(0):.1f}" y="{p.Y(0) + 14:.1f}" text-anchor="middle">0</text>')
+    return svg(610, 260, "".join(body), "Gradient descent with small and large learning rate")
 
 
 # ---------------------------------------------------------------- injection

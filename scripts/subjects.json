@@ -342,7 +342,8 @@
     "title": "Ridge & lasso regularization",
     "priority": "high",
     "pyqs": 2,
-    "blurb": "L2 vs L1 penalties, shrinkage vs sparsity, effect of λ on bias and variance, regularized loss numericals."
+    "blurb": "L2 vs L1 penalties, shrinkage vs sparsity, effect of λ on bias and variance, regularized loss numericals.",
+    "page": "ridge-lasso"
    },
    {
     "title": "Logistic regression & linear classifiers",
