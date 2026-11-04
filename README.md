@@ -13,7 +13,7 @@ Same folder name (slug) everywhere: website notes in `src/content/docs/<slug>/`,
 |---|---|---|---|---|
 | 1 | Programming, DS & Algorithms | [`pdsa`](subjects/pdsa) | 17 / 16 / 16 | **complete: 9 of 9 topics** |
 | 2 | Machine Learning | [`machine-learning`](subjects/machine-learning) | 11 / 14 / 16 | **complete: 12 of 12 topics, with diagrams** |
-| 3 | DBMS & Warehousing | [`dbms`](subjects/dbms) | 8 / 9 / 18 | topic plan ready |
+| 3 | DBMS & Warehousing | [`dbms`](subjects/dbms) | 8 / 9 / 18 | **complete: 7 of 7 topics, with diagrams** |
 | 4 | Artificial Intelligence | [`ai`](subjects/ai) | 11 / 3 / 8 | topic plan ready |
 | 5 | Probability & Statistics | [`probability-statistics`](subjects/probability-statistics) | 16 / 18 / 13 | topic plan ready |
 | 6 | Linear Algebra | [`linear-algebra`](subjects/linear-algebra) | 10 / 17 / 8 | topic plan ready |

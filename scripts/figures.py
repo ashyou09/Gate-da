@@ -1114,6 +1114,63 @@ def binning():
     return svg(620, 275, "".join(body), "Equal-width versus equal-frequency binning")
 
 
+# ---------------------------------------------------------------- DBMS: warehousing
+
+
+@fig("dw-star", "A star schema for sales. The central fact table holds the measures (units sold, revenue) and one foreign key "
+     "per dimension. Each dimension table is denormalized: it holds a whole hierarchy (day → month → quarter → year) in one "
+     "table. A snowflake schema would split those hierarchies into further normalized tables.")
+def dw_star():
+    body = []
+    fact = (300, 130)
+    dims = [("Time", ["time_key", "day, month", "quarter, year"], (110, 45)), ("Item", ["item_key", "name, brand", "type"], (490, 45)),
+            ("Location", ["location_key", "city, state", "country"], (110, 215)), ("Branch", ["branch_key", "name", "type"], (490, 215))]
+    for name, cols, (x, y) in dims:
+        body.append(f'<line class="ax" x1="{fact[0]}" y1="{fact[1]}" x2="{x}" y2="{y}"/>')
+    for name, cols, (x, y) in dims:
+        body.append(f'<rect class="box" x="{x - 70}" y="{y - 32}" width="140" height="70" rx="6"/>')
+        body.append(f'<text class="t-ink" x="{x}" y="{y - 14}" text-anchor="middle" style="font-weight:700">{name}</text>')
+        for i, c in enumerate(cols):
+            body.append(f'<text class="t-mut" x="{x}" y="{y + 4 + i * 14}" text-anchor="middle">{c}</text>')
+    body.append(f'<rect class="box-ink" x="{fact[0] - 85}" y="{fact[1] - 52}" width="170" height="104" rx="8"/>')
+    lines = ["Sales (fact)", "time_key", "item_key", "location_key", "branch_key", "units_sold, revenue"]
+    for i, t in enumerate(lines):
+        body.append(f'<text class="on-ink" x="{fact[0]}" y="{fact[1] - 32 + i * 15}" text-anchor="middle" style="font-weight:{700 if i == 0 else 400}">{t}</text>')
+    return svg(600, 265, "".join(body), "Star schema with one fact table and four dimensions")
+
+
+@fig("dw-lattice", "The lattice of cuboids for three dimensions (time, item, location) with no hierarchies: 2³ = 8 group-bys. "
+     "The base cuboid at the bottom groups by all three; the apex at the top is the grand total. Moving up is roll-up "
+     "(aggregate away a dimension); moving down is drill-down.")
+def dw_lattice():
+    levels = [["all (apex)"], ["time", "item", "location"], ["time, item", "time, location", "item, location"], ["time, item, location (base)"]]
+    pos = {}
+    body = []
+    for li, row in enumerate(levels):
+        y = 30 + li * 62
+        for j, lab in enumerate(row):
+            x = 310 + (j - (len(row) - 1) / 2) * 190
+            pos[lab] = (x, y)
+    def key(l):
+        return set(t.strip() for t in l.replace("(base)", "").replace("(apex)", "").split(",")) - {"all", ""}
+    labs = [l for row in levels for l in row]
+    for a in labs:
+        for b in labs:
+            ka, kb = key(a), key(b)
+            if ka < kb and len(kb) == len(ka) + 1:
+                (x1, y1), (x2, y2) = pos[a], pos[b]
+                body.append(f'<line class="grid" x1="{x1}" y1="{y1 + 12}" x2="{x2}" y2="{y2 - 12}"/>')
+    for li, row in enumerate(levels):
+        for lab in row:
+            x, y = pos[lab]
+            w = 9 * len(lab) + 20
+            hot = li in (0, 3)
+            body.append(f'<rect class="{"box-ink" if hot else "box"}" x="{x - w / 2:.1f}" y="{y - 13}" width="{w}" height="26" rx="13"/>')
+            body.append(f'<text class="{"on-ink" if hot else ""}" x="{x}" y="{y + 4}" text-anchor="middle">{lab}</text>')
+        body.append(f'<text class="t-mut" x="20" y="{30 + li * 62 + 4}">{li}-D</text>' if li < 3 else f'<text class="t-mut" x="20" y="{30 + li * 62 + 4}">3-D</text>')
+    return svg(620, 240, "".join(body), "Lattice of cuboids for three dimensions")
+
+
 # ---------------------------------------------------------------- injection
 
 
