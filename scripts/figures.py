@@ -989,6 +989,33 @@ def ra_division():
     return svg(640, y0 + len(custs) * rh + 12, "".join(body), "Relational division as a grid")
 
 
+# ---------------------------------------------------------------- DBMS: SQL
+
+
+@fig("sql-order", "The logical order in which SQL evaluates a query, which is not the order you write it in. WHERE filters "
+     "rows before grouping (so it cannot use aggregates); HAVING filters groups after aggregation; SELECT aliases exist "
+     "only from the SELECT step onward, so ORDER BY can use them but WHERE cannot.")
+def sql_order():
+    steps = [("1", "FROM / JOIN", "combine rows"), ("2", "WHERE", "filter rows"),
+             ("3", "GROUP BY", "make groups"), ("4", "HAVING", "filter groups"),
+             ("5", "SELECT", "pick columns"), ("6", "DISTINCT", "drop duplicates"),
+             ("7", "ORDER BY", "sort rows"), ("8", "LIMIT", "keep n rows")]
+    body = []
+    w, h, gap = 140, 62, 14
+    for i, (n, kw, desc) in enumerate(steps):
+        r, c = divmod(i, 4)
+        x = 20 + c * (w + gap); y = 20 + r * (h + 40)
+        hot = kw in ("WHERE", "HAVING")
+        body.append(f'<rect class="{"box-ink" if hot else "box"}" x="{x}" y="{y}" width="{w}" height="{h}" rx="8"/>')
+        body.append(f'<text class="{"on-ink" if hot else "t-ink"}" x="{x + 12}" y="{y + 22}" style="font-weight:700">{n}. {kw}</text>')
+        body.append(f'<text class="{"on-ink" if hot else "t-mut"}" x="{x + 12}" y="{y + 44}">{desc}</text>')
+        if c < 3:
+            body.append(f'<path class="ax" d="M{x + w + 2},{y + h / 2} h{gap - 4} m-5,-4 l5,4 l-5,4"/>')
+    body.append(f'<path class="ax" d="M{20 + 3 * (w + gap) + w / 2},{20 + h + 2} v14 H{20 + w / 2} v14 m-4,-5 l4,5 l4,-5"/>')
+    body.append('<text class="t-mut" x="20" y="232">written order: SELECT … FROM … WHERE … GROUP BY … HAVING … ORDER BY … LIMIT</text>')
+    return svg(640, 244, "".join(body), "Logical evaluation order of an SQL query")
+
+
 # ---------------------------------------------------------------- injection
 
 
