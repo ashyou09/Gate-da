@@ -1264,6 +1264,41 @@ def astar_q44():
     return svg(620, 258, "".join(body), "A* search on the 2025 Q44 graph")
 
 
+# ---------------------------------------------------------------- AI: games
+
+
+@fig("ab-tree", "Alpha–beta on the classic tree [[3, 12, 8], [2, 4, 6], [14, 5, 2]], children searched left to right. The first MIN node "
+     "returns 3, so MAX's α becomes 3. At the second MIN node the first leaf is 2 ≤ α: MIN will return at most 2, which MAX "
+     "will never choose, so the leaves 4 and 6 are pruned (dashed). The root's minimax value is 3, the same as without pruning.")
+def ab_tree():
+    tree = [[3, 12, 8], [2, 4, 6], [14, 5, 2]]
+    pruned = {(1, 1), (1, 2)}
+    body = []
+    root = (300, 34)
+    mins = [(120, 110), (300, 110), (480, 110)]
+    mvals = [3, "≤2", 2]
+    def tri(x, y, up, label, hot=False):
+        pts = f"{x},{y - 15} {x - 16},{y + 12} {x + 16},{y + 12}" if up else f"{x},{y + 15} {x - 16},{y - 12} {x + 16},{y - 12}"
+        return [f'<polygon class="{"box-ink" if hot else "box"}" points="{pts}" style="stroke:var(--gd-ink)"/>',
+                f'<text class="{"on-ink" if hot else "title"}" x="{x}" y="{y + (5 if up else 1)}" text-anchor="middle">{label}</text>']
+    for i, (mx, my) in enumerate(mins):
+        body.append(f'<line class="ax" x1="{root[0]}" y1="{root[1] + 12}" x2="{mx}" y2="{my - 12}"/>')
+        for j, v in enumerate(tree[i]):
+            lx, ly = mx + (j - 1) * 52, 200
+            pr = (i, j) in pruned
+            body.append(f'<line class="{"mut" if pr else "ax"}" x1="{mx}" y1="{my + 15}" x2="{lx}" y2="{ly - 12}"/>')
+            body.append(f'<rect class="{"grid" if pr else "box"}" x="{lx - 13}" y="{ly - 12}" width="26" height="24" rx="3" style="{"stroke-dasharray:4 3" if pr else ""}"/>')
+            body.append(f'<text class="{"t-mut" if pr else "title"}" x="{lx}" y="{ly + 4}" text-anchor="middle">{v}</text>')
+            if pr:
+                body.append(f'<text class="t-warn" x="{lx}" y="{ly + 28}" text-anchor="middle">pruned</text>')
+        body += tri(mx, my, False, mvals[i])
+    body += tri(root[0], root[1], True, 3, hot=True)
+    body.append('<text class="t-mut" x="20" y="38">MAX</text><text class="t-mut" x="20" y="114">MIN</text>')
+    body.append('<text class="t-ink" x="345" y="30">α = 3 after the first child</text>')
+    body.append('<text class="t-warn" x="326" y="114" text-anchor="start">2 ≤ α = 3 → stop</text>')
+    return svg(620, 245, "".join(body), "Alpha-beta pruning on a two-ply game tree")
+
+
 # ---------------------------------------------------------------- injection
 
 
