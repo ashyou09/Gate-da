@@ -1299,6 +1299,39 @@ def ab_tree():
     return svg(620, 245, "".join(body), "Alpha-beta pruning on a two-ply game tree")
 
 
+# ---------------------------------------------------------------- AI: logic
+
+
+@fig("resolution-tree", "Proof by resolution refutation that KB = {P ⇒ Q, Q ⇒ R, P} entails R. Convert the KB to clauses "
+     "(¬P ∨ Q, ¬Q ∨ R, P), add the negated goal ¬R, and resolve pairs that contain a literal and its negation. Reaching the "
+     "empty clause □ means KB ∧ ¬R is unsatisfiable, so KB ⊨ R.")
+def resolution_tree():
+    body = []
+    def box(x, y, t, hot=False, neg=False):
+        w = 10 * len(t) + 28
+        cls = "box-ink" if hot else "box"
+        style = "stroke:var(--gd-trap);stroke-width:1.6" if neg else ""
+        return [f'<rect class="{cls}" x="{x - w / 2}" y="{y - 14}" width="{w}" height="28" rx="14" style="{style}"/>',
+                f'<text class="{"on-ink" if hot else ("t-warn" if neg else "title")}" x="{x}" y="{y + 5}" text-anchor="middle">{t}</text>']
+    pts = {"nR": (80, 30), "c2": (230, 30), "nQ": (155, 95), "c1": (330, 95), "nP": (240, 160), "P": (430, 160), "E": (335, 225)}
+    for a, b in [("nR", "nQ"), ("c2", "nQ"), ("nQ", "nP"), ("c1", "nP"), ("nP", "E"), ("P", "E")]:
+        (x1, y1), (x2, y2) = pts[a], pts[b]
+        body.append(f'<line class="ax" x1="{x1}" y1="{y1 + 14}" x2="{x2}" y2="{y2 - 14}"/>')
+    body += box(*pts["nR"], "¬R", neg=True)
+    body += box(*pts["c2"], "¬Q ∨ R")
+    body += box(*pts["nQ"], "¬Q")
+    body += box(*pts["c1"], "¬P ∨ Q")
+    body += box(*pts["nP"], "¬P")
+    body += box(*pts["P"], "P")
+    body += box(*pts["E"], "□ (empty)", hot=True)
+    body.append('<text class="t-warn" x="80" y="62" text-anchor="middle">negated goal</text>')
+    notes = ["1. clauses: ¬P ∨ Q, ¬Q ∨ R, P", "2. add ¬R (negated goal)", "3. resolve on R → ¬Q", "4. resolve on Q → ¬P",
+             "5. resolve on P → □", "contradiction ⇒ KB ⊨ R"]
+    for i, t in enumerate(notes):
+        body.append(f'<text class="{"t-ink" if i == 5 else "t-mut"}" x="490" y="{40 + i * 24}">{t}</text>')
+    return svg(720, 250, "".join(body), "Resolution refutation tree")
+
+
 # ---------------------------------------------------------------- injection
 
 
