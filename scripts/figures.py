@@ -958,6 +958,37 @@ def er_q61():
     return svg(610, 270, "".join(body), "ER diagram with many-to-many relationship and multivalued attribute")
 
 
+# ---------------------------------------------------------------- DBMS: relational algebra
+
+
+@fig("ra-division", "Division in 2025 Q62. Each tick is a (branch, customer) pair from π(branch, customer)(Loan ⋈ Borrower). "
+     "Dividing by π(branch)(Loan) keeps a customer only if their row is ticked in every branch column. Only Karteek's "
+     "row is complete, so the result has 1 tuple.")
+def ra_division():
+    branches = ["Banjara Hills", "Kondapur", "SR Nagar", "Balanagar"]
+    pairs = {("Balanagar", "Karteek"), ("Balanagar", "Sunil"), ("Banjara Hills", "Anand"), ("Banjara Hills", "Karteek"),
+             ("Kondapur", "Karteek"), ("Kondapur", "Sunil"), ("SR Nagar", "Ankita"), ("SR Nagar", "Gopal"), ("SR Nagar", "Karteek")}
+    custs = ["Anand", "Ankita", "Gopal", "Karteek", "Sunil"]
+    x0, y0, cw, rh = 120, 50, 110, 34
+    body = []
+    for j, b in enumerate(branches):
+        body.append(f'<text class="title" x="{x0 + j * cw + cw / 2}" y="{y0 - 12}" text-anchor="middle">{b}</text>')
+    for i, c in enumerate(custs):
+        y = y0 + i * rh
+        full = all((b, c) in pairs for b in branches)
+        if full:
+            body.append(f'<rect class="box-ink" x="{x0 - 100}" y="{y + 2}" width="{100 + 4 * cw + 90}" height="{rh - 4}" rx="6" style="opacity:.22"/>')
+        body.append(f'<text class="{"t-ink" if full else ""}" x="{x0 - 12}" y="{y + rh / 2 + 4}" text-anchor="end" style="font-weight:{600 if full else 400}">{c}</text>')
+        for j, b in enumerate(branches):
+            cx = x0 + j * cw + cw / 2
+            body.append(f'<rect class="box" x="{cx - 14}" y="{y + 5}" width="28" height="{rh - 10}" rx="4"/>')
+            if (b, c) in pairs:
+                body.append(f'<text class="t-ink" x="{cx}" y="{y + rh / 2 + 5}" text-anchor="middle" style="font-size:14px;font-weight:700">✓</text>')
+        n = sum((b, c) in pairs for b in branches)
+        body.append(f'<text class="{"t-ink" if full else "t-mut"}" x="{x0 + 4 * cw + 10}" y="{y + rh / 2 + 4}">{n}/4{"  → kept" if full else ""}</text>')
+    return svg(640, y0 + len(custs) * rh + 12, "".join(body), "Relational division as a grid")
+
+
 # ---------------------------------------------------------------- injection
 
 
