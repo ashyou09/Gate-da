@@ -282,32 +282,53 @@
   "syllabus": "ER-model, relational model: relational algebra, tuple calculus, SQL, integrity constraints, normal form, file organization, indexing, data types, data transformation such as normalization, discretization, sampling, compression; data warehouse modelling: schema for multidimensional data models, concept hierarchies, measures: categorization and computations.",
   "topics": [
    {
-    "title": "ER model & relational model, keys, integrity constraints",
-    "priority": "high"
-   },
-   {
-    "title": "Functional dependencies, closures & normal forms",
-    "priority": "high"
+    "title": "ER model, relational model, keys & constraints",
+    "priority": "high",
+    "page": "er-relational-model",
+    "pyqs": 3,
+    "blurb": "Entities, relationships, cardinality and participation, ER → tables, super/candidate/primary/foreign keys, integrity constraints."
    },
    {
     "title": "Relational algebra & tuple calculus",
-    "priority": "med"
+    "priority": "high",
+    "page": "relational-algebra",
+    "pyqs": 5,
+    "blurb": "Select, project, joins, set operations, division; reading and evaluating expressions; tuple relational calculus."
    },
    {
-    "title": "SQL: joins, GROUP BY / HAVING, nested queries",
-    "priority": "high"
+    "title": "SQL",
+    "priority": "high",
+    "page": "sql",
+    "pyqs": 4,
+    "blurb": "SELECT-FROM-WHERE, joins, GROUP BY / HAVING, nested and correlated subqueries, NULLs, aggregates."
    },
    {
-    "title": "File organization & indexing, B+ trees",
-    "priority": "med"
+    "title": "Functional dependencies & normalization",
+    "priority": "high",
+    "page": "normalization",
+    "pyqs": 4,
+    "blurb": "Armstrong's axioms, attribute closure, candidate keys, 1NF–BCNF, lossless and dependency-preserving decomposition."
    },
    {
-    "title": "Data types & data transformation (normalization, discretization, sampling, compression)",
-    "priority": "med"
+    "title": "File organization, indexing & B+ trees",
+    "priority": "med",
+    "page": "indexing-bplus-trees",
+    "pyqs": 3,
+    "blurb": "Heap/sorted/hashed files, dense vs sparse and clustered indexes, B+ tree order, insertion and splits, hash vs tree indexes."
    },
    {
-    "title": "Data warehousing: star/snowflake schema, OLAP, concept hierarchies, measures",
-    "priority": "med"
+    "title": "Data types & data transformation",
+    "priority": "med",
+    "page": "data-transformation",
+    "pyqs": 1,
+    "blurb": "Attribute types, min-max and z-score normalization, discretization, sampling, compression."
+   },
+   {
+    "title": "Data warehousing & OLAP",
+    "priority": "med",
+    "page": "data-warehousing",
+    "pyqs": 3,
+    "blurb": "Star and snowflake schemas, facts and dimensions, concept hierarchies, cuboids, CUBE, roll-up / drill-down / slice / dice, measures."
    }
   ],
   "note": "Spiked to 18 marks in 2026. An SQL or normalization question has appeared every year."

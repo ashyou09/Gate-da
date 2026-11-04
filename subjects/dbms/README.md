@@ -13,7 +13,7 @@ Spiked to 18 marks in 2026. An SQL or normalization question has appeared every 
 
 Hub page: `src/content/docs/dbms/index.md` (site URL `/dbms/`)
 
-- _Not started yet._
+- 1. ER, keys & constraints — `src/content/docs/dbms/er-relational-model.md`
 
 ## Official syllabus
 

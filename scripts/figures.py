@@ -912,6 +912,52 @@ def pca_scree():
     return svg(520, 285, "".join(body), "Scree plot and cumulative explained variance")
 
 
+# ---------------------------------------------------------------- DBMS: ER
+
+
+@fig("er-q61", "The ER diagram of 2026 Q61 in Chen notation. Rectangles are entities, the diamond is the relationship, "
+     "ellipses are attributes (key attributes underlined, the multivalued attribute A22 in a double ellipse). Double "
+     "lines mean total participation; M and N mark a many-to-many relationship. It needs four 3NF tables.")
+def er_q61():
+    body = []
+
+    def ent(x, y, name):
+        return [f'<rect class="box" x="{x - 45}" y="{y - 20}" width="90" height="40" rx="2" style="stroke:var(--gd-ink);stroke-width:1.6"/>',
+                f'<text class="title" x="{x}" y="{y + 5}" text-anchor="middle">{name}</text>']
+
+    def attr(x, y, name, ex, ey, key=False, multi=False):
+        out = [f'<line class="ax" x1="{x}" y1="{y}" x2="{ex}" y2="{ey}"/>',
+               f'<ellipse class="box" cx="{x}" cy="{y}" rx="30" ry="15"/>']
+        if multi:
+            out.append(f'<ellipse class="box" style="fill:none" cx="{x}" cy="{y}" rx="25" ry="11"/>')
+        deco = ' style="text-decoration:underline"' if key else ""
+        out.append(f'<text x="{x}" y="{y + 4}" text-anchor="middle"{deco}>{name}</text>')
+        return out
+
+    E1, E2, R = (110, 130), (470, 130), (290, 130)
+    for (x, y), nm, k in ((E1, "A1", "1"), (E2, "A2", "2")):
+        ex, ey = x, y - 20
+        for i, dx in enumerate((-70, 0, 70)):
+            body += attr(x + dx, y - 85, f"A{k}{i + 1}", x + dx * 0.4, ey, key=(i == 0), multi=(k == "2" and i == 1))
+    for (x, y), lab in ((E1, "M"), (E2, "N")):
+        sx = x + 45 if x < R[0] else x - 45
+        rx = R[0] - 45 if x < R[0] else R[0] + 45
+        for off in (-3, 3):
+            body.append(f'<line class="ax" x1="{sx}" y1="{y + off}" x2="{rx}" y2="{R[1] + off}"/>')
+        body.append(f'<text class="t-ink" x="{(sx + rx) / 2}" y="{y - 10}" text-anchor="middle">{lab}</text>')
+    body.append(f'<polygon class="box" style="stroke:var(--gd-ink);stroke-width:1.6" points="{R[0] - 45},{R[1]} {R[0]},{R[1] - 28} {R[0] + 45},{R[1]} {R[0]},{R[1] + 28}"/>')
+    body.append(f'<text class="title" x="{R[0]}" y="{R[1] + 5}" text-anchor="middle">R12</text>')
+    body += ent(*E1, "E1") + ent(*E2, "E2")
+    tables = [("E1", "(A11, A12, A13)"), ("E2", "(A21, A23)"), ("E2_A22", "(A21, A22)"), ("R12", "(A11, A21)")]
+    body.append('<text class="title" x="30" y="205">tables (3NF):</text>')
+    for i, (t, cols) in enumerate(tables):
+        x = 30 + i * 145
+        body.append(f'<rect class="box" x="{x}" y="215" width="135" height="44" rx="6"/>')
+        body.append(f'<text class="t-ink" x="{x + 67}" y="233" text-anchor="middle" style="font-weight:600">{t}</text>')
+        body.append(f'<text x="{x + 67}" y="250" text-anchor="middle">{cols}</text>')
+    return svg(610, 270, "".join(body), "ER diagram with many-to-many relationship and multivalued attribute")
+
+
 # ---------------------------------------------------------------- injection
 
 
