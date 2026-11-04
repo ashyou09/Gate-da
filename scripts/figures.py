@@ -1332,6 +1332,31 @@ def resolution_tree():
     return svg(720, 250, "".join(body), "Resolution refutation tree")
 
 
+@fig("fol-quantifier-order", "Quantifier order changes meaning. Left: ∀x ∃y Loves(x, y), meaning everyone loves someone, possibly a "
+     "different person each. Right: ∃y ∀x Loves(x, y), meaning there is one person whom everyone loves. The right-hand "
+     "situation implies the left, but not the other way round.")
+def fol_quant_order():
+    people = ["a", "b", "c"]
+    body = []
+    for k, (title, edges) in enumerate([("∀x ∃y Loves(x, y)", [(0, 1), (1, 2), (2, 0)]), ("∃y ∀x Loves(x, y)", [(0, 1), (1, 1), (2, 1)])]):
+        ox = 20 + k * 310
+        body.append(f'<text class="title" x="{ox + 140}" y="18" text-anchor="middle">{title}</text>')
+        L = [(ox + 50, 60 + i * 55) for i in range(3)]
+        R = [(ox + 230, 60 + i * 55) for i in range(3)]
+        body.append(f'<text class="t-mut" x="{ox + 50}" y="40" text-anchor="middle">x</text><text class="t-mut" x="{ox + 230}" y="40" text-anchor="middle">y</text>')
+        for a, b in edges:
+            (x1, y1), (x2, y2) = L[a], R[b]
+            body.append(f'<line class="hl" x1="{x1 + 15}" y1="{y1}" x2="{x2 - 18}" y2="{y2}"/>')
+            body.append(f'<path class="hl" style="fill:none" d="M{x2 - 26},{y2 - 5} L{x2 - 17},{y2} L{x2 - 26},{y2 + 5}" transform="rotate({0} {x2} {y2})"/>')
+        for i, nm in enumerate(people):
+            for (x, y) in (L[i], R[i]):
+                hot = k == 1 and (x, y) == R[1]
+                body.append(f'<circle class="{"box-ink" if hot else "box"}" cx="{x}" cy="{y}" r="14"/>')
+                body.append(f'<text class="{"on-ink" if hot else "title"}" x="{x}" y="{y + 4}" text-anchor="middle">{nm}</text>')
+        body.append(f'<text class="t-mut" x="{ox + 140}" y="235" text-anchor="middle">{"each x has its own y" if k == 0 else "one y (b) works for every x"}</text>')
+    return svg(640, 248, "".join(body), "Quantifier order in first-order logic")
+
+
 # ---------------------------------------------------------------- injection
 
 
