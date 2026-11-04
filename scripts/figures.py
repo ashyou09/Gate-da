@@ -1393,6 +1393,56 @@ def bn_q24():
     return svg(560, 215, "".join(body), "Bayesian network of 2024 Q24")
 
 
+@fig("ve-chain", "Variable elimination on the chain A → B → C to get P(C). Multiply the factors that mention A and sum A out, "
+     "giving a new factor over B; then multiply in P(C | B) and sum B out. Each step only touches small tables, instead of "
+     "the whole joint over (A, B, C). Values are listed for the variable = 0, 1.")
+def ve_chain():
+    steps = [("P(A) · P(B|A)", "Σ over A", "g(B) = P(B)", "(0.69, 0.31)"),
+             ("g(B) · P(C|B)", "Σ over B", "h(C) = P(C)", "(0.583, 0.417)")]
+    body = []
+    for i, (prod, op, res, val) in enumerate(steps):
+        y = 30 + i * 80
+        body.append(f'<rect class="box" x="20" y="{y}" width="170" height="40" rx="8"/>')
+        body.append(f'<text class="title" x="105" y="{y + 25}" text-anchor="middle">{prod}</text>')
+        body.append(f'<path class="ax" d="M195,{y + 20} h60 m-6,-5 l6,5 l-6,5"/>')
+        body.append(f'<text class="t-mut" x="225" y="{y + 12}" text-anchor="middle">{op}</text>')
+        body.append(f'<rect class="box-ink" x="262" y="{y}" width="150" height="40" rx="8"/>')
+        body.append(f'<text class="on-ink" x="337" y="{y + 25}" text-anchor="middle">{res}</text>')
+        body.append(f'<text class="t-ink" x="425" y="{y + 25}">= {val}</text>')
+    body.append('<path class="mut" d="M337,72 v28 H105 v8"/>')
+    return svg(640, 170, "".join(body), "Variable elimination on a chain")
+
+
+@fig("sampling-convergence", "Rejection sampling for P(A=1 | C=1) on the chain example, from one run of the sampler. Each "
+     "point is the estimate after N prior samples (only the ~41.7% with C = 1 are kept). The estimate wanders for small N and "
+     "settles near the exact value 0.547 (dashed) as N grows: approximate, but consistent.")
+def sampling_conv():
+    import random as _r
+    _r.seed(3)
+    pA, pB, pC = 0.3, {1: 0.8, 0: 0.1}, {1: 0.9, 0: 0.2}
+    kept = hits = 0
+    pts = []
+    marks = set(int(round(10 ** e)) for e in np.linspace(1, 5, 60))
+    for n in range(1, 100001):
+        a = _r.random() < pA; b = _r.random() < pB[a]; c = _r.random() < pC[b]
+        if c:
+            kept += 1; hits += a
+        if n in marks and kept:
+            pts.append((np.log10(n), hits / kept))
+    p = Plot(60, 20, 480, 200, (1, 5), (0.2, 0.9))
+    body = [p.axes("number of samples N (log scale)", "estimate", xoff=32, yoff=40)]
+    for e in range(1, 6):
+        body.append(f'<text class="t-mut" x="{p.X(e):.1f}" y="{p.Y(0.2) + 15:.1f}" text-anchor="middle">10^{e}</text>')
+    for v in (0.3, 0.5, 0.7, 0.9):
+        body.append(f'<text class="t-mut" x="{p.X(1) - 6:.1f}" y="{p.Y(v) + 4:.1f}" text-anchor="end">{v}</text>')
+    body.append(f'<line class="mut" x1="{p.X(1):.1f}" y1="{p.Y(0.5468):.1f}" x2="{p.X(5):.1f}" y2="{p.Y(0.5468):.1f}"/>')
+    body.append(p.path([a for a, _ in pts], [b for _, b in pts], "ink"))
+    for a, b in pts:
+        body.append(f'<circle class="dot-ink" cx="{p.X(a):.1f}" cy="{p.Y(b):.1f}" r="2.4"/>')
+    body.append(f'<text class="t-mut" x="{p.X(4.95):.1f}" y="{p.Y(0.5468) - 8:.1f}" text-anchor="end">exact 0.547</text>')
+    return svg(560, 270, "".join(body), "Convergence of rejection sampling")
+
+
 # ---------------------------------------------------------------- injection
 
 

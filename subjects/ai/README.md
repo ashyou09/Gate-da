@@ -14,6 +14,12 @@ Volatile (3 to 11 marks), but the search and logic questions are cheap marks.
 Hub page: `src/content/docs/ai/index.md` (site URL `/ai/`)
 
 - 1. Uninformed search — `src/content/docs/ai/uninformed-search.md`
+- 2. Informed search & A* — `src/content/docs/ai/informed-search.md`
+- 3. Minimax & alpha-beta — `src/content/docs/ai/adversarial-search.md`
+- 4. Propositional logic — `src/content/docs/ai/propositional-logic.md`
+- 5. First-order logic — `src/content/docs/ai/first-order-logic.md`
+- 6. Bayesian networks — `src/content/docs/ai/bayesian-networks.md`
+- 7. Inference: VE & sampling — `src/content/docs/ai/bn-inference.md`
 
 ## Official syllabus
 
