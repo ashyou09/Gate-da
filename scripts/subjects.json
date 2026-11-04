@@ -445,36 +445,53 @@
   "syllabus": "Search: informed, uninformed, adversarial; logic: propositional, predicate; reasoning under uncertainty: conditional independence representation, exact inference through variable elimination, and approximate inference through sampling.",
   "topics": [
    {
-    "title": "Uninformed search: BFS, DFS, UCS, IDDFS",
-    "priority": "high"
+    "title": "Uninformed search",
+    "priority": "high",
+    "page": "uninformed-search",
+    "pyqs": 2,
+    "blurb": "Problem formulation, BFS, DFS, uniform-cost, depth-limited and iterative deepening; completeness, optimality, time and space."
    },
    {
-    "title": "Informed search: greedy best-first, A*, admissibility & consistency",
-    "priority": "high"
+    "title": "Informed search & A*",
+    "priority": "high",
+    "page": "informed-search",
+    "pyqs": 2,
+    "blurb": "Greedy best-first, A*, f = g + h, admissible and consistent heuristics, tracing A* by hand, combining heuristics."
    },
    {
-    "title": "Adversarial search: minimax & alpha-beta pruning",
-    "priority": "med"
+    "title": "Adversarial search: minimax & alpha-beta",
+    "priority": "high",
+    "page": "adversarial-search",
+    "pyqs": 3,
+    "blurb": "Game trees, minimax values, alpha-beta pruning conditions, move ordering and complexity."
    },
    {
-    "title": "Propositional logic: equivalences, CNF, resolution",
-    "priority": "high"
+    "title": "Propositional logic",
+    "priority": "high",
+    "page": "propositional-logic",
+    "pyqs": 4,
+    "blurb": "Truth tables, equivalences, tautologies, entailment, CNF, resolution, translating English."
    },
    {
-    "title": "Predicate (first-order) logic",
-    "priority": "high"
+    "title": "First-order (predicate) logic",
+    "priority": "high",
+    "page": "first-order-logic",
+    "pyqs": 3,
+    "blurb": "Quantifiers, translating sentences, ∀ with ⇒ and ∃ with ∧, validity, negation of quantifiers, unification and inference."
    },
    {
     "title": "Bayesian networks & conditional independence",
-    "priority": "med"
+    "priority": "med",
+    "page": "bayesian-networks",
+    "pyqs": 2,
+    "blurb": "Factorising the joint, reading independences with d-separation, colliders, Markov blanket, computing joint probabilities."
    },
    {
-    "title": "Exact inference: variable elimination",
-    "priority": "med"
-   },
-   {
-    "title": "Approximate inference: sampling",
-    "priority": "low"
+    "title": "Inference: variable elimination & sampling",
+    "priority": "med",
+    "page": "bn-inference",
+    "pyqs": 1,
+    "blurb": "Exact inference by enumeration and variable elimination; approximate inference by prior, rejection, likelihood-weighting and Gibbs sampling."
    }
   ],
   "note": "Volatile (3 to 11 marks), but the search and logic questions are cheap marks."

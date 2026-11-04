@@ -13,7 +13,7 @@ Volatile (3 to 11 marks), but the search and logic questions are cheap marks.
 
 Hub page: `src/content/docs/ai/index.md` (site URL `/ai/`)
 
-- _Not started yet._
+- 1. Uninformed search — `src/content/docs/ai/uninformed-search.md`
 
 ## Official syllabus
 

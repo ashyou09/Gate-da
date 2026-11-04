@@ -1171,6 +1171,81 @@ def dw_lattice():
     return svg(620, 240, "".join(body), "Lattice of cuboids for three dimensions")
 
 
+# ---------------------------------------------------------------- AI: search
+
+
+def _graph(nodes, edges, hl_path=(), hvals=None, r=15):
+    """nodes: {name: (x, y)}; edges: [(a, b, label)] directed; hl_path: sequence of nodes to highlight."""
+    body = []
+    hp = set(zip(hl_path, hl_path[1:]))
+    for a, b, lab in edges:
+        (x1, y1), (x2, y2) = nodes[a], nodes[b]
+        dx, dy = x2 - x1, y2 - y1
+        L = (dx * dx + dy * dy) ** 0.5
+        ux, uy = dx / L, dy / L
+        sx, sy, ex, ey = x1 + ux * r, y1 + uy * r, x2 - ux * (r + 2), y2 - uy * (r + 2)
+        cls = "hl" if (a, b) in hp else "ax"
+        body.append(f'<line class="{cls}" x1="{sx:.1f}" y1="{sy:.1f}" x2="{ex:.1f}" y2="{ey:.1f}" style="{"" if cls == "hl" else "stroke-width:1.4"}"/>')
+        ax, ay = ex, ey
+        px, py = -uy, ux
+        body.append(f'<path class="{cls}" style="fill:none" d="M{ax - ux * 8 + px * 4:.1f},{ay - uy * 8 + py * 4:.1f} L{ax:.1f},{ay:.1f} L{ax - ux * 8 - px * 4:.1f},{ay - uy * 8 - py * 4:.1f}"/>')
+        mx, my = (x1 + x2) / 2 - uy * 11, (y1 + y2) / 2 + ux * 11
+        if lab != "":
+            body.append(f'<text class="t-mut" x="{mx:.1f}" y="{my + 4:.1f}" text-anchor="middle">{lab}</text>')
+    for n, (x, y) in nodes.items():
+        on = n in hl_path
+        body.append(f'<circle class="{"box-ink" if on else "box"}" cx="{x}" cy="{y}" r="{r}"/>')
+        body.append(f'<text class="{"on-ink" if on else "title"}" x="{x}" y="{y + 4}" text-anchor="middle">{n}</text>')
+        if hvals and n in hvals:
+            body.append(f'<text class="t-hl" x="{x}" y="{y - r - 6}" text-anchor="middle">h={hvals[n]}</text>')
+    return body
+
+
+@fig("search-bfs-dfs", "The order in which BFS and DFS expand the same binary tree (children visited left to right). BFS goes "
+     "level by level using a FIFO queue; DFS goes as deep as possible first using a LIFO stack. BFS needs memory for a whole "
+     "level (b^d nodes); DFS only for one path and its siblings (b·m).")
+def search_bfs_dfs():
+    pos = {}
+    def place(i, depth, x, span):
+        pos[i] = (x, 40 + depth * 62)
+        if depth < 3:
+            place(2 * i, depth + 1, x - span / 2, span / 2)
+            place(2 * i + 1, depth + 1, x + span / 2, span / 2)
+    body = []
+    for k, (title, order) in enumerate([("BFS (queue)", None), ("DFS (stack)", None)]):
+        pos.clear(); place(1, 0, 155 + k * 310, 150)
+        body.append(f'<text class="title" x="{155 + k * 310}" y="16" text-anchor="middle">{title}</text>')
+        bfs = sorted(pos)
+        dfs = []
+        def pre(i):
+            if i in pos:
+                dfs.append(i); pre(2 * i); pre(2 * i + 1)
+        pre(1)
+        seq = bfs if k == 0 else dfs
+        rank = {n: j + 1 for j, n in enumerate(seq)}
+        for i in pos:
+            for c in (2 * i, 2 * i + 1):
+                if c in pos:
+                    (x1, y1), (x2, y2) = pos[i], pos[c]
+                    body.append(f'<line class="grid" x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" style="stroke-width:1.4"/>')
+        for i, (x, y) in pos.items():
+            body.append(f'<circle class="{"box-ink" if rank[i] <= 5 else "box"}" cx="{x}" cy="{y}" r="12"/>')
+            body.append(f'<text class="{"on-ink" if rank[i] <= 5 else ""}" x="{x}" y="{y + 4}" text-anchor="middle">{rank[i]}</text>')
+    body.append('<text class="t-mut" x="310" y="262" text-anchor="middle">numbers = expansion order; the first 5 expansions are filled</text>')
+    return svg(620, 270, "".join(body), "BFS versus DFS expansion order")
+
+
+@fig("search-ucs", "A weighted graph from S to the goal G. BFS finds the path with the fewest edges, S → B → G (cost 7). "
+     "Uniform-cost search always expands the cheapest frontier node, so it finds the cheapest path S → A → C → G (cost 5, highlighted).")
+def search_ucs():
+    nodes = {"S": (50, 120), "A": (190, 50), "B": (220, 200), "C": (350, 50), "D": (330, 128), "G": (490, 110)}
+    edges = [("S", "A", 1), ("S", "B", 5), ("A", "C", 3), ("A", "D", 1), ("B", "G", 2), ("C", "G", 1), ("D", "G", 6)]
+    body = _graph(nodes, edges, hl_path=("S", "A", "C", "G"))
+    body.append('<text class="t-mut" x="540" y="60">BFS: S-B-G, cost 7</text>')
+    body.append('<text class="t-ink" x="540" y="84">UCS: S-A-C-G, cost 5</text>')
+    return svg(700, 220, "".join(body), "Weighted graph comparing BFS and uniform-cost search")
+
+
 # ---------------------------------------------------------------- injection
 
 
