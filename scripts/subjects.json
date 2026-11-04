@@ -1,34 +1,416 @@
 [
- {"slug":"general-aptitude","name":"General Aptitude","short":"GA","order":8,"marks":[15,15,15],
-  "syllabus":"Verbal Aptitude (grammar, vocabulary, reading comprehension, verbal analogies), Quantitative Aptitude (data interpretation, ratios, percentages, permutations & combinations, geometry, mensuration, series, logarithms), Analytical Aptitude (logic, deduction, induction, analogy, number relations) and Spatial Aptitude (transformation of shapes, paper folding, cutting, patterns).",
-  "topics":[["Verbal: grammar & vocabulary","high"],["Verbal: reading comprehension & critical reasoning","high"],["Quant: percentages, ratios, averages, mixtures","high"],["Quant: time-speed-work, ages, profit-loss","high"],["Quant: counting & probability basics","med"],["Quant: data interpretation (tables, charts)","high"],["Analytical: logic, syllogisms, arrangements","high"],["Spatial: folding, cutting, rotation, patterns","med"]],
-  "note":"Exactly 15 marks every year (5 one-mark + 5 two-mark). Do 30 minutes of PYQs daily alongside other subjects."},
- {"slug":"probability-statistics","name":"Probability & Statistics","short":"P&S","order":5,"marks":[16,18,13],
-  "syllabus":"Counting (permutations and combinations), probability axioms, sample space, events, independent events, mutually exclusive events, marginal, conditional and joint probability, Bayes theorem, conditional expectation and variance, mean, median, mode and standard deviation, correlation and covariance, random variables, discrete random variables and probability mass functions, uniform, Bernoulli, binomial distribution, continuous random variables and probability distribution function, uniform, exponential, Poisson, normal, standard normal, t-distribution, chi-squared distributions, cumulative distribution function, conditional PDF, central limit theorem, confidence interval, z-test, t-test, chi-squared test.",
-  "topics":[["Counting & probability axioms","high"],["Conditional probability, independence & Bayes' theorem","high"],["Random variables, expectation, variance, covariance","high"],["Discrete distributions: uniform, Bernoulli, binomial, Poisson","high"],["Continuous distributions: uniform, exponential, normal","high"],["CDF/PDF manipulation & transformations","med"],["Conditional expectation & law of total variance","med"],["Descriptive statistics & correlation","med"],["CLT & confidence intervals","med"],["Hypothesis tests: z, t, chi-squared","med"],["t and chi-squared distributions","low"]],
-  "note":"Largest maths block; never below 13 marks. Bayes' theorem has appeared every year."},
- {"slug":"linear-algebra","name":"Linear Algebra","short":"LA","order":6,"marks":[10,17,8],
-  "syllabus":"Vector space, subspaces, linear dependence and independence of vectors, matrices, projection matrix, orthogonal matrix, idempotent matrix, partition matrix and their properties, quadratic forms, systems of linear equations and solutions; Gaussian elimination, eigenvalues and eigenvectors, determinant, rank, nullity, projections, LU decomposition, singular value decomposition.",
-  "topics":[["Vector spaces, subspaces, basis, independence","med"],["Rank, nullity & rank-nullity theorem","high"],["Systems of linear equations & Gaussian elimination","high"],["Determinants & special matrices (orthogonal, idempotent, projection)","high"],["Eigenvalues & eigenvectors","high"],["Quadratic forms & definiteness","med"],["LU decomposition","low"],["SVD & its link to PCA","high"]],
-  "note":"Volatile (8 to 17 marks). Eigenvalues have appeared every year."},
- {"slug":"calculus-optimization","name":"Calculus & Optimization","short":"Calc","order":7,"marks":[8,8,7],
-  "syllabus":"Functions of a single variable, limit, continuity and differentiability, Taylor series, maxima and minima, optimization involving a single variable.",
-  "topics":[["Limits, continuity & differentiability","med"],["Taylor series","med"],["Maxima & minima (single and multivariable)","high"],["Convexity","high"],["Gradient descent as an update rule","high"],["Constrained optimization & Lagrange multipliers","low"]],
-  "note":"Small but always present (7–8 marks)."},
- {"slug":"pdsa","name":"Programming, DS & Algorithms","short":"PDSA","order":1,"marks":[17,16,16],
-  "syllabus":"Programming in Python, basic data structures: stacks, queues, linked lists, trees, hash tables; search algorithms: linear search and binary search, basic sorting algorithms: selection sort, bubble sort and insertion sort; divide and conquer: mergesort, quicksort; introduction to graph theory; basic graph algorithms: traversals and shortest path.",
-  "topics":[],
-  "note":"The most stable subject in the paper."},
- {"slug":"dbms","name":"DBMS & Warehousing","short":"DBMS","order":3,"marks":[8,9,18],
-  "syllabus":"ER-model, relational model: relational algebra, tuple calculus, SQL, integrity constraints, normal form, file organization, indexing, data types, data transformation such as normalization, discretization, sampling, compression; data warehouse modelling: schema for multidimensional data models, concept hierarchies, measures: categorization and computations.",
-  "topics":[["ER model & relational model, keys, integrity constraints","high"],["Functional dependencies, closures & normal forms","high"],["Relational algebra & tuple calculus","med"],["SQL: joins, GROUP BY / HAVING, nested queries","high"],["File organization & indexing, B+ trees","med"],["Data types & data transformation (normalization, discretization, sampling, compression)","med"],["Data warehousing: star/snowflake schema, OLAP, concept hierarchies, measures","med"]],
-  "note":"Spiked to 18 marks in 2026. An SQL or normalization question has appeared every year."},
- {"slug":"machine-learning","name":"Machine Learning","short":"ML","order":2,"marks":[11,14,16],
-  "syllabus":"Supervised learning: regression and classification problems, simple linear regression, multiple linear regression, ridge regression, logistic regression, k-nearest neighbour, naive Bayes classifier, linear discriminant analysis, support vector machine, decision trees, bias-variance trade-off, cross-validation methods such as leave-one-out (LOO) and k-folds cross-validation, multi-layer perceptron, feed-forward neural network. Unsupervised learning: clustering algorithms, k-means/k-medoid, hierarchical clustering, top-down, bottom-up: single-linkage, multiple-linkage, dimensionality reduction, principal component analysis.",
-  "topics":[["ML basics, bias-variance, overfitting & cross-validation","high"],["Linear regression: simple, multiple, ridge (and lasso)","high"],["Logistic regression","high"],["Evaluation metrics: confusion matrix, precision, recall, F1, ROC","high"],["k-NN & naive Bayes","med"],["Linear discriminant analysis","med"],["Support vector machines","med"],["Decision trees: entropy, information gain, Gini","high"],["Neural networks: MLP, activations, backpropagation","med"],["Clustering: k-means, k-medoid, hierarchical","high"],["PCA & dimensionality reduction","high"]],
-  "note":"Rising every year (11 → 14 → 16)."},
- {"slug":"ai","name":"Artificial Intelligence","short":"AI","order":4,"marks":[11,3,8],
-  "syllabus":"Search: informed, uninformed, adversarial; logic: propositional, predicate; reasoning under uncertainty: conditional independence representation, exact inference through variable elimination, and approximate inference through sampling.",
-  "topics":[["Uninformed search: BFS, DFS, UCS, IDDFS","high"],["Informed search: greedy best-first, A*, admissibility & consistency","high"],["Adversarial search: minimax & alpha-beta pruning","med"],["Propositional logic: equivalences, CNF, resolution","high"],["Predicate (first-order) logic","high"],["Bayesian networks & conditional independence","med"],["Exact inference: variable elimination","med"],["Approximate inference: sampling","low"]],
-  "note":"Volatile (3 to 11 marks), but the search and logic questions are cheap marks."}
+ {
+  "slug": "general-aptitude",
+  "name": "General Aptitude",
+  "short": "GA",
+  "order": 8,
+  "marks": [
+   15,
+   15,
+   15
+  ],
+  "syllabus": "Verbal Aptitude (grammar, vocabulary, reading comprehension, verbal analogies), Quantitative Aptitude (data interpretation, ratios, percentages, permutations & combinations, geometry, mensuration, series, logarithms), Analytical Aptitude (logic, deduction, induction, analogy, number relations) and Spatial Aptitude (transformation of shapes, paper folding, cutting, patterns).",
+  "topics": [
+   {
+    "title": "Verbal: grammar & vocabulary",
+    "priority": "high"
+   },
+   {
+    "title": "Verbal: reading comprehension & critical reasoning",
+    "priority": "high"
+   },
+   {
+    "title": "Quant: percentages, ratios, averages, mixtures",
+    "priority": "high"
+   },
+   {
+    "title": "Quant: time-speed-work, ages, profit-loss",
+    "priority": "high"
+   },
+   {
+    "title": "Quant: counting & probability basics",
+    "priority": "med"
+   },
+   {
+    "title": "Quant: data interpretation (tables, charts)",
+    "priority": "high"
+   },
+   {
+    "title": "Analytical: logic, syllogisms, arrangements",
+    "priority": "high"
+   },
+   {
+    "title": "Spatial: folding, cutting, rotation, patterns",
+    "priority": "med"
+   }
+  ],
+  "note": "Exactly 15 marks every year (5 one-mark + 5 two-mark). Do 30 minutes of PYQs daily alongside other subjects."
+ },
+ {
+  "slug": "probability-statistics",
+  "name": "Probability & Statistics",
+  "short": "P&S",
+  "order": 5,
+  "marks": [
+   16,
+   18,
+   13
+  ],
+  "syllabus": "Counting (permutations and combinations), probability axioms, sample space, events, independent events, mutually exclusive events, marginal, conditional and joint probability, Bayes theorem, conditional expectation and variance, mean, median, mode and standard deviation, correlation and covariance, random variables, discrete random variables and probability mass functions, uniform, Bernoulli, binomial distribution, continuous random variables and probability distribution function, uniform, exponential, Poisson, normal, standard normal, t-distribution, chi-squared distributions, cumulative distribution function, conditional PDF, central limit theorem, confidence interval, z-test, t-test, chi-squared test.",
+  "topics": [
+   {
+    "title": "Counting & probability axioms",
+    "priority": "high"
+   },
+   {
+    "title": "Conditional probability, independence & Bayes' theorem",
+    "priority": "high"
+   },
+   {
+    "title": "Random variables, expectation, variance, covariance",
+    "priority": "high"
+   },
+   {
+    "title": "Discrete distributions: uniform, Bernoulli, binomial, Poisson",
+    "priority": "high"
+   },
+   {
+    "title": "Continuous distributions: uniform, exponential, normal",
+    "priority": "high"
+   },
+   {
+    "title": "CDF/PDF manipulation & transformations",
+    "priority": "med"
+   },
+   {
+    "title": "Conditional expectation & law of total variance",
+    "priority": "med"
+   },
+   {
+    "title": "Descriptive statistics & correlation",
+    "priority": "med"
+   },
+   {
+    "title": "CLT & confidence intervals",
+    "priority": "med"
+   },
+   {
+    "title": "Hypothesis tests: z, t, chi-squared",
+    "priority": "med"
+   },
+   {
+    "title": "t and chi-squared distributions",
+    "priority": "low"
+   }
+  ],
+  "note": "Largest maths block; never below 13 marks. Bayes' theorem has appeared every year."
+ },
+ {
+  "slug": "linear-algebra",
+  "name": "Linear Algebra",
+  "short": "LA",
+  "order": 6,
+  "marks": [
+   10,
+   17,
+   8
+  ],
+  "syllabus": "Vector space, subspaces, linear dependence and independence of vectors, matrices, projection matrix, orthogonal matrix, idempotent matrix, partition matrix and their properties, quadratic forms, systems of linear equations and solutions; Gaussian elimination, eigenvalues and eigenvectors, determinant, rank, nullity, projections, LU decomposition, singular value decomposition.",
+  "topics": [
+   {
+    "title": "Vector spaces, subspaces, basis, independence",
+    "priority": "med"
+   },
+   {
+    "title": "Rank, nullity & rank-nullity theorem",
+    "priority": "high"
+   },
+   {
+    "title": "Systems of linear equations & Gaussian elimination",
+    "priority": "high"
+   },
+   {
+    "title": "Determinants & special matrices (orthogonal, idempotent, projection)",
+    "priority": "high"
+   },
+   {
+    "title": "Eigenvalues & eigenvectors",
+    "priority": "high"
+   },
+   {
+    "title": "Quadratic forms & definiteness",
+    "priority": "med"
+   },
+   {
+    "title": "LU decomposition",
+    "priority": "low"
+   },
+   {
+    "title": "SVD & its link to PCA",
+    "priority": "high"
+   }
+  ],
+  "note": "Volatile (8 to 17 marks). Eigenvalues have appeared every year."
+ },
+ {
+  "slug": "calculus-optimization",
+  "name": "Calculus & Optimization",
+  "short": "Calc",
+  "order": 7,
+  "marks": [
+   8,
+   8,
+   7
+  ],
+  "syllabus": "Functions of a single variable, limit, continuity and differentiability, Taylor series, maxima and minima, optimization involving a single variable.",
+  "topics": [
+   {
+    "title": "Limits, continuity & differentiability",
+    "priority": "med"
+   },
+   {
+    "title": "Taylor series",
+    "priority": "med"
+   },
+   {
+    "title": "Maxima & minima (single and multivariable)",
+    "priority": "high"
+   },
+   {
+    "title": "Convexity",
+    "priority": "high"
+   },
+   {
+    "title": "Gradient descent as an update rule",
+    "priority": "high"
+   },
+   {
+    "title": "Constrained optimization & Lagrange multipliers",
+    "priority": "low"
+   }
+  ],
+  "note": "Small but always present (7–8 marks)."
+ },
+ {
+  "slug": "pdsa",
+  "name": "Programming, DS & Algorithms",
+  "short": "PDSA",
+  "order": 1,
+  "marks": [
+   17,
+   16,
+   16
+  ],
+  "syllabus": "Programming in Python, basic data structures: stacks, queues, linked lists, trees, hash tables; search algorithms: linear search and binary search, basic sorting algorithms: selection sort, bubble sort and insertion sort; divide and conquer: mergesort, quicksort; introduction to graph theory; basic graph algorithms: traversals and shortest path.",
+  "topics": [
+   {
+    "title": "Python semantics & code tracing",
+    "priority": "high",
+    "page": "python-semantics",
+    "pyqs": 8,
+    "blurb": "Mutability, aliasing, default arguments, closures and the operator rules behind every 'what does this print?' question."
+   },
+   {
+    "title": "Recursion & call counting",
+    "priority": "high",
+    "page": "recursion-tracing",
+    "pyqs": 5,
+    "blurb": "Call trees, the runtime stack, counting activations and the order in which work happens."
+   },
+   {
+    "title": "Complexity & recurrences",
+    "priority": "high",
+    "page": "complexity-recurrences",
+    "pyqs": 2,
+    "blurb": "Big-O, Ω and Θ, counting loops, unrolling, recursion trees and the Master theorem."
+   },
+   {
+    "title": "Searching & sorting",
+    "priority": "high",
+    "page": "searching-sorting",
+    "pyqs": 9,
+    "blurb": "Binary search, selection/bubble/insertion counts, inversions, merge sort and quicksort."
+   },
+   {
+    "title": "Graphs: traversals & shortest paths",
+    "priority": "high",
+    "pyqs": 5,
+    "blurb": "BFS, DFS, edge types, topological order, Dijkstra, Bellman-Ford and MST basics."
+   },
+   {
+    "title": "Hashing",
+    "priority": "med",
+    "pyqs": 3,
+    "blurb": "Hash functions, chaining, linear probing traces and load factor."
+   },
+   {
+    "title": "Stacks, queues, deques & linked lists",
+    "priority": "med",
+    "pyqs": 3,
+    "blurb": "Operation traces, LIFO/FIFO behaviour and pointer manipulation."
+   },
+   {
+    "title": "Trees, BST & heaps",
+    "priority": "med",
+    "pyqs": 2,
+    "blurb": "Traversals, rebuilding a tree from two traversals, BST and heap operations."
+   },
+   {
+    "title": "Divide & conquer, greedy & DP basics",
+    "priority": "low",
+    "pyqs": 0,
+    "blurb": "Recognising the paradigm, merge/quick analysis, classic greedy and DP problems."
+   }
+  ],
+  "note": "The most stable subject in the paper."
+ },
+ {
+  "slug": "dbms",
+  "name": "DBMS & Warehousing",
+  "short": "DBMS",
+  "order": 3,
+  "marks": [
+   8,
+   9,
+   18
+  ],
+  "syllabus": "ER-model, relational model: relational algebra, tuple calculus, SQL, integrity constraints, normal form, file organization, indexing, data types, data transformation such as normalization, discretization, sampling, compression; data warehouse modelling: schema for multidimensional data models, concept hierarchies, measures: categorization and computations.",
+  "topics": [
+   {
+    "title": "ER model & relational model, keys, integrity constraints",
+    "priority": "high"
+   },
+   {
+    "title": "Functional dependencies, closures & normal forms",
+    "priority": "high"
+   },
+   {
+    "title": "Relational algebra & tuple calculus",
+    "priority": "med"
+   },
+   {
+    "title": "SQL: joins, GROUP BY / HAVING, nested queries",
+    "priority": "high"
+   },
+   {
+    "title": "File organization & indexing, B+ trees",
+    "priority": "med"
+   },
+   {
+    "title": "Data types & data transformation (normalization, discretization, sampling, compression)",
+    "priority": "med"
+   },
+   {
+    "title": "Data warehousing: star/snowflake schema, OLAP, concept hierarchies, measures",
+    "priority": "med"
+   }
+  ],
+  "note": "Spiked to 18 marks in 2026. An SQL or normalization question has appeared every year."
+ },
+ {
+  "slug": "machine-learning",
+  "name": "Machine Learning",
+  "short": "ML",
+  "order": 2,
+  "marks": [
+   11,
+   14,
+   16
+  ],
+  "syllabus": "Supervised learning: regression and classification problems, simple linear regression, multiple linear regression, ridge regression, logistic regression, k-nearest neighbour, naive Bayes classifier, linear discriminant analysis, support vector machine, decision trees, bias-variance trade-off, cross-validation methods such as leave-one-out (LOO) and k-folds cross-validation, multi-layer perceptron, feed-forward neural network. Unsupervised learning: clustering algorithms, k-means/k-medoid, hierarchical clustering, top-down, bottom-up: single-linkage, multiple-linkage, dimensionality reduction, principal component analysis.",
+  "topics": [
+   {
+    "title": "ML basics, bias-variance, overfitting & cross-validation",
+    "priority": "high"
+   },
+   {
+    "title": "Linear regression: simple, multiple, ridge (and lasso)",
+    "priority": "high"
+   },
+   {
+    "title": "Logistic regression",
+    "priority": "high"
+   },
+   {
+    "title": "Evaluation metrics: confusion matrix, precision, recall, F1, ROC",
+    "priority": "high"
+   },
+   {
+    "title": "k-NN & naive Bayes",
+    "priority": "med"
+   },
+   {
+    "title": "Linear discriminant analysis",
+    "priority": "med"
+   },
+   {
+    "title": "Support vector machines",
+    "priority": "med"
+   },
+   {
+    "title": "Decision trees: entropy, information gain, Gini",
+    "priority": "high"
+   },
+   {
+    "title": "Neural networks: MLP, activations, backpropagation",
+    "priority": "med"
+   },
+   {
+    "title": "Clustering: k-means, k-medoid, hierarchical",
+    "priority": "high"
+   },
+   {
+    "title": "PCA & dimensionality reduction",
+    "priority": "high"
+   }
+  ],
+  "note": "Rising every year (11 → 14 → 16)."
+ },
+ {
+  "slug": "ai",
+  "name": "Artificial Intelligence",
+  "short": "AI",
+  "order": 4,
+  "marks": [
+   11,
+   3,
+   8
+  ],
+  "syllabus": "Search: informed, uninformed, adversarial; logic: propositional, predicate; reasoning under uncertainty: conditional independence representation, exact inference through variable elimination, and approximate inference through sampling.",
+  "topics": [
+   {
+    "title": "Uninformed search: BFS, DFS, UCS, IDDFS",
+    "priority": "high"
+   },
+   {
+    "title": "Informed search: greedy best-first, A*, admissibility & consistency",
+    "priority": "high"
+   },
+   {
+    "title": "Adversarial search: minimax & alpha-beta pruning",
+    "priority": "med"
+   },
+   {
+    "title": "Propositional logic: equivalences, CNF, resolution",
+    "priority": "high"
+   },
+   {
+    "title": "Predicate (first-order) logic",
+    "priority": "high"
+   },
+   {
+    "title": "Bayesian networks & conditional independence",
+    "priority": "med"
+   },
+   {
+    "title": "Exact inference: variable elimination",
+    "priority": "med"
+   },
+   {
+    "title": "Approximate inference: sampling",
+    "priority": "low"
+   }
+  ],
+  "note": "Volatile (3 to 11 marks), but the search and logic questions are cheap marks."
+ }
 ]

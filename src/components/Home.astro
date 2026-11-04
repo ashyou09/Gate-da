@@ -1,0 +1,139 @@
+---
+/** Home dashboard: exam countdown, start button, subjects in study order. */
+import { getCollection } from 'astro:content';
+import { subjects, mean, EXAM_DATE } from '../data/subjects';
+import MarksBars from './MarksBars.astro';
+
+const ids = new Set((await getCollection('docs')).map((e) => e.id));
+const rows = subjects.map((s) => {
+  const written = s.topics.filter((t) => t.page && ids.has(`${s.slug}/${t.page}`));
+  return { ...s, written: written.length, next: written[0] };
+});
+const totalTopics = rows.reduce((a, r) => a + r.topics.length, 0);
+const totalWritten = rows.reduce((a, r) => a + r.written, 0);
+const firstOpen = rows.find((r) => r.written < r.topics.length && r.written > 0) ?? rows[0];
+const startHref = firstOpen.next ? `/${firstOpen.slug}/${firstOpen.next.page}/` : `/${firstOpen.slug}/`;
+const daysLeft = Math.max(0, Math.ceil((new Date(EXAM_DATE).getTime() - Date.now()) / 86_400_000));
+---
+
+<section class="hero">
+  <div class="hero-text">
+    <p class="eyebrow">GATE · Data Science &amp; AI · 2027</p>
+    <h1>Every topic, from basics to PYQ level.</h1>
+    <p class="lede">
+      Notes built from the 2024–2026 papers. Each topic teaches from zero, then sums up the key points and tests you
+      with real PYQs and predicted 2027 questions.
+    </p>
+    <div class="actions">
+      <a class="btn primary" href={startHref}>Start preparing</a>
+      <a class="btn" href="/roadmap/">Study roadmap</a>
+    </div>
+  </div>
+  <aside class="countdown" aria-label="Exam countdown">
+    <span class="label">GATE 2027 starts in</span>
+    <span class="days"><span id="gd-days">{daysLeft}</span><small>days</small></span>
+    <span class="date">6 Feb 2027 · IIT Madras</span>
+    <span class="label">Notes progress</span>
+    <span class="progress" style={`--p:${(totalWritten / totalTopics) * 100}%`}></span>
+    <span class="date">{totalWritten} of {totalTopics} topics written</span>
+  </aside>
+</section>
+
+<section class="path">
+  <div class="path-head">
+    <h2>Your subjects, in study order</h2>
+    <p>Non-maths subjects first, ordered by how stable and heavy they were in 2024–26. General Aptitude runs alongside everything.</p>
+  </div>
+  <ol class="grid">
+    {rows.map((r, i) => (
+      <li>
+        <a class="subject" href={`/${r.slug}/`}>
+          <span class="top">
+            <span class="step">{String(i + 1).padStart(2, '0')}</span>
+            <span class:list={['state', { live: r.written > 0 }]}>
+              {r.written > 0 ? `${r.written}/${r.topics.length} topics` : `${r.topics.length} topics planned`}
+            </span>
+          </span>
+          <span class="name">{r.name}</span>
+          <span class="note">{r.note}</span>
+          <span class="bottom">
+            <MarksBars marks={r.marks} compact />
+            <span class="avg"><b>{mean(r.marks)}</b> avg marks</span>
+          </span>
+          <span class="progress" style={`--p:${(r.written / r.topics.length) * 100}%`}></span>
+        </a>
+      </li>
+    ))}
+  </ol>
+</section>
+
+<section class="method">
+  <h2>What every topic page gives you</h2>
+  <ol class="steps">
+    <li><b>Topic map</b><span>A mind map of every sub-topic, so you see the whole chapter first.</span></li>
+    <li><b>Teach</b><span>Basics first, intuition before formula, a worked example after every rule.</span></li>
+    <li><b>Summary</b><span>The points and traps to re-read the night before the exam.</span></li>
+    <li><b>PYQs</b><span>Every 2024–26 question on the topic, solved and checked against the official key.</span></li>
+    <li><b>2027 practice</b><span>New MCQ, MSQ and NAT questions in the same pattern, with full solutions.</span></li>
+  </ol>
+</section>
+
+<script define:vars={{ EXAM_DATE }}>
+  const el = document.getElementById('gd-days');
+  if (el) el.textContent = String(Math.max(0, Math.ceil((new Date(EXAM_DATE).getTime() - Date.now()) / 86400000)));
+</script>
+
+<style>
+  .eyebrow, .label { margin: 0; font: 500 0.72rem/1.4 var(--gd-mono); letter-spacing: 0.09em; text-transform: uppercase; color: var(--sl-color-gray-3); }
+  h1 { margin: 0.6rem 0 0; font: 780 clamp(2.3rem, 1.6rem + 3.2vw, 3.7rem)/1.02 var(--gd-display); letter-spacing: -0.03em; color: var(--sl-color-white); text-wrap: balance; max-width: 15ch; }
+  h2 { margin: 0; font: 720 clamp(1.4rem, 1.2rem + 0.8vw, 1.8rem)/1.15 var(--gd-display); letter-spacing: -0.015em; color: var(--sl-color-white); }
+  .lede { margin: 1rem 0 0; max-width: 56ch; font-size: 1.08rem; line-height: 1.6; color: var(--sl-color-gray-2); }
+
+  .hero { display: grid; grid-template-columns: minmax(0, 1fr) 17rem; gap: 2.5rem; align-items: center; padding-block: 0.5rem 2.5rem; border-bottom: 1px solid var(--gd-line); }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.6rem; }
+  .btn { display: inline-flex; align-items: center; padding: 0.7rem 1.2rem; border-radius: 0.5rem; border: 1px solid var(--gd-line); font-weight: 600; color: var(--sl-color-white); text-decoration: none; background: var(--gd-surface); }
+  .btn:hover { border-color: var(--gd-ink); }
+  .btn.primary { background: var(--gd-ink); border-color: var(--gd-ink); color: var(--gd-on-ink); }
+  .btn.primary:hover { filter: brightness(1.1); }
+
+  .countdown { display: flex; flex-direction: column; gap: 0.45rem; padding: 1.3rem 1.4rem; border-radius: 0.8rem; border: 1px solid var(--gd-line); background-color: var(--gd-surface); background-image: linear-gradient(var(--gd-grid) 1px, transparent 1px), linear-gradient(90deg, var(--gd-grid) 1px, transparent 1px); background-size: 16px 16px; }
+  .days { display: flex; align-items: baseline; gap: 0.4rem; font: 800 4rem/0.95 var(--gd-display); letter-spacing: -0.04em; color: var(--sl-color-white); font-variant-numeric: tabular-nums; }
+  .days small { font: 600 1rem var(--gd-body); letter-spacing: 0; color: var(--sl-color-gray-2); }
+  .date { font-size: 0.85rem; color: var(--sl-color-gray-2); margin-bottom: 0.6rem; }
+  .countdown .date:last-child { margin-bottom: 0; }
+
+  .progress { display: block; height: 6px; border-radius: 3px; background: var(--gd-chip); position: relative; overflow: hidden; }
+  .progress::after { content: ''; position: absolute; inset: 0 auto 0 0; width: var(--p); background: var(--gd-ink); }
+
+  .path { padding-block: 2.25rem 1rem; }
+  .path-head p { margin: 0.5rem 0 0; max-width: 60ch; color: var(--sl-color-gray-2); }
+  .grid { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; gap: 0.9rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15.5rem), 1fr)); }
+  .grid li { margin: 0; }
+  .subject { display: flex; flex-direction: column; gap: 0.55rem; height: 100%; padding: 1.1rem 1.15rem 0; border: 1px solid var(--gd-line); border-radius: 0.7rem; background: var(--gd-surface); color: inherit; text-decoration: none; overflow: hidden; transition: border-color .15s, transform .15s, box-shadow .15s; }
+  .subject:hover, .subject:focus-visible { border-color: var(--gd-ink); transform: translateY(-2px); box-shadow: 0 10px 24px -16px var(--gd-shadow); }
+  .top { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+  .step { font: 800 1.5rem/1 var(--gd-display); color: var(--gd-ink); font-variant-numeric: tabular-nums; }
+  .state { font: 500 0.7rem/1 var(--gd-mono); padding: 0.3rem 0.5rem; border-radius: 999px; background: var(--gd-chip); color: var(--sl-color-gray-2); }
+  .state.live { background: var(--gd-hl); color: var(--gd-hl-ink); }
+  .name { font: 700 1.12rem/1.25 var(--gd-display); color: var(--sl-color-white); }
+  .note { font-size: 0.85rem; line-height: 1.5; color: var(--sl-color-gray-2); }
+  .bottom { display: flex; align-items: flex-end; justify-content: space-between; gap: 0.5rem; margin-top: auto; padding-top: 0.5rem; }
+  .avg { font-size: 0.78rem; color: var(--sl-color-gray-3); text-align: right; }
+  .avg b { display: block; font: 750 1.35rem/1 var(--gd-display); color: var(--sl-color-white); }
+  .subject .progress { margin: 0.8rem -1.15rem 0; border-radius: 0; height: 4px; }
+
+  .method { padding-block: 2rem 1rem; }
+  .steps { list-style: none; padding: 0; margin: 1.3rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: 0; border: 1px solid var(--gd-line); border-radius: 0.7rem; overflow: hidden; counter-reset: s; }
+  .steps li { margin: 0; padding: 1rem 1.1rem; display: flex; flex-direction: column; gap: 0.35rem; border-right: 1px solid var(--gd-line); counter-increment: s; }
+  .steps li:last-child { border-right: none; }
+  .steps li::before { content: counter(s); font: 700 0.75rem/1 var(--gd-mono); color: var(--gd-ink); }
+  .steps b { font-family: var(--gd-display); color: var(--sl-color-white); }
+  .steps span { font-size: 0.85rem; line-height: 1.5; color: var(--sl-color-gray-2); }
+
+  @media (max-width: 50rem) {
+    .hero { grid-template-columns: 1fr; gap: 1.5rem; }
+    .steps li { border-right: none; border-bottom: 1px solid var(--gd-line); }
+    .steps li:last-child { border-bottom: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .subject { transition: none; } .subject:hover { transform: none; } }
+</style>

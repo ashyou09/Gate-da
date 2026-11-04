@@ -27,6 +27,18 @@ export default defineConfig({
       description: 'Topic-wise GATE Data Science & AI notes built from PYQ analysis.',
       customCss: ['katex/dist/katex.min.css', './src/styles/custom.css'],
       lastUpdated: false,
+      components: { PageTitle: './src/components/PageTitle.astro' },
+      head: [
+        { tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.googleapis.com' } },
+        { tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: true } },
+        {
+          tag: 'link',
+          attrs: {
+            rel: 'stylesheet',
+            href: 'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap',
+          },
+        },
+      ],
       sidebar: [
         { label: 'Start here', items: ['index', 'roadmap', 'references'] },
         // One group per subject, in study order. Pages inside a group come from

@@ -6,8 +6,6 @@ sidebar:
   order: 3
 ---
 
-<span class="tag high">★ HIGH</span> <span class="tag yr">2024 Q40</span> <span class="tag yr">2026 Q15</span> <span class="tag yr">embedded every year</span>
-
 **Why it matters:** there are only two direct questions so far (both on recurrences), but every sorting, searching, hashing and graph question assumes you know these costs. If you get this page right, the later topics become much easier.
 
 ## Topic map
@@ -205,7 +203,9 @@ $F(n)$ is the maximum number of comparisons binary search makes on a sorted arra
 (A) $F(n) = F(\lfloor n/2 \rfloor) + 1$ (B) $F(n) = F(\lfloor n/2\rfloor) + F(\lceil n/2\rceil)$ (C) $F(n) = F(\lfloor n/2\rfloor)$ (D) $F(n) = F(n-1) + 1$
 
 <details>
-<summary>Solution: answer (A)</summary>
+<summary>Show solution</summary>
+
+**Answer: (A)**
 
 One comparison with the middle element either finds the key or throws away about half of the array. In the worst case you keep the **larger** remaining half, which has $\lfloor n/2 \rfloor$ elements. So:
 
@@ -224,7 +224,9 @@ Quicksort on $n$ distinct, randomly ordered elements uses the first element as t
 (A) $T(1) + T(n-1) + O(n)$ (B) $T(n/4) + T(3n/4) + O(n)$ (C) $2T(n/2) + O(n)$ (D) $\dfrac1n\sum_{k=0}^{n-1}\big[T(k) + T(n-k-1)\big] + O(n)$
 
 <details>
-<summary>Solution: answer (D)</summary>
+<summary>Show solution</summary>
+
+**Answer: (D)**
 
 Because the input is randomly ordered, the first element is equally likely to be the 1st, 2nd, …, or $n$th smallest. If it's the $(k+1)$th smallest, the subproblems have sizes $k$ and $n-k-1$. The **expected** cost averages over all $n$ possibilities, each with probability $\frac1n$:
 
@@ -255,7 +257,9 @@ while i > 0:
 (A) $\Theta(\log n)$ (B) $\Theta(n)$ (C) $\Theta(n\log n)$ (D) $\Theta(n^2)$
 
 <details>
-<summary>Answer: (B)</summary>
+<summary>Show solution</summary>
+
+**Answer: (B)**
 
 The total work is $n + \frac n2 + \frac n4 + \dots \le 2n$, which is $\Theta(n)$. Students often pick (C) because they multiply "n work" by "log n iterations", but the work shrinks each iteration, so you have to add it up as a geometric series.
 
@@ -265,7 +269,9 @@ The total work is $n + \frac n2 + \frac n4 + \dots \le 2n$, which is $\Theta(n)$
 (A) $n^2 + 100n = O(n^2)$ (B) $2^{n+1} = \Theta(2^n)$ (C) $2^{2n} = \Theta(2^n)$ (D) $\log(n^3) = \Theta(\log n)$
 
 <details>
-<summary>Answer: A; B; D</summary>
+<summary>Show solution</summary>
+
+**Answer: A; B; D**
 
 - **(A)** True.
 - **(B)** $2^{n+1} = 2\cdot 2^n$, a constant factor. True.
@@ -278,7 +284,9 @@ The total work is $n + \frac n2 + \frac n4 + \dots \le 2n$, which is $\Theta(n)$
 (A) $\Theta(n^2)$ (B) $\Theta(n^2\log n)$ (C) $\Theta(n^3)$ (D) $\Theta(n\log n)$
 
 <details>
-<summary>Answer: (B)</summary>
+<summary>Show solution</summary>
+
+**Answer: (B)**
 
 $a = 4$, $b = 2$, so $\log_2 4 = 2 = d$. That's case 2, giving $\Theta(n^2\log n)$.
 
@@ -288,7 +296,9 @@ $a = 4$, $b = 2$, so $\log_2 4 = 2 = d$. That's case 2, giving $\Theta(n^2\log n
 (A) $\Theta(\sqrt n)$ (B) $\Theta(\sqrt n \log n)$ (C) $\Theta(n)$ (D) $\Theta(n\log n)$
 
 <details>
-<summary>Answer: (C)</summary>
+<summary>Show solution</summary>
+
+**Answer: (C)**
 
 $\log_3 3 = 1 > d = \tfrac12$. That's case 3 (leaves dominate), giving $\Theta(n^{1}) = \Theta(n)$.
 
@@ -306,7 +316,9 @@ for i in range(1, n+1):
 ```
 
 <details>
-<summary>Answer: 50</summary>
+<summary>Show solution</summary>
+
+**Answer: 50**
 
 For each $i$, the inner loop runs $\lfloor 16/i \rfloor$ times:
 
@@ -320,7 +332,9 @@ In general this is $\sum \lfloor n/i\rfloor \approx n\ln n$, so $\Theta(n\log n)
 (A) $\Theta(n)$ (B) $\Theta(n\log n)$ (C) $\Theta(n^2)$ (D) $\Theta(2^{n/2})$
 
 <details>
-<summary>Answer: (C)</summary>
+<summary>Show solution</summary>
+
+**Answer: (C)**
 
 $T(n) = n + (n-2) + (n-4) + \dots$, which has about $n/2$ terms averaging about $n/2$. That's roughly $n^2/4 = \Theta(n^2)$. The Master theorem doesn't apply because the recurrence is subtractive.
 

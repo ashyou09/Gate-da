@@ -6,8 +6,6 @@ sidebar:
   order: 4
 ---
 
-<span class="tag high">★ HIGH</span> <span class="tag yr">2024 ×3</span> <span class="tag yr">2025 ×2</span> <span class="tag yr">2026 ×3</span>
-
 **Why it matters:** this is the second-largest PDSA block (9 questions in 3 years, counting 2026 Q15 and Q58). GATE doesn't ask you to *write* a sort. It asks you to **count**: passes, comparisons, swaps, and the array's state after $k$ passes. That means you have to know the *exact* version of each algorithm, not just its idea.
 
 ## Topic map
@@ -244,7 +242,9 @@ Which of (i) bubble, (ii) insertion, (iii) selection sorts `[4, 3, 2, 1, 5]` int
 (A) (i) only (B) (iii) only (C) (ii) and (iii) (D) (i) and (ii)
 
 <details>
-<summary>Solution: answer (B) selection only</summary>
+<summary>Show solution</summary>
+
+**Answer: (B) selection only**
 
 Simulate each one literally:
 
@@ -264,7 +264,9 @@ $P = [1, 2, 3, 5, 4]$. $N_1$ is the total number of comparisons made by bubble s
 (A) $N_1 = 10, N_2 = 4$ (B) $N_1 > N_2$ (C) IS on $P$ performs only one swap (D) Both BS and IS make at least one unnecessary comparison
 
 <details>
-<summary>Solution: answer B; C; D</summary>
+<summary>Show solution</summary>
+
+**Answer: B; C; D**
 
 **Bubble sort** (plain version): $4 + 3 + 2 + 1 = 10$ comparisons. With the early-exit flag it's $4 + 3 = 7$. Either way, $N_1 > N_2$.
 
@@ -289,7 +291,9 @@ Insertion sort on `[1, 3, 5, 7, 9, 11, x, 15, 13]` takes **exactly two swaps**. 
 (A) 10 (B) 12 (C) 14 (D) 16
 
 <details>
-<summary>Solution: answer A; C</summary>
+<summary>Show solution</summary>
+
+**Answer: A; C**
 
 Insertion swaps = inversions. The pair (15, 13) is always **1** inversion. We need exactly **one more** inversion involving $x$.
 
@@ -307,7 +311,9 @@ Insertion swaps = inversions. The pair (15, 13) is always **1** inversion. We ne
 In-place quicksort with the **last element as pivot** on `[60, 70, 80, 90, 100]`. What is the minimum number of swaps?
 
 <details>
-<summary>Solution: answer 0</summary>
+<summary>Show solution</summary>
+
+**Answer: 0**
 
 Run Lomuto partition with pivot = 100. Every element is $\le 100$, so `i` moves forward together with `j`. Each "swap" is `A[i], A[j]` with $i = j$, which moves nothing. The final pivot swap is also with itself. The same thing happens at every recursive level, because the array is already sorted.
 
@@ -320,7 +326,9 @@ No element ever changes position, so the minimum number of real swaps is **0**. 
 Recursive binary search on a sorted array of **1000** distinct integers, with three-way comparisons. What is the maximum number of comparisons if $y$ isn't in the array?
 
 <details>
-<summary>Solution: answer 10</summary>
+<summary>Show solution</summary>
+
+**Answer: 10**
 
 $\lfloor \log_2 1000 \rfloor + 1 = 9 + 1 = 10$. The search range shrinks $1000 \to 499\text{–}500 \to 249\text{–}250 \to \dots \to 1 \to$ empty. That's 10 midpoints examined.
 
@@ -332,7 +340,9 @@ For which inputs does binary search take $O(\log n)$ time in the worst case?
 (A) array in any order (B) linked list in any order (C) array in increasing order (D) linked list in increasing order
 
 <details>
-<summary>Solution: answer (C) only</summary>
+<summary>Show solution</summary>
+
+**Answer: (C) only**
 
 The data must be sorted, so (A) and (B) fail: binary search isn't even correct on them. It also needs random access, so (D) fails: finding the middle of a linked list takes $O(n)$.
 
@@ -347,7 +357,9 @@ These follow the patterns above, with the variations most likely to show up next
 **F1 (1 mark, NAT).** Selection sort on `[8, 5, 2, 9, 1, 7]`. How many swaps does it make in total? (Don't count a swap of an element with itself.)
 
 <details>
-<summary>Answer: 3</summary>
+<summary>Show solution</summary>
+
+**Answer: 3**
 
 | Pass | Minimum of the unsorted part | Swap | Array afterwards |
 |---|---|---|---|
@@ -364,7 +376,9 @@ These follow the patterns above, with the variations most likely to show up next
 **F2 (2 marks, NAT).** How many comparisons does insertion sort make on `[8, 5, 2, 9, 1, 7]`?
 
 <details>
-<summary>Answer: 11</summary>
+<summary>Show solution</summary>
+
+**Answer: 11**
 
 The array has 9 inversions: 8 is bigger than 4 later elements, 5 than 2, 2 than 1, 9 than 2, and 1 than none ($4 + 2 + 1 + 2 + 0 = 9$).
 
@@ -384,7 +398,9 @@ Total = **11**.
 (A) Bubble sort with an early-exit flag makes $n - 1$ comparisons on sorted input (B) Insertion sort makes exactly as many swaps as bubble sort on every input (C) Selection sort is stable (D) Merge sort makes $\Theta(n\log n)$ comparisons even on sorted input
 
 <details>
-<summary>Answer: A; B; D</summary>
+<summary>Show solution</summary>
+
+**Answer: A; B; D**
 
 - **(A)** One pass with no swaps, then it stops. True.
 - **(B)** Both equal the number of inversions. True.
@@ -396,7 +412,9 @@ Total = **11**.
 **F4 (2 marks, NAT).** Run one Lomuto partition (pivot = last element) on `[7, 2, 9, 4, 3, 8, 5]`. Including the final pivot swap, how many swaps actually exchange two different positions?
 
 <details>
-<summary>Answer: 4</summary>
+<summary>Show solution</summary>
+
+**Answer: 4**
 
 Pivot = 5 and `i = -1`.
 
@@ -418,7 +436,9 @@ Every one of these swaps exchanges two different positions, so the answer is **4
 **F5 (1 mark, NAT).** What is the maximum number of comparisons needed to merge two sorted lists of sizes 5 and 7?
 
 <details>
-<summary>Answer: 11</summary>
+<summary>Show solution</summary>
+
+**Answer: 11**
 
 The worst case is when the lists interleave perfectly, and one element is output per comparison until a list runs out: $m + k - 1 = 5 + 7 - 1 = 11$.
 
@@ -428,7 +448,9 @@ The worst case is when the lists interleave perfectly, and one element is output
 (A) $\Theta(n\log n)$ (B) $\Theta(n^2)$ (C) $\Theta(n^2\log n)$ (D) $\Theta(n^3)$
 
 <details>
-<summary>Answer: (B)</summary>
+<summary>Show solution</summary>
+
+**Answer: (B)**
 
 $T(n) = 2T(n/2) + \Theta(n^2)$. Here $d = 2 > \log_2 2 = 1$, so the root dominates (Master case 1), giving $\Theta(n^2)$.
 
@@ -437,7 +459,9 @@ $T(n) = 2T(n/2) + \Theta(n^2)$. Here $d = 2 > \log_2 2 = 1$, so the root dominat
 **F7 (1 mark, NAT).** A sorted array has 100 elements. What is the maximum number of three-way comparisons binary search makes?
 
 <details>
-<summary>Answer: 7</summary>
+<summary>Show solution</summary>
+
+**Answer: 7**
 
 $\lfloor\log_2 100\rfloor + 1 = 6 + 1 = 7$.
 

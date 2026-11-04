@@ -1,124 +1,184 @@
-/* ---------- Theme ---------- */
+/*
+ * GATE DA 2027 — study-notebook identity.
+ * Layout: Starlight docs shell; content reads like a worked notebook —
+ * ink-blue accent, highlighter for "high priority", graph-paper formula boxes.
+ * Starlight convention: :root = dark theme, [data-theme='light'] = light theme.
+ */
+
+/* ---------- Tokens: dark ---------- */
 :root {
-  --sl-color-accent-low: #1f2a4d;
-  --sl-color-accent: #4f6bed;
-  --sl-color-accent-high: #c9d3ff;
-  --gate-formula-bg: #f3f6ff;
-  --gate-formula-border: #4f6bed;
-  --gate-pyq-bg: #fff7e8;
-  --gate-pyq-border: #e69a1a;
-  --gate-trap-bg: #fff0f0;
-  --gate-trap-border: #d64545;
+  --gd-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+  --gd-body: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
+  --gd-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --gd-ink: #8d9dff;
+  --gd-on-ink: #0d1130;
+  --gd-surface: #171b33;
+  --gd-line: #2a2f4e;
+  --gd-chip: #232845;
+  --gd-hl: rgba(245, 201, 74, 0.2);
+  --gd-hl-ink: #f6d47e;
+  --gd-hl-strong: #f2c443;
+  --gd-grid: rgba(141, 157, 255, 0.07);
+  --gd-shadow: rgba(0, 0, 0, 0.9);
+  --gd-trap: #ff8f8f;
+  --gd-trap-bg: rgba(255, 110, 110, 0.08);
+  --gd-on-trap: #2a0a0a;
+
+  --sl-color-white: #eef0fb;
+  --sl-color-gray-1: #d4d8ee;
+  --sl-color-gray-2: #b0b5d0;
+  --sl-color-gray-3: #8188aa;
+  --sl-color-gray-4: #525878;
+  --sl-color-gray-5: #313650;
+  --sl-color-gray-6: #1d2137;
+  --sl-color-black: #111427;
+  --sl-color-accent-low: #1f2856;
+  --sl-color-accent: #8d9dff;
+  --sl-color-accent-high: #d8ddff;
+
+  --sl-font: var(--gd-body);
+  --sl-font-mono: var(--gd-mono);
+  --sl-content-width: 48rem;
+  --sl-line-height: 1.7;
 }
+
+/* ---------- Tokens: light ---------- */
 :root[data-theme='light'] {
-  --sl-color-accent-low: #dfe5ff;
-  --sl-color-accent: #3550d6;
-  --sl-color-accent-high: #1a2563;
+  --gd-ink: #2b3cb7;
+  --gd-on-ink: #ffffff;
+  --gd-surface: #ffffff;
+  --gd-line: #dde0ed;
+  --gd-chip: #eef0f7;
+  --gd-hl: #ffe68f;
+  --gd-hl-ink: #574000;
+  --gd-hl-strong: #e3b318;
+  --gd-grid: rgba(43, 60, 183, 0.065);
+  --gd-shadow: rgba(25, 35, 100, 0.45);
+  --gd-trap: #b42323;
+  --gd-trap-bg: #fff4f3;
+  --gd-on-trap: #ffffff;
+
+  --sl-color-white: #11152f;
+  --sl-color-gray-1: #252a4b;
+  --sl-color-gray-2: #464c6c;
+  --sl-color-gray-3: #696f90;
+  --sl-color-gray-4: #a2a7c0;
+  --sl-color-gray-5: #d6d9e7;
+  --sl-color-gray-6: #eef0f6;
+  --sl-color-gray-7: #f6f7fb;
+  --sl-color-black: #fbfbfd;
+  --sl-color-accent-low: #e2e6ff;
+  --sl-color-accent: #2b3cb7;
+  --sl-color-accent-high: #17206b;
 }
-:root[data-theme='dark'] {
-  --gate-formula-bg: #161d33;
-  --gate-pyq-bg: #2a2113;
-  --gate-trap-bg: #2b1616;
-}
+
+/* ---------- Chrome ---------- */
+.site-title { font-family: var(--gd-display); font-weight: 750; letter-spacing: -0.02em; color: var(--sl-color-white); }
+
+/* ---------- Reading typography ---------- */
+.sl-markdown-content { font-size: 1.02rem; }
+.sl-markdown-content :is(h2, h3, h4) { font-family: var(--gd-display); letter-spacing: -0.015em; color: var(--sl-color-white); text-wrap: balance; }
+.sl-markdown-content .sl-heading-wrapper.level-h2 { margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--gd-line); }
+.sl-markdown-content h2 { font-size: 1.65rem; font-weight: 720; }
+.sl-markdown-content h3 { margin-top: 2rem; font-size: 1.22rem; font-weight: 680; }
+.sl-markdown-content hr { display: none; } /* section breaks are drawn by h2 */
+.sl-markdown-content strong { color: var(--sl-color-white); font-weight: 600; }
+.sl-markdown-content :not(pre) > code { padding: 0.1em 0.35em; border-radius: 0.3rem; background: var(--gd-chip); border: none; font-size: 0.88em; }
+.sl-markdown-content blockquote { border-inline-start: 3px solid var(--gd-hl-strong); padding: 0.2rem 0 0.2rem 1rem; color: var(--sl-color-gray-2); font-style: italic; }
 
 /* ---------- Math ---------- */
-.katex-display {
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 0.4rem 0;
-}
-.katex { font-size: 1.08em; }
-
-/* ---------- Boxes (use as <div class="formula"> ... </div>) ---------- */
-.sl-markdown-content .formula,
-.sl-markdown-content .pyq,
-.sl-markdown-content .trap {
-  border-left: 4px solid;
-  border-radius: 0.5rem;
-  padding: 0.8rem 1rem;
-  margin: 1.2rem 0;
-}
-.sl-markdown-content .formula {
-  background: var(--gate-formula-bg);
-  border-color: var(--gate-formula-border);
-}
-.sl-markdown-content .pyq {
-  background: var(--gate-pyq-bg);
-  border-color: var(--gate-pyq-border);
-}
-.sl-markdown-content .trap {
-  background: var(--gate-trap-bg);
-  border-color: var(--gate-trap-border);
-}
-.sl-markdown-content .formula > :first-child,
-.sl-markdown-content .pyq > :first-child,
-.sl-markdown-content .trap > :first-child { margin-top: 0; }
-
-/* Small tags: <span class="tag y24">2024</span> */
-.tag {
-  display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 600;
-  line-height: 1.4;
-  padding: 0.05rem 0.5rem;
-  border-radius: 999px;
-  margin-right: 0.25rem;
-  vertical-align: middle;
-  border: 1px solid currentColor;
-}
-.tag.high { color: #d64545; }
-.tag.med { color: #c77c0e; }
-.tag.low { color: #3a8f5c; }
-.tag.yr { color: var(--sl-color-accent); }
-
-/* ---------- Solutions ---------- */
-.sl-markdown-content details {
-  border: 1px solid var(--sl-color-gray-5);
-  border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
-  margin: 0.8rem 0;
-}
-.sl-markdown-content details summary {
-  cursor: pointer;
-  font-weight: 600;
-  color: var(--sl-color-accent);
-}
-.sl-markdown-content details[open] summary { margin-bottom: 0.5rem; }
+.katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.4rem 0; }
+.katex { font-size: 1.06em; }
 
 /* ---------- Tables ---------- */
-.sl-markdown-content table { display: block; overflow-x: auto; }
-.sl-markdown-content th { white-space: nowrap; }
-
-/* ---------- Topic map: <div class="mindmap"> + nested list ---------- */
-.sl-markdown-content .mindmap {
-  border: 1px solid var(--sl-color-gray-5);
-  border-radius: 0.75rem;
-  padding: 1rem 1.25rem;
-  margin: 1.2rem 0;
-  background: var(--sl-color-gray-7, transparent);
-}
-.sl-markdown-content .mindmap ul {
-  list-style: none;
-  padding-left: 1.4rem;
-  margin: 0;
-  border-left: 2px solid var(--sl-color-accent);
-}
-.sl-markdown-content .mindmap > ul { border-left: none; padding-left: 0; }
-.sl-markdown-content .mindmap li {
-  position: relative;
-  margin: 0.25rem 0;
-  padding-left: 0.6rem;
-}
-.sl-markdown-content .mindmap ul ul > li::before {
-  content: '';
-  position: absolute;
-  left: -1.4rem;
-  top: 0.8em;
-  width: 1.6rem;
-  border-top: 2px solid var(--sl-color-accent);
-}
-.sl-markdown-content .mindmap > ul > li > strong {
-  font-size: 1.1rem;
-  color: var(--sl-color-accent-high);
-}
+.sl-markdown-content table { display: block; overflow-x: auto; border-collapse: collapse; font-size: 0.92rem; font-variant-numeric: tabular-nums; }
+.sl-markdown-content th { white-space: nowrap; background: var(--gd-chip); color: var(--sl-color-white); font-weight: 600; font-family: var(--gd-body); }
+.sl-markdown-content :is(th, td) { border-bottom: 1px solid var(--gd-line); padding: 0.5rem 0.75rem; }
 .sl-markdown-content td code { white-space: nowrap; }
+
+/* ---------- Boxes ---------- */
+.sl-markdown-content :is(.formula, .trap, .pyq) {
+  position: relative;
+  margin: 1.6rem 0;
+  padding: 1.6rem 1.2rem 1rem;
+  border-radius: 0.7rem;
+  border: 1px solid var(--gd-line);
+}
+.sl-markdown-content :is(.formula, .trap, .pyq)::before {
+  position: absolute;
+  top: -0.65rem;
+  left: 1rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 0.3rem;
+  font: 600 0.68rem/1.2 var(--gd-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+/* graph-paper box for things to memorise */
+.sl-markdown-content .formula {
+  background-color: var(--gd-surface);
+  background-image: linear-gradient(var(--gd-grid) 1px, transparent 1px), linear-gradient(90deg, var(--gd-grid) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+.sl-markdown-content .formula::before { content: 'Remember'; background: var(--gd-ink); color: var(--gd-on-ink); }
+.sl-markdown-content .trap { background: var(--gd-trap-bg); border-color: color-mix(in srgb, var(--gd-trap) 35%, transparent); }
+.sl-markdown-content .trap::before { content: 'Trap'; background: var(--gd-trap); color: var(--gd-on-trap); }
+.sl-markdown-content .pyq { background: var(--gd-surface); }
+.sl-markdown-content .pyq::before { content: 'PYQ'; background: var(--gd-hl-strong); color: #2b2100; }
+.sl-markdown-content :is(.formula, .trap, .pyq) > :first-child { margin-top: 0; }
+.sl-markdown-content :is(.formula, .trap, .pyq) h3 { margin-top: 0.25rem; }
+
+/* ---------- Tags (used in hub tables) ---------- */
+.tag { display: inline-block; font: 500 0.7rem/1 var(--gd-mono); padding: 0.3rem 0.5rem; border-radius: 999px; margin-right: 0.25rem; vertical-align: middle; background: var(--gd-chip); color: var(--sl-color-gray-2); white-space: nowrap; }
+.tag.high { background: var(--gd-hl); color: var(--gd-hl-ink); }
+.tag.yr { color: var(--gd-ink); }
+
+/* ---------- Solutions: fold-out cards ---------- */
+.sl-markdown-content details {
+  margin: 0.9rem 0 1.6rem;
+  border: 1px solid var(--gd-line);
+  border-radius: 0.6rem;
+  background: var(--gd-surface);
+}
+.sl-markdown-content details > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem;
+  font: 600 0.88rem/1.3 var(--gd-body);
+  color: var(--gd-ink);
+}
+.sl-markdown-content details > summary::-webkit-details-marker { display: none; }
+.sl-markdown-content details > summary::before { content: '+'; display: inline-grid; place-items: center; width: 1.2rem; height: 1.2rem; border-radius: 0.3rem; background: var(--gd-chip); font: 600 0.9rem/1 var(--gd-mono); }
+.sl-markdown-content details[open] > summary::before { content: '−'; }
+.sl-markdown-content details[open] > summary { border-bottom: 1px solid var(--gd-line); }
+.sl-markdown-content details > :not(summary) { margin-inline: 1rem; }
+.sl-markdown-content details > :last-child { margin-bottom: 1rem; }
+.sl-markdown-content details > summary:focus-visible { outline: 2px solid var(--gd-ink); outline-offset: 2px; border-radius: 0.6rem; }
+
+/* ---------- Topic map ---------- */
+.sl-markdown-content .mindmap {
+  margin: 1.4rem 0;
+  padding: 1.2rem 1.3rem;
+  border: 1px solid var(--gd-line);
+  border-radius: 0.8rem;
+  background: var(--gd-surface);
+  overflow-x: auto;
+}
+.sl-markdown-content .mindmap ul { list-style: none; margin: 0; padding-left: 1.5rem; border-left: 2px solid color-mix(in srgb, var(--gd-ink) 45%, transparent); }
+.sl-markdown-content .mindmap > ul { border-left: none; padding-left: 0; }
+.sl-markdown-content .mindmap li { position: relative; margin: 0.3rem 0; padding-left: 0.6rem; }
+.sl-markdown-content .mindmap ul ul > li::before { content: ''; position: absolute; left: -1.5rem; top: 0.85em; width: 1.7rem; border-top: 2px solid color-mix(in srgb, var(--gd-ink) 45%, transparent); }
+.sl-markdown-content .mindmap > ul > li > strong { font: 720 1.15rem var(--gd-display); color: var(--gd-ink); }
+.sl-markdown-content .mindmap > ul > li > ul > li { font-weight: 600; color: var(--sl-color-white); }
+.sl-markdown-content .mindmap > ul > li > ul > li > ul > li { font-weight: 400; color: var(--sl-color-gray-2); font-size: 0.95rem; }
+
+/* ---------- Asides ---------- */
+.starlight-aside { border-radius: 0.6rem; }
+
+/* Home (splash) page: no empty title panel above the custom hero */
+.content-panel:has(> .sl-container:empty) { display: none; }
+.content-panel:has(> .sl-container:empty) + .content-panel { border-top: none; }

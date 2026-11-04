@@ -6,8 +6,6 @@ sidebar:
   order: 1
 ---
 
-<span class="tag high">★ HIGH</span> <span class="tag yr">2024 ×2</span> <span class="tag yr">2025 ×3</span> <span class="tag yr">2026 ×3</span>
-
 **Why it matters:** 8 of about 30 PDSA questions in three years were "trace this Python code". Most were 2-mark questions. Every one tested one of the six ideas below, never obscure library trivia.
 
 If you already know Python, read this page for the **GATE angle**: it covers only the corners of the language that examiners turn into trick questions. Skim §1.1–1.2 and slow down from §1.3.
@@ -287,7 +285,9 @@ print(append_to_lst(3, []))
 ```
 
 <details>
-<summary>Solution: answer (B) [1] / [1, 2] / [3]</summary>
+<summary>Show solution</summary>
+
+**Answer: (B) [1] / [1, 2] / [3]**
 
 1. The default `[]` is created once, when `def` runs. Call it $D$.
 2. `append_to_lst(1)`: `lst` is $D$, so $D$ becomes `[1]`. Prints `[1]`.
@@ -319,7 +319,9 @@ print(f1(40))  # Line S
 (A) `f1` and `f2` share the same list `x` (B) Line Q prints `[10, 20]` (C) Line R prints `[10, 20, 30]` (D) Line S prints `[10, 20, 40]`
 
 <details>
-<summary>Solution: answer B; D</summary>
+<summary>Show solution</summary>
+
+**Answer: B; D**
 
 Each call to `outer()` runs `x = []` again, so `f1` and `f2` each have their **own** list. Call them $x_1$ and $x_2$.
 
@@ -342,7 +344,9 @@ Each call to `outer()` runs `x = []` again, so `f1` and `f2` each have their **o
 (A) `A.extend(B)` (B) `A.append(B)` (C) `A.update(B)` (D) `A.insert(B)`
 
 <details>
-<summary>Solution: answer (A)</summary>
+<summary>Show solution</summary>
+
+**Answer: (A)**
 
 - `extend` adds each element of `B`, giving `[1,2,3,4,5,6]`. Correct.
 - `append(B)` adds `B` as **one** element, giving `[1,2,3,[4,5,6]]`.
@@ -367,7 +371,9 @@ while "other" in C:
 At the end, which sets contain `"this"`? (A) only A (B) only B (C) only C (D) A and C
 
 <details>
-<summary>Solution: answer (B) only B</summary>
+<summary>Show solution</summary>
+
+**Answer: (B) only B**
 
 Key rule: in `A, B, C = …`, **all three right sides use the old values** (§1.6).
 
@@ -410,7 +416,9 @@ print(f(15, 10))
 ```
 
 <details>
-<summary>Solution: answer 160</summary>
+<summary>Show solution</summary>
+
+**Answer: 160**
 
 `/` produces floats, but `7.0 % 2 == 1` is still `True` and `0.0 == 0` is `True`, so the float type doesn't change the path taken.
 
@@ -445,7 +453,9 @@ print(len(a))
 ```
 
 <details>
-<summary>Answer: 4</summary>
+<summary>Show solution</summary>
+
+**Answer: 4**
 
 `b += [4]` mutates the shared list, so `a` becomes `[1,2,3,4]`. `b = b + [5]` builds a new list and moves only `b`. So `len(a)` is **4**.
 
@@ -455,7 +465,9 @@ print(len(a))
 (A) `-3 -2` (B) `-4 3` (C) `-3 2` (D) `-4 -3`
 
 <details>
-<summary>Answer: (B)</summary>
+<summary>Show solution</summary>
+
+**Answer: (B)**
 
 $-17/5 = -3.4$, and the floor of that is $-4$. Then $-17 - (-4)(5) = -17 + 20 = 3$. Check: $(-4)(5) + 3 = -17$. ✓
 
@@ -473,7 +485,9 @@ h[0][1] = 7
 (A) `g == [[5,0],[5,0],[5,0]]` (B) `h[2] == [5, 0]` (C) `g[0][1] == 7` (D) `h[1] == [5, 7]`
 
 <details>
-<summary>Answer: A; B</summary>
+<summary>Show solution</summary>
+
+**Answer: A; B**
 
 - `g` holds the **same** inner list three times, so `g[1][0] = 5` shows up in every row. (A) is true.
 - `h` copies each row separately, so `h` has three independent `[5, 0]` lists. (B) is true.
@@ -493,7 +507,9 @@ print(f(3) + f(4, []))
 ```
 
 <details>
-<summary>Answer: 10</summary>
+<summary>Show solution</summary>
+
+**Answer: 10**
 
 The shared default grows to `[1]`, then `[1, 2]`, then `[1, 2, 3]`, so `f(3)` returns $6$. `f(4, [])` uses a fresh list and returns $4$. Total: $6 + 4 = 10$.
 
@@ -516,7 +532,9 @@ print(s1() * 10 + s2())
 ```
 
 <details>
-<summary>Answer: 64</summary>
+<summary>Show solution</summary>
+
+**Answer: 64**
 
 `s1` and `s2` each have their own `count`.
 
@@ -540,7 +558,9 @@ f()
 (A) `5` (B) `10` (C) `UnboundLocalError` (D) `None`
 
 <details>
-<summary>Answer: (C)</summary>
+<summary>Show solution</summary>
+
+**Answer: (C)**
 
 Because `x` is assigned somewhere inside `f`, Python treats `x` as local for the **whole** function body. The `print(x)` line reads that local before it has a value, which raises `UnboundLocalError`.
 

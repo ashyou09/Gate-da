@@ -37,39 +37,23 @@ for s in subjects:
     hub = docs / "index.md"
     created = not hub.exists()
     if created:
-        topics = "\n".join(
-            f"{i}. {t} <span class=\"tag {p}\">{TAG[p]}</span>"
-            for i, (t, p) in enumerate(s["topics"], 1)
-        )
         files = sorted(p for p in mat.rglob("*") if p.is_file() and p.name != "README.md")
         mats = "\n".join(
             f"- [{p.relative_to(mat)}]({REPO}/subjects/{slug}/{p.relative_to(mat).as_posix()})" for p in files
         )
         hub.write_text(f"""---
-title: {json.dumps(name + " — Overview", ensure_ascii=False)}
+title: {json.dumps(name, ensure_ascii=False)}
 description: {json.dumps("GATE DA " + name + ": syllabus, weightage, topic plan and study material.", ensure_ascii=False)}
 sidebar:
   label: Overview & topic plan
   order: 0
 ---
 
-<span class="tag med">Notes in progress</span>
-
-| 2024 | 2025 | 2026 | Mean |
-|---|---|---|---|
-| {m[0]} | {m[1]} | {m[2]} | **{mean}** |
-
-{s["note"]}
+Notes for this subject are on the way. The topics above are in study order, and the full PYQ map comes with the first topic page.
 
 ## Official syllabus
 
 > {s["syllabus"]}
-
-## Topic plan
-
-Topic pages will be written in this order, following the [notes playbook]({REPO}/NOTES_PLAYBOOK.md). Each one gets a topic map, teaching from basics, a summary, solved PYQs and predicted 2027 questions.
-
-{topics}
 
 ## Study material in the repo
 

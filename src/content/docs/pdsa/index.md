@@ -1,12 +1,12 @@
 ---
-title: PDSA — Overview & PYQ analysis
+title: Programming, DS & Algorithms
 description: Every Programming, Data Structures & Algorithms question from GATE DA 2024–2026, mapped to topics.
 sidebar:
   label: Overview & PYQ map
   order: 0
 ---
 
-**Programming, Data Structures & Algorithms** carried **17, 16 and 16 marks** in 2024, 2025 and 2026. It's the most stable subject in GATE DA. If you're solid here, about 16 marks are close to guaranteed.
+PDSA is the most stable subject in GATE DA. If you're solid here, about 16 marks are close to guaranteed.
 
 ## Official syllabus
 
@@ -65,18 +65,6 @@ Not in the DA syllabus, so don't overspend time on them: heavy dynamic programmi
 :::caution[Pattern across all 3 papers]
 Almost every PDSA mark came from **tracing**: running code, a sort or a traversal by hand on paper. Very few questions asked you to recall definitions. Practise tracing slowly and carefully. Speed comes later.
 :::
-
-## Topic pages (study in this order)
-
-1. [Python semantics & code tracing](/pdsa/python-semantics/)
-2. [Recursion & call counting](/pdsa/recursion-tracing/)
-3. [Asymptotic complexity & recurrences](/pdsa/complexity-recurrences/)
-4. [Searching & sorting](/pdsa/searching-sorting/)
-5. Graphs: BFS, DFS, topological sort, shortest paths *(next)*
-6. Hashing *(next)*
-7. Stacks, queues, deques & linked lists *(next)*
-8. Trees, BST & heaps *(next)*
-9. Divide & conquer, greedy & DP basics *(next)*
 
 ## Study material in the repo
 

@@ -1,0 +1,25 @@
+---
+/** Three bars for 2024/2025/2026 marks, drawn to one scale (0–20). */
+interface Props { marks: number[]; compact?: boolean }
+const { marks, compact = false } = Astro.props;
+const years = ['24', '25', '26'];
+const MAX = 20;
+---
+<div class:list={['marks', { compact }]} role="img" aria-label={`Marks: 2024 ${marks[0]}, 2025 ${marks[1]}, 2026 ${marks[2]}`}>
+  {marks.map((m, i) => (
+    <div class="col">
+      <span class="val">{m}</span>
+      <span class="bar" style={`--h:${(m / MAX) * 100}%`}></span>
+      <span class="yr">’{years[i]}</span>
+    </div>
+  ))}
+</div>
+<style>
+  .marks { display: flex; gap: 0.35rem; align-items: flex-end; height: 4.6rem; }
+  .marks.compact { height: 3.6rem; }
+  .col { display: grid; grid-template-rows: auto 1fr auto; justify-items: center; height: 100%; width: 1.6rem; }
+  .bar { align-self: end; width: 0.7rem; height: var(--h); min-height: 2px; border-radius: 2px 2px 0 0; background: var(--gd-ink); }
+  .col:last-child .bar { background: var(--gd-hl-strong); }
+  .val { font: 600 0.72rem/1.2 var(--gd-mono); color: var(--sl-color-gray-2); font-variant-numeric: tabular-nums; }
+  .yr { font: 0.68rem/1.4 var(--gd-mono); color: var(--sl-color-gray-3); }
+</style>

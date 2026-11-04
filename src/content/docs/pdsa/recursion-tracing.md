@@ -6,8 +6,6 @@ sidebar:
   order: 2
 ---
 
-<span class="tag high">★ HIGH</span> <span class="tag yr">2024 ×2</span> <span class="tag yr">2025 ×2</span> <span class="tag yr">2026 ×2</span>
-
 **Why it matters:** 2024 Q38 and Q41, 2025 Q63 and Q64, and 2026 Q39 and Q58 are all solved with **one drawing: the call tree**. Get fast at drawing it and these become easy 2-mark questions.
 
 ## Topic map
@@ -215,7 +213,9 @@ How many function calls (stack activations), including the initial one, does `my
 (A) 5 (B) 9 (C) 15 (D) 17
 
 <details>
-<summary>Solution: answer (C) 15</summary>
+<summary>Show solution</summary>
+
+**Answer: (C) 15**
 
 Use $C(n) = 1 + C(n-1) + C(n-2)$ with $C(0) = C(-1) = 1$:
 
@@ -249,7 +249,9 @@ print(count(child_dict, 0))
 ```
 
 <details>
-<summary>Solution: answer 9 (option D)</summary>
+<summary>Show solution</summary>
+
+**Answer: 9 (option D)**
 
 `child_dict` describes a tree: 0 has children 1 and 2, 1 has children 3, 4, 5, and 2 has children 6, 7, 8. `count(i)` returns 1 for `i` itself plus the count of every child subtree. In other words, it counts **the nodes in the subtree rooted at `i`**.
 
@@ -279,7 +281,9 @@ print(count)
 ```
 
 <details>
-<summary>Solution: answer 8</summary>
+<summary>Show solution</summary>
+
+**Answer: 8**
 
 Look at what `fun` does: it walks `i = 0 … n-2`, swaps each out-of-order adjacent pair, and counts the swaps. That's **one pass of bubble sort**, written recursively. Because `data` is a list, the swaps stay in place for the next pass.
 
@@ -315,7 +319,9 @@ Output sum
 ```
 
 <details>
-<summary>Solution: answer 24</summary>
+<summary>Show solution</summary>
+
+**Answer: 24**
 
 **Phase 1: pushing.** Starting from `[0]`, the loop pushes 1, 2, … 8. When `x = 8`, `flag` becomes 1. The stack is `[0, 1, 2, 3, 4, 5, 6, 7, 8]`, with 8 on top.
 
@@ -346,7 +352,9 @@ def g(n):
 ```
 
 <details>
-<summary>Answer: g(5) = 11, 15 calls</summary>
+<summary>Show solution</summary>
+
+**Answer: g(5) = 11, 15 calls**
 
 **Value.** $g(0) = 0$, $g(1) = 1$, $g(2) = 1$, $g(3) = 1 + 2 = 3$, $g(4) = 3 + 2 = 5$, $g(5) = 5 + 6 = $ **11**.
 
@@ -365,7 +373,9 @@ def r(s):
 (A) `GATE` (B) `ETAG` (C) `EGAT` (D) `ATEG`
 
 <details>
-<summary>Answer: (B) ETAG</summary>
+<summary>Show solution</summary>
+
+**Answer: (B) ETAG**
 
 `r("GATE") = r("ATE") + "G" = (r("TE") + "A") + "G" = (("E" + "T") + "A") + "G"`, which is `ETAG`. The function reverses the string.
 
@@ -374,7 +384,9 @@ def r(s):
 **P3 (2 marks, NAT).** How many numbers does `p(5)` print? (`p` is the ruler function from §2.4.)
 
 <details>
-<summary>Answer: 31</summary>
+<summary>Show solution</summary>
+
+**Answer: 31**
 
 Let $N(n)$ be the count. $N(n) = 2N(n-1) + 1$ with $N(0) = 0$, so $N(n) = 2^n - 1$, and $N(5) = $ **31**.
 
@@ -389,7 +401,9 @@ def s(n):
 ```
 
 <details>
-<summary>Answer: 11, depth 5</summary>
+<summary>Show solution</summary>
+
+**Answer: 11, depth 5**
 
 The calls are `s(2027)`, `s(202)`, `s(20)`, `s(2)`, `s(0)`: that's **5 frames** on the stack at the deepest point. The function adds the digits: $7 + 2 + 0 + 2 = $ **11**.
 
@@ -399,7 +413,9 @@ The calls are `s(2027)`, `s(202)`, `s(20)`, `s(2)`, `s(0)`: that's **5 frames** 
 (A) The maximum stack depth for `F(n)` is $n$ (B) The total calls for `F(6)` is 25 (C) Memoisation reduces the calls to $O(n)$ (D) The number of leaf calls of `F(n)` is $F_{n+1}$
 
 <details>
-<summary>Answer: A; B; C; D (all true)</summary>
+<summary>Show solution</summary>
+
+**Answer: A; B; C; D (all true)**
 
 - **(A)** The longest path is `F(n) → F(n-1) → … → F(1)`, which is $n$ frames. True.
 - **(B)** $C(6) = 2F_7 - 1 = 2(13) - 1 = 25$. True.
