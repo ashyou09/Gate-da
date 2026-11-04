@@ -1,0 +1,124 @@
+/* ---------- Theme ---------- */
+:root {
+  --sl-color-accent-low: #1f2a4d;
+  --sl-color-accent: #4f6bed;
+  --sl-color-accent-high: #c9d3ff;
+  --gate-formula-bg: #f3f6ff;
+  --gate-formula-border: #4f6bed;
+  --gate-pyq-bg: #fff7e8;
+  --gate-pyq-border: #e69a1a;
+  --gate-trap-bg: #fff0f0;
+  --gate-trap-border: #d64545;
+}
+:root[data-theme='light'] {
+  --sl-color-accent-low: #dfe5ff;
+  --sl-color-accent: #3550d6;
+  --sl-color-accent-high: #1a2563;
+}
+:root[data-theme='dark'] {
+  --gate-formula-bg: #161d33;
+  --gate-pyq-bg: #2a2113;
+  --gate-trap-bg: #2b1616;
+}
+
+/* ---------- Math ---------- */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.4rem 0;
+}
+.katex { font-size: 1.08em; }
+
+/* ---------- Boxes (use as <div class="formula"> ... </div>) ---------- */
+.sl-markdown-content .formula,
+.sl-markdown-content .pyq,
+.sl-markdown-content .trap {
+  border-left: 4px solid;
+  border-radius: 0.5rem;
+  padding: 0.8rem 1rem;
+  margin: 1.2rem 0;
+}
+.sl-markdown-content .formula {
+  background: var(--gate-formula-bg);
+  border-color: var(--gate-formula-border);
+}
+.sl-markdown-content .pyq {
+  background: var(--gate-pyq-bg);
+  border-color: var(--gate-pyq-border);
+}
+.sl-markdown-content .trap {
+  background: var(--gate-trap-bg);
+  border-color: var(--gate-trap-border);
+}
+.sl-markdown-content .formula > :first-child,
+.sl-markdown-content .pyq > :first-child,
+.sl-markdown-content .trap > :first-child { margin-top: 0; }
+
+/* Small tags: <span class="tag y24">2024</span> */
+.tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  margin-right: 0.25rem;
+  vertical-align: middle;
+  border: 1px solid currentColor;
+}
+.tag.high { color: #d64545; }
+.tag.med { color: #c77c0e; }
+.tag.low { color: #3a8f5c; }
+.tag.yr { color: var(--sl-color-accent); }
+
+/* ---------- Solutions ---------- */
+.sl-markdown-content details {
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  margin: 0.8rem 0;
+}
+.sl-markdown-content details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--sl-color-accent);
+}
+.sl-markdown-content details[open] summary { margin-bottom: 0.5rem; }
+
+/* ---------- Tables ---------- */
+.sl-markdown-content table { display: block; overflow-x: auto; }
+.sl-markdown-content th { white-space: nowrap; }
+
+/* ---------- Topic map: <div class="mindmap"> + nested list ---------- */
+.sl-markdown-content .mindmap {
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  margin: 1.2rem 0;
+  background: var(--sl-color-gray-7, transparent);
+}
+.sl-markdown-content .mindmap ul {
+  list-style: none;
+  padding-left: 1.4rem;
+  margin: 0;
+  border-left: 2px solid var(--sl-color-accent);
+}
+.sl-markdown-content .mindmap > ul { border-left: none; padding-left: 0; }
+.sl-markdown-content .mindmap li {
+  position: relative;
+  margin: 0.25rem 0;
+  padding-left: 0.6rem;
+}
+.sl-markdown-content .mindmap ul ul > li::before {
+  content: '';
+  position: absolute;
+  left: -1.4rem;
+  top: 0.8em;
+  width: 1.6rem;
+  border-top: 2px solid var(--sl-color-accent);
+}
+.sl-markdown-content .mindmap > ul > li > strong {
+  font-size: 1.1rem;
+  color: var(--sl-color-accent-high);
+}
+.sl-markdown-content td code { white-space: nowrap; }
