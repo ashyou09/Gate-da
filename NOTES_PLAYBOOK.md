@@ -45,6 +45,14 @@ Fixed order of sections:
 5. `## Test yourself (A): previous-year questions` — every PYQ on this topic, as `### GATE DA <year> Q<n> (<marks>, <type>)`, solution inside `<details><summary>Solution: answer …</summary> … </details>`.
 6. `## Test yourself (B): predicted 2027-style questions` — 5–7 new MCQ/MSQ/NAT questions (F1, F2 …) in the same `<details>` format.
 
+## Diagrams
+- Draw every figure yourself in `scripts/figures.py` (no images copied from the web): a function decorated with
+  `@fig("name", "caption")` that returns SVG built from real numbers (numpy), using the `.dg` CSS classes
+  (`ink`, `hl`, `warn`, `mut`, `dot*`, `box*`) so it follows light/dark mode.
+- Place it in a page with the two markers `<!-- fig:name -->` and `<!-- /fig:name -->` on their own lines, then run
+  `python3 scripts/figures.py` to inject it.
+- Check each figure once in light and dark mode (no overlaps, nothing clipped) before committing.
+
 ## 3. Quality rules
 - **Verify every answer**: run code questions in Python; recompute every number; match PYQ answers against the official key.
 - Blank line after every opening `<div …>` / `<details>` / `<summary>` line and before the closing tag, so markdown inside renders.
