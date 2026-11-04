@@ -1246,6 +1246,24 @@ def search_ucs():
     return svg(700, 220, "".join(body), "Weighted graph comparing BFS and uniform-cost search")
 
 
+@fig("astar-q44", "The 2025 Q44 graph redrawn with step costs on the edges and h above each node. A* pops nodes in order of "
+     "f = g + h: S(0), A(6), E(7), B(8), C(9), D(8), G(9). The optimal path S → E → C → D → G (cost 9) is highlighted. "
+     "Note h(C) = 6 > c(C,D) + h(D) = 5, so this h is admissible but not consistent: f drops from 9 at C to 8 at D.")
+def astar_q44():
+    nodes = {"S": (40, 150), "A": (150, 70), "B": (260, 70), "C": (370, 70), "E": (150, 170), "D": (470, 150), "G": (570, 150)}
+    edges = [("S", "A", 4), ("S", "E", 1), ("A", "B", 2), ("B", "C", 2), ("E", "C", 2), ("C", "D", 3), ("D", "G", 3)]
+    h = {"S": "–", "A": 2, "B": 2, "C": 6, "E": 6, "D": 2, "G": 0}
+    body = _graph(nodes, edges, hl_path=("S", "E", "C", "D", "G"), hvals=h)
+    rows = [("S", 0, 0, 0), ("A", 4, 2, 6), ("E", 1, 6, 7), ("B", 6, 2, 8), ("C", 3, 6, 9), ("D", 6, 2, 8), ("G", 9, 0, 9)]
+    body.append('<text class="title" x="40" y="225">pop order</text>')
+    for i, (n, g, hh, f) in enumerate(rows):
+        x = 130 + i * 68
+        body.append(f'<rect class="box" x="{x - 28}" y="210" width="60" height="36" rx="6"/>')
+        body.append(f'<text class="t-ink" x="{x + 2}" y="225" text-anchor="middle" style="font-weight:700">{i + 1}. {n}</text>')
+        body.append(f'<text class="t-mut" x="{x + 2}" y="240" text-anchor="middle">f={f}</text>')
+    return svg(620, 258, "".join(body), "A* search on the 2025 Q44 graph")
+
+
 # ---------------------------------------------------------------- injection
 
 
