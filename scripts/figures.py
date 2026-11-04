@@ -450,6 +450,74 @@ def roc_example():
     return svg(560, 320, "".join(body), "ROC curve of a worked example")
 
 
+# ---------------------------------------------------------------- k-NN
+
+
+@fig("knn-q63", "GATE DA 2024 Q63 redrawn. Query ◇ at (2, 1); circles at (1, 1), (1, 2); squares at (2, 3), (3, 3), (3, 2). "
+     "Rings show the k = 1, 3, 5 neighbourhoods. Votes: k = 1 → 1 circle; k = 3 → 2 circles, 1 square; k = 5 → 2 circles, "
+     "3 squares. The smallest odd k that gives 'square' is 5.")
+def knn_q63():
+    p = Plot(50, 20, 300, 260, (0, 4), (0, 4))
+    q = (2, 1)
+    body = [p.axes("", "")]
+    for t in (1, 2, 3):
+        body.append(f'<line class="grid" x1="{p.X(t):.1f}" y1="{p.Y(0):.1f}" x2="{p.X(t):.1f}" y2="{p.Y(4):.1f}"/>')
+        body.append(f'<line class="grid" x1="{p.X(0):.1f}" y1="{p.Y(t):.1f}" x2="{p.X(4):.1f}" y2="{p.Y(t):.1f}"/>')
+        body.append(f'<text class="t-mut" x="{p.X(t):.1f}" y="{p.Y(0) + 14:.1f}" text-anchor="middle">{t}</text>')
+        body.append(f'<text class="t-mut" x="{p.X(0) - 8:.1f}" y="{p.Y(t) + 4:.1f}" text-anchor="end">{t}</text>')
+    unit = p.X(1) - p.X(0)
+    body.append(f'<clipPath id="knnclip"><rect x="{p.x0}" y="{p.y0}" width="{p.w}" height="{p.h}"/></clipPath><g clip-path="url(#knnclip)">')
+    for r, k, cls in [(1.0, 1, "ink"), (2 ** 0.5, 3, "hl"), (5 ** 0.5, 5, "warn")]:
+        body.append(f'<circle class="{cls}" style="fill:none;stroke-dasharray:5 4;stroke-width:1.6" cx="{p.X(q[0]):.1f}" cy="{p.Y(q[1]):.1f}" r="{r * unit + 4:.1f}"/>')
+    body.append('</g>')
+    for x, y in [(1, 1), (1, 2)]:
+        body.append(f'<circle class="dot" cx="{p.X(x):.1f}" cy="{p.Y(y):.1f}" r="8"/>')
+    for x, y in [(2, 3), (3, 3), (3, 2)]:
+        body.append(f'<rect class="dot-warn" x="{p.X(x) - 8:.1f}" y="{p.Y(y) - 8:.1f}" width="16" height="16"/>')
+    cx, cy = p.X(q[0]), p.Y(q[1])
+    body.append(f'<polygon class="dot-hl" points="{cx},{cy - 9} {cx + 9},{cy} {cx},{cy + 9} {cx - 9},{cy}"/>')
+    rows = [("k = 1", "radius 1", "1 ● : 0 ■ → ●", "t-ink"), ("k = 3", "radius √2", "2 ● : 1 ■ → ●", "t-hl"), ("k = 5", "radius √5", "2 ● : 3 ■ → ■", "t-warn")]
+    for i, (k, r, v, c) in enumerate(rows):
+        y = 70 + i * 52
+        body.append(f'<text class="{c}" x="380" y="{y}" style="font-weight:600">{k}</text>')
+        body.append(f'<text class="t-mut" x="380" y="{y + 16}">{r}</text>')
+        body.append(f'<text x="380" y="{y + 32}">{v}</text>')
+    return svg(560, 310, "".join(body), "k-nearest neighbours on the 2024 Q63 dataset")
+
+
+@fig("knn-k-effect", "The same 60 noisy training points classified by 1-NN and 15-NN. With k = 1 every point gets its own island, "
+     "so the boundary is jagged (low bias, high variance; training error is 0). With k = 15 the boundary is smooth "
+     "(higher bias, lower variance).")
+def knn_k_effect():
+    rng = np.random.default_rng(11)
+    n = 60
+    X = rng.uniform(0, 1, (n, 2))
+    y = (X[:, 1] > 0.5 + 0.25 * np.sin(2 * np.pi * X[:, 0])).astype(int)
+    flip = rng.random(n) < 0.12
+    y[flip] = 1 - y[flip]
+    body = []
+    G = 34
+    for k_i, k in enumerate((1, 15)):
+        ox = 10 + k_i * 300
+        p = Plot(ox + 10, 30, 270, 220, (0, 1), (0, 1))
+        body.append(f'<text class="title" x="{ox + 145}" y="18" text-anchor="middle">{k}-NN</text>')
+        cw = p.w / G; chh = p.h / G
+        for i in range(G):
+            for j in range(G):
+                cx = (i + 0.5) / G; cy = (j + 0.5) / G
+                d = np.hypot(X[:, 0] - cx, X[:, 1] - cy)
+                lab = int(y[np.argsort(d)[:k]].mean() > 0.5)
+                col = "var(--gd-ink)" if lab else "var(--gd-trap)"
+                body.append(f'<rect x="{p.X(i / G):.1f}" y="{p.Y((j + 1) / G):.1f}" width="{cw + 0.3:.1f}" height="{chh + 0.3:.1f}" style="fill:{col};fill-opacity:.16"/>')
+        for (a, b), lab in zip(X, y):
+            if lab:
+                body.append(f'<circle class="dot-ink" cx="{p.X(a):.1f}" cy="{p.Y(b):.1f}" r="3.6"/>')
+            else:
+                body.append(f'<rect class="dot-warn" x="{p.X(a) - 3.4:.1f}" y="{p.Y(b) - 3.4:.1f}" width="6.8" height="6.8"/>')
+        body.append(f'<rect class="grid" x="{p.x0}" y="{p.y0}" width="{p.w}" height="{p.h}"/>')
+    return svg(610, 262, "".join(body), "Decision regions of 1-NN and 15-NN")
+
+
 # ---------------------------------------------------------------- injection
 
 

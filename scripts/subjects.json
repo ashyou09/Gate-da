@@ -363,7 +363,8 @@
     "title": "k-NN & naive Bayes",
     "priority": "high",
     "pyqs": 3,
-    "blurb": "Distance-based voting and the effect of k; Bayes-rule classification, parameter counting, misclassification probability."
+    "blurb": "Distance-based voting and the effect of k; Bayes-rule classification, parameter counting, misclassification probability.",
+    "page": "knn-naive-bayes"
    },
    {
     "title": "Linear discriminant analysis",
