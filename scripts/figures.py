@@ -315,6 +315,87 @@ def reg_paths():
     return svg(620, 262, "".join(body), "Ridge and lasso coefficient paths")
 
 
+# ---------------------------------------------------------------- logistic & linear classifiers
+
+
+@fig("logit-sigmoid", "The sigmoid σ(z) = 1/(1 + e^(−z)) squashes any real score into (0, 1). σ(0) = 0.5 is the decision threshold. "
+     "Its derivative σ'(z) = σ(z)(1 − σ(z)) peaks at 0.25 when z = 0; at σ = 0.4 it is 0.4 × 0.6 = 0.24 (2024 Q33).")
+def logit_sigmoid():
+    z = np.linspace(-7, 7, 300)
+    sg = 1 / (1 + np.exp(-z))
+    p = Plot(60, 20, 500, 220, (-7, 7), (0, 1.05))
+    body = [p.axes("z = wᵀx + b", "", xoff=30)]
+    for t in (-6, -4, -2, 0, 2, 4, 6):
+        body.append(f'<text class="t-mut" x="{p.X(t):.1f}" y="{p.Y(0) + 14:.1f}" text-anchor="middle">{t}</text>')
+    for v in (0.25, 0.5, 1.0):
+        body.append(f'<line class="grid" x1="{p.X(-7):.1f}" y1="{p.Y(v):.1f}" x2="{p.X(7):.1f}" y2="{p.Y(v):.1f}"/>')
+        body.append(f'<text class="t-mut" x="{p.X(-7) - 6:.1f}" y="{p.Y(v) + 4:.1f}" text-anchor="end">{v:g}</text>')
+    body.append(p.path(z, sg, "ink"))
+    body.append(p.path(z, sg * (1 - sg), "hl"))
+    zz = np.log(0.4 / 0.6)
+    body.append(f'<circle class="dot-warn" cx="{p.X(zz):.1f}" cy="{p.Y(0.4):.1f}" r="4"/>')
+    body.append(f'<circle class="dot-warn" cx="{p.X(zz):.1f}" cy="{p.Y(0.24):.1f}" r="4"/>')
+    body.append(f'<line class="mut" x1="{p.X(zz):.1f}" y1="{p.Y(0.4):.1f}" x2="{p.X(zz):.1f}" y2="{p.Y(0.24):.1f}"/>')
+    body.append(f'<text class="t-warn" x="{p.X(zz) - 8:.1f}" y="{p.Y(0.4) - 6:.1f}" text-anchor="end">σ = 0.4</text>')
+    body.append(f'<text class="t-warn" x="{p.X(zz) - 10:.1f}" y="{p.Y(0.24) - 4:.1f}" text-anchor="end">σ′ = 0.24</text>')
+    body.append(f'<text class="t-ink" x="{p.X(4.2):.1f}" y="{p.Y(1 / (1 + np.exp(-4.2))) + 18:.1f}">σ(z)</text>')
+    body.append(f'<text class="t-hl" x="{p.X(1.2):.1f}" y="{p.Y(0.25) - 8:.1f}">σ′(z), max 0.25</text>')
+    return svg(580, 285, "".join(body), "Sigmoid and its derivative")
+
+
+@fig("linsep-q53", "The four datasets of GATE DA 2024 Q53, redrawn (● circles, ■ squares). A dashed line separates the classes in "
+     "(i) and (iv). In (ii) a circle is surrounded by squares, and (iii) is the XOR pattern: no single straight line works.")
+def linsep():
+    sets = {
+        "(i) separable": ([(1, 3), (2, 3), (1, 2)], [(2, 1), (3, 1), (2, 0)], ((0.3, 0.6), (3.6, 2.6))),
+        "(ii) not separable": ([(2, 2)], [(2, 3), (1, 2), (3, 2), (2, 1)], None),
+        "(iii) not separable (XOR)": ([(3, 3), (1, 1)], [(1, 3), (3, 1)], None),
+        "(iv) separable": ([(2, 0.1), (3, 1.5), (3, 0.2)], [(1, 2.3), (2, 2.6), (1, 1.2)], ((0.6, 0.0), (3.6, 2.9))),
+    }
+    body = []
+    for k, (title, (circ, sq, line)) in enumerate(sets.items()):
+        ox = 10 + (k % 2) * 300; oy = 10 + (k // 2) * 185
+        p = Plot(ox + 30, oy + 26, 230, 130, (0, 3.8), (-0.3, 3.6))
+        body.append(f'<text class="title" x="{ox + 145}" y="{oy + 12}" text-anchor="middle">{title}</text>')
+        body.append(p.axes())
+        for t in (1, 2, 3):
+            body.append(f'<line class="grid" x1="{p.X(t):.1f}" y1="{p.Y(-0.3):.1f}" x2="{p.X(t):.1f}" y2="{p.Y(3.6):.1f}"/>')
+            body.append(f'<line class="grid" x1="{p.X(0):.1f}" y1="{p.Y(t):.1f}" x2="{p.X(3.8):.1f}" y2="{p.Y(t):.1f}"/>')
+        if line:
+            (a, b), (c, d) = line
+            body.append(f'<line class="mut" style="stroke:var(--gd-ink)" x1="{p.X(a):.1f}" y1="{p.Y(b):.1f}" x2="{p.X(c):.1f}" y2="{p.Y(d):.1f}"/>')
+        for x, y in circ:
+            body.append(f'<circle class="dot" cx="{p.X(x):.1f}" cy="{p.Y(y):.1f}" r="6"/>')
+        for x, y in sq:
+            body.append(f'<rect class="dot-warn" x="{p.X(x) - 6:.1f}" y="{p.Y(y) - 6:.1f}" width="12" height="12"/>')
+    return svg(610, 380, "".join(body), "Linear separability of four datasets")
+
+
+@fig("linear-boundary", "A linear classifier f(x) = wᵀx + b. The boundary f(x) = 0 is a line (a hyperplane in higher dimensions); "
+     "w is perpendicular to it and points towards the positive side. The distance of a point from the boundary is |f(x)| / ‖w‖.")
+def linear_boundary():
+    p = Plot(40, 20, 420, 260, (-0.5, 5), (-0.5, 4))
+    w = np.array([3, 4.0]); b = -10
+    body = [p.axes("x₁", "x₂", xoff=30, yoff=24)]
+    A, B = (-0.5, 2.875), (4.0, -0.5)
+    poly = [A, B, (5, -0.5), (5, 4), (-0.5, 4)]
+    body.append('<polygon style="fill:var(--gd-ink);fill-opacity:.08" points="' + " ".join(f"{p.X(a):.1f},{p.Y(c):.1f}" for a, c in poly) + '"/>')
+    body.append(f'<line class="ink" x1="{p.X(A[0]):.1f}" y1="{p.Y(A[1]):.1f}" x2="{p.X(B[0]):.1f}" y2="{p.Y(B[1]):.1f}"/>')
+    foot = np.array([1.2, (-b - 3 * 1.2) / 4])
+    tip = foot + 0.9 * w / np.linalg.norm(w)
+    body.append(f'<line class="hl" x1="{p.X(foot[0]):.1f}" y1="{p.Y(foot[1]):.1f}" x2="{p.X(tip[0]):.1f}" y2="{p.Y(tip[1]):.1f}"/>')
+    body.append(f'<circle class="dot-hl" cx="{p.X(tip[0]):.1f}" cy="{p.Y(tip[1]):.1f}" r="4"/>')
+    body.append(f'<text class="t-hl" x="{p.X(tip[0]) + 8:.1f}" y="{p.Y(tip[1]):.1f}">w</text>')
+    pt = np.array([3.5, 2.5]); fval = w @ pt + b; proj = pt - fval / (w @ w) * w
+    body.append(f'<line class="mut" style="stroke:var(--gd-trap)" x1="{p.X(pt[0]):.1f}" y1="{p.Y(pt[1]):.1f}" x2="{p.X(proj[0]):.1f}" y2="{p.Y(proj[1]):.1f}"/>')
+    body.append(f'<circle class="dot" cx="{p.X(pt[0]):.1f}" cy="{p.Y(pt[1]):.1f}" r="5"/>')
+    body.append(f'<text class="t-warn" x="{p.X(pt[0]):.1f}" y="{p.Y(pt[1]) - 12:.1f}" text-anchor="middle">x · distance |f(x)|/‖w‖</text>')
+    body.append(f'<text class="t-ink" x="{p.X(0.2):.1f}" y="{p.Y(3.6):.1f}">f(x) &gt; 0 → class +1</text>')
+    body.append(f'<text class="t-mut" x="{p.X(-0.3):.1f}" y="{p.Y(-0.25):.1f}">f(x) &lt; 0 → class −1</text>')
+    body.append(f'<text class="t-ink" x="{p.X(1.9):.1f}" y="{p.Y(0.1):.1f}" text-anchor="start">wᵀx + b = 0</text>')
+    return svg(500, 320, "".join(body), "Linear decision boundary with normal vector")
+
+
 # ---------------------------------------------------------------- injection
 
 

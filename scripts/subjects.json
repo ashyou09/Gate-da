@@ -349,7 +349,8 @@
     "title": "Logistic regression & linear classifiers",
     "priority": "high",
     "pyqs": 4,
-    "blurb": "Sigmoid and its derivative, cross-entropy, decision boundaries, the perceptron update, linear separability."
+    "blurb": "Sigmoid and its derivative, cross-entropy, decision boundaries, the perceptron update, linear separability.",
+    "page": "logistic-linear-classifiers"
    },
    {
     "title": "Evaluation metrics",
