@@ -377,7 +377,8 @@
     "title": "Support vector machines",
     "priority": "high",
     "pyqs": 2,
-    "blurb": "Maximum margin, support vectors, hard vs soft margin, hinge loss and kernels."
+    "blurb": "Maximum margin, support vectors, hard vs soft margin, hinge loss and kernels.",
+    "page": "svm"
    },
    {
     "title": "Decision trees",

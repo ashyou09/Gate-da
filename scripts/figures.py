@@ -562,6 +562,65 @@ def lda_projection():
     return svg(620, 290, "".join(body), "LDA projection direction compared with the mean-difference direction")
 
 
+# ---------------------------------------------------------------- SVM
+
+
+@fig("svm-margin", "Hard-margin SVM on the 2025 Q53 data: class 1 at (2,0), (0,2), (2,2), class 2 at (0,0). The solution is "
+     "w = (1, 1), b = −1, so the boundary is x₁ + x₂ = 1 and the margin lines are x₁ + x₂ = 0 and x₁ + x₂ = 2. "
+     "The three ringed points touch the margin: they are the support vectors. Margin width = 2/‖w‖ = √2.")
+def svm_margin():
+    p = Plot(50, 20, 300, 260, (-0.8, 2.8), (-0.8, 2.8))
+    body = [f'<clipPath id="svmclip"><rect x="{p.x0}" y="{p.y0}" width="{p.w}" height="{p.h}"/></clipPath>']
+    body.append(p.axes("x₁", "x₂", xoff=30, yoff=26))
+    for t in (0, 1, 2):
+        body.append(f'<text class="t-mut" x="{p.X(t):.1f}" y="{p.Y(-0.8) + 14:.1f}" text-anchor="middle">{t}</text>')
+        body.append(f'<text class="t-mut" x="{p.X(-0.8) - 6:.1f}" y="{p.Y(t) + 4:.1f}" text-anchor="end">{t}</text>')
+    body.append('<g clip-path="url(#svmclip)">')
+    band = [(-0.8, 0.8), (0.8, -0.8), (2.8, -0.8), (-0.8, 2.8)]
+    body.append('<polygon style="fill:var(--gd-hl-strong);fill-opacity:.12" points="' + " ".join(f"{p.X(a):.1f},{p.Y(b):.1f}" for a, b in [(-0.8, 0.8), (0.8, -0.8), (2.8, -0.8), (2.8, -0.8), (-0.8, 2.8)][:2] + [(2.8, -0.8), (-0.8, 2.8)]) + '"/>')
+    for c, cls in ((1, "ink"), (0, "mut"), (2, "mut")):
+        a, b = (-0.8, c + 0.8), (c + 0.8, -0.8)
+        body.append(f'<line class="{cls}" x1="{p.X(a[0]):.1f}" y1="{p.Y(a[1]):.1f}" x2="{p.X(b[0]):.1f}" y2="{p.Y(b[1]):.1f}"/>')
+    body.append('</g>')
+    body.append(f'<line class="hl" x1="{p.X(0):.1f}" y1="{p.Y(0):.1f}" x2="{p.X(1):.1f}" y2="{p.Y(1):.1f}" style="stroke-width:1.8"/>')
+    body.append(f'<text class="t-hl" x="{p.X(0.62):.1f}" y="{p.Y(0.42):.1f}">√2</text>')
+    for x, y in [(2, 0), (0, 2), (2, 2)]:
+        body.append(f'<circle class="dot-ink" cx="{p.X(x):.1f}" cy="{p.Y(y):.1f}" r="6"/>')
+    body.append(f'<rect class="dot-warn" x="{p.X(0) - 6:.1f}" y="{p.Y(0) - 6:.1f}" width="12" height="12"/>')
+    for x, y in [(2, 0), (0, 2), (0, 0)]:
+        body.append(f'<circle class="warn" style="fill:none;stroke-width:1.6" cx="{p.X(x):.1f}" cy="{p.Y(y):.1f}" r="11"/>')
+    body.append(f'<text class="t-ink" x="{p.X(1.55):.1f}" y="{p.Y(-0.45):.1f}">x₁+x₂ = 1</text>')
+    lines = [("boundary", "wᵀx + b = 0", "t-ink"), ("margin lines", "wᵀx + b = ±1", "t-mut"),
+             ("support vectors", "ringed: y(wᵀx+b) = 1", "t-warn"), ("width", "2/‖w‖ = 2/√2 = √2", "t-hl"),
+             ("(2,2)", "y f(x) = 3 > 1: not a SV", "t-mut")]
+    for i, (a, b, c) in enumerate(lines):
+        body.append(f'<text class="{c}" x="380" y="{60 + i * 44}" style="font-weight:600">{a}</text>')
+        body.append(f'<text x="380" y="{78 + i * 44}">{b}</text>')
+    return svg(600, 320, "".join(body), "Maximum-margin separator with support vectors")
+
+
+@fig("svm-losses", "Losses as a function of the margin y·f(x). The 0–1 loss counts mistakes. The hinge loss max(0, 1 − yf) "
+     "(SVM) is zero once a point is beyond the margin (yf ≥ 1) and grows linearly otherwise. The logistic loss "
+     "log₂(1 + e^(−yf)) never reaches exactly zero.")
+def svm_losses():
+    m = np.linspace(-2.5, 3, 300)
+    p = Plot(60, 20, 480, 220, (-2.5, 3), (0, 3.6))
+    body = [p.axes("margin  y · f(x)", "loss", xoff=32, yoff=30)]
+    for t in (-2, -1, 0, 1, 2, 3):
+        body.append(f'<text class="t-mut" x="{p.X(t):.1f}" y="{p.Y(0) + 15:.1f}" text-anchor="middle">{t}</text>')
+    body.append(f'<line class="grid" x1="{p.X(1):.1f}" y1="{p.Y(0):.1f}" x2="{p.X(1):.1f}" y2="{p.Y(3.6):.1f}"/>')
+    zo = np.where(m < 0, 1.0, 0.0)
+    body.append(p.path(m[m < 0], zo[m < 0], "mut"))
+    body.append(p.path(m[m >= 0], zo[m >= 0], "mut"))
+    body.append(p.path(m, np.maximum(0, 1 - m), "ink"))
+    body.append(p.path(m, np.log2(1 + np.exp(-m)), "hl"))
+    body.append(f'<text class="t-ink" x="{p.X(-1.0) - 6:.1f}" y="{p.Y(2.0) + 18:.1f}" text-anchor="end">hinge</text>')
+    body.append(f'<text class="t-hl" x="{p.X(1.6):.1f}" y="{p.Y(np.log2(1 + np.exp(-1.6))) - 10:.1f}">logistic</text>')
+    body.append(f'<text class="t-mut" x="{p.X(-1.2):.1f}" y="{p.Y(1) - 6:.1f}">0–1</text>')
+    body.append(f'<text class="t-mut" x="{p.X(1) + 4:.1f}" y="{p.Y(3.3):.1f}">yf = 1</text>')
+    return svg(560, 285, "".join(body), "Hinge, logistic and zero-one losses")
+
+
 # ---------------------------------------------------------------- injection
 
 
