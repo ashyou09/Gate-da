@@ -856,6 +856,62 @@ def hc_linkage():
     return svg(640, 240, "".join(body), "Single versus complete linkage")
 
 
+# ---------------------------------------------------------------- PCA
+
+
+@fig("pca-axes", "200 correlated points with their principal components. PC1 (blue) points along the direction of greatest "
+     "spread; PC2 (yellow) is perpendicular to it. Each axis extends 2√λ on either side of the mean. Projecting onto PC1 alone keeps most of the "
+     "variance; the short perpendicular segments are what that projection throws away (the reconstruction error).")
+def pca_axes():
+    rng = np.random.default_rng(2)
+    C = np.array([[2.5, 1.5], [1.5, 1.6]])
+    X = rng.multivariate_normal([0, 0], C, 200)
+    X -= X.mean(0)
+    S = X.T @ X / len(X)
+    lam, V = np.linalg.eigh(S)
+    lam, V = lam[::-1], V[:, ::-1]
+    p = Plot(30, 20, 340, 280, (-5, 5), (-4, 4))
+    body = [f'<rect class="grid" x="{p.x0}" y="{p.y0}" width="{p.w}" height="{p.h}" rx="6"/>']
+    u = V[:, 0]
+    for x in X[::8]:
+        proj = (x @ u) * u
+        body.append(f'<line class="grid" style="stroke:var(--gd-trap);stroke-opacity:.6" x1="{p.X(x[0]):.1f}" y1="{p.Y(x[1]):.1f}" x2="{p.X(proj[0]):.1f}" y2="{p.Y(proj[1]):.1f}"/>')
+    for a, b in X:
+        body.append(f'<circle class="dot" cx="{p.X(a):.1f}" cy="{p.Y(b):.1f}" r="2.4" style="opacity:.55"/>')
+    for k, cls in ((0, "ink"), (1, "hl")):
+        v = V[:, k] * 2 * np.sqrt(lam[k])
+        body.append(f'<line class="{cls}" style="stroke-width:3.2" x1="{p.X(-v[0]):.1f}" y1="{p.Y(-v[1]):.1f}" x2="{p.X(v[0]):.1f}" y2="{p.Y(v[1]):.1f}"/>')
+        body.append(f'<text class="{"t-ink" if k == 0 else "t-hl"}" x="{p.X(v[0]) + 6:.1f}" y="{p.Y(v[1]) - 4:.1f}">PC{k + 1}</text>')
+    tot = lam.sum()
+    info = [("covariance eigenvalues", "t-mut"), (f"λ₁ = {lam[0]:.2f}", "t-ink"), (f"λ₂ = {lam[1]:.2f}", "t-hl"),
+            (f"PC1 explains {lam[0] / tot:.0%}", "t-ink"), ("PC1 ⟂ PC2 (angle 90°)", "t-mut")]
+    for i, (t, c) in enumerate(info):
+        body.append(f'<text class="{c}" x="395" y="{60 + i * 30}">{t}</text>')
+    return svg(600, 320, "".join(body), "Principal component axes on correlated data")
+
+
+@fig("pca-scree", "A scree plot for eigenvalues 4, 2, 1, 0.5, 0.5 (total 8). Bars show each component's share of the variance "
+     "(50%, 25%, 12.5%, 6.25%, 6.25%); the line is the cumulative share. Keeping 90% of the variance needs 4 components.")
+def pca_scree():
+    lam = np.array([4, 2, 1, 0.5, 0.5])
+    share = lam / lam.sum()
+    cum = np.cumsum(share)
+    p = Plot(60, 20, 420, 220, (0.4, 5.6), (0, 1.05))
+    body = [p.axes("principal component", "fraction of variance", xoff=32, yoff=40)]
+    for v in (0.25, 0.5, 0.75, 0.9, 1.0):
+        body.append(f'<line class="grid" x1="{p.X(0.4):.1f}" y1="{p.Y(v):.1f}" x2="{p.X(5.6):.1f}" y2="{p.Y(v):.1f}"/>')
+        body.append(f'<text class="t-mut" x="{p.X(0.4) - 6:.1f}" y="{p.Y(v) + 4:.1f}" text-anchor="end">{v:g}</text>')
+    for i, (sh, c) in enumerate(zip(share, cum), 1):
+        body.append(f'<rect class="box-ink" x="{p.X(i) - 22:.1f}" y="{p.Y(sh):.1f}" width="44" height="{p.Y(0) - p.Y(sh):.1f}" rx="3" style="opacity:.85"/>')
+        body.append(f'<text class="t-mut" x="{p.X(i):.1f}" y="{p.Y(0) + 15:.1f}" text-anchor="middle">{i}</text>')
+    body.append(p.path(np.arange(1, 6), cum, "hl"))
+    for i, c in enumerate(cum, 1):
+        body.append(f'<circle class="dot-hl" cx="{p.X(i):.1f}" cy="{p.Y(c):.1f}" r="4"/>')
+        body.append(f'<text class="t-hl" x="{p.X(i):.1f}" y="{p.Y(c) - 9:.1f}" text-anchor="middle">{c:.3g}</text>')
+    body.append(f'<text class="t-warn" x="{p.X(5.55):.1f}" y="{p.Y(0.9) + 14:.1f}" text-anchor="end">90% line</text>')
+    return svg(520, 285, "".join(body), "Scree plot and cumulative explained variance")
+
+
 # ---------------------------------------------------------------- injection
 
 

@@ -405,7 +405,8 @@
     "title": "PCA & dimensionality reduction",
     "priority": "high",
     "pyqs": 3,
-    "blurb": "Covariance, eigenvectors as directions of maximum variance, explained variance, link to SVD."
+    "blurb": "Covariance, eigenvectors as directions of maximum variance, explained variance, link to SVD.",
+    "page": "pca"
    }
   ],
   "note": "Rising every year (11 → 14 → 16)."

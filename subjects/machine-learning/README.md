@@ -16,6 +16,17 @@ Rising every year (11 → 14 → 16).
 Hub page: `src/content/docs/machine-learning/index.md` (site URL `/machine-learning/`)
 
 - 1. Foundations — `src/content/docs/machine-learning/ml-foundations.md`
+- 2. Linear regression — `src/content/docs/machine-learning/linear-regression.md`
+- 3. Ridge & lasso — `src/content/docs/machine-learning/ridge-lasso.md`
+- 4. Logistic & linear classifiers — `src/content/docs/machine-learning/logistic-linear-classifiers.md`
+- 5. Evaluation metrics — `src/content/docs/machine-learning/evaluation-metrics.md`
+- 6. k-NN & naive Bayes — `src/content/docs/machine-learning/knn-naive-bayes.md`
+- 7. LDA — `src/content/docs/machine-learning/lda.md`
+- 8. SVM — `src/content/docs/machine-learning/svm.md`
+- 9. Decision trees — `src/content/docs/machine-learning/decision-trees.md`
+- 10. Neural networks — `src/content/docs/machine-learning/neural-networks.md`
+- 11. Clustering — `src/content/docs/machine-learning/clustering.md`
+- 12. PCA — `src/content/docs/machine-learning/pca.md`
 
 ## Official syllabus
 
