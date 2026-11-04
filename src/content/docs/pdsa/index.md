@@ -29,6 +29,7 @@ Not in the DA syllabus, so don't overspend time on them: heavy dynamic programmi
 | 2024 | 41 | 2 | MCQ | Python + recursion | Recursive swap reverses a list | C |
 | 2024 | 45 | 2 | MCQ | Sorting | Which sort finishes after 2 passes | Selection |
 | 2024 | 51 | 2 | MSQ | Graphs | Valid topological orders | B;D |
+| 2024 | 52 | 2 | MSQ | Trees | Counting facts: $L$, $I$, $N$, $H$ of a binary tree | A;B;C |
 | 2025 | 18 | 1 | MCQ | Hashing | Linear probing with $h(x)=3x \bmod 10$ | 4 and 6 |
 | 2025 | 23 | 1 | MCQ | Python | `extend` vs `append` | `A.extend(B)` |
 | 2025 | 27 | 1 | MSQ | Searching | When binary search is $O(\log n)$ | sorted array only |
@@ -59,7 +60,7 @@ Not in the DA syllabus, so don't overspend time on them: heavy dynamic programmi
 | Binary search & recurrences | 4 | <span class="tag high">Every year</span> $\lfloor\log_2 n\rfloor+1$. |
 | Hashing | 3 | <span class="tag med">2 of 3 yrs</span> Linear probing trace. |
 | Stacks / queues / deques | 3 | <span class="tag med">2 of 3 yrs</span> Operation trace. |
-| Tree traversals | 2 | <span class="tag med">2 of 3 yrs</span> Rebuild from two traversals. |
+| Trees (traversals, counting facts) | 3 | <span class="tag med">2 of 3 yrs</span> Rebuild from two traversals; node/leaf/height bounds. |
 | Linked lists, heaps, shortest paths, MST, DP | 0 | <span class="tag low">Not yet asked</span> In syllabus. Learn the core facts. |
 
 :::caution[Pattern across all 3 papers]

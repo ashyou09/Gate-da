@@ -17,6 +17,11 @@ Hub page: `src/content/docs/pdsa/index.md` (site URL `/pdsa/`)
 - 2. Recursion & tracing — `src/content/docs/pdsa/recursion-tracing.md`
 - 3. Complexity & recurrences — `src/content/docs/pdsa/complexity-recurrences.md`
 - 4. Searching & sorting — `src/content/docs/pdsa/searching-sorting.md`
+- 5. Graphs — `src/content/docs/pdsa/graphs.md`
+- 6. Hashing — `src/content/docs/pdsa/hashing.md`
+- 7. Stacks, queues & lists — `src/content/docs/pdsa/stacks-queues-linked-lists.md`
+- 8. Trees, BST & heaps — `src/content/docs/pdsa/trees-bst-heaps.md`
+- 9. D&C, greedy & DP — `src/content/docs/pdsa/divide-greedy-dp.md`
 
 ## Official syllabus
 

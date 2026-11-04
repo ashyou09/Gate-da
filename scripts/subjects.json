@@ -235,31 +235,36 @@
     "title": "Graphs: traversals & shortest paths",
     "priority": "high",
     "pyqs": 5,
-    "blurb": "BFS, DFS, edge types, topological order, Dijkstra, Bellman-Ford and MST basics."
+    "blurb": "BFS, DFS, edge types, topological order, Dijkstra, Bellman-Ford and MST basics.",
+    "page": "graphs"
    },
    {
     "title": "Hashing",
     "priority": "med",
     "pyqs": 3,
-    "blurb": "Hash functions, chaining, linear probing traces and load factor."
+    "blurb": "Hash functions, chaining, linear probing traces and load factor.",
+    "page": "hashing"
    },
    {
     "title": "Stacks, queues, deques & linked lists",
     "priority": "med",
     "pyqs": 3,
-    "blurb": "Operation traces, LIFO/FIFO behaviour and pointer manipulation."
+    "blurb": "Operation traces, LIFO/FIFO behaviour and pointer manipulation.",
+    "page": "stacks-queues-linked-lists"
    },
    {
     "title": "Trees, BST & heaps",
     "priority": "med",
-    "pyqs": 2,
-    "blurb": "Traversals, rebuilding a tree from two traversals, BST and heap operations."
+    "pyqs": 3,
+    "blurb": "Binary tree counting facts, rebuilding a tree from traversals, BST insert/delete and heaps.",
+    "page": "trees-bst-heaps"
    },
    {
     "title": "Divide & conquer, greedy & DP basics",
     "priority": "low",
     "pyqs": 0,
-    "blurb": "Recognising the paradigm, merge/quick analysis, classic greedy and DP problems."
+    "blurb": "Recognising the paradigm, merge/quick analysis, classic greedy and DP problems.",
+    "page": "divide-greedy-dp"
    }
   ],
   "note": "The most stable subject in the paper."
