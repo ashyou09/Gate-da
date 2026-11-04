@@ -518,6 +518,50 @@ def knn_k_effect():
     return svg(610, 262, "".join(body), "Decision regions of 1-NN and 15-NN")
 
 
+# ---------------------------------------------------------------- LDA
+
+
+@fig("lda-projection", "Two elongated classes. Projecting onto the line joining the means (yellow) mixes the classes because "
+     "it ignores their shape; the Fisher direction u ∝ S_W⁻¹(μ₁ − μ₂) (blue) tilts away from the long axis of the clouds, "
+     "so the projected classes barely overlap. Right: the 1-D projections on each direction.")
+def lda_projection():
+    rng = np.random.default_rng(5)
+    C = np.array([[2.2, 1.9], [1.9, 2.0]])
+    L = np.linalg.cholesky(C)
+    A = rng.normal(size=(40, 2)) @ L.T + np.array([0, 0.0])
+    B = rng.normal(size=(40, 2)) @ L.T + np.array([1.6, -0.6])
+    mA, mB = A.mean(0), B.mean(0)
+    SW = (A - mA).T @ (A - mA) + (B - mB).T @ (B - mB)
+    d = mB - mA
+    u = np.linalg.solve(SW, d); u /= np.linalg.norm(u)
+    m = d / np.linalg.norm(d)
+    p = Plot(30, 20, 300, 250, (-4.5, 5.5), (-4.5, 4.5))
+    body = [f'<rect class="grid" x="{p.x0}" y="{p.y0}" width="{p.w}" height="{p.h}" rx="6"/>']
+    c = (mA + mB) / 2
+    for vec, cls in ((m, "hl"), (u, "ink")):
+        a, b = c - 4 * vec, c + 4 * vec
+        body.append(f'<line class="{cls}" x1="{p.X(a[0]):.1f}" y1="{p.Y(a[1]):.1f}" x2="{p.X(b[0]):.1f}" y2="{p.Y(b[1]):.1f}"/>')
+    for x, y in A:
+        body.append(f'<circle class="dot" cx="{p.X(x):.1f}" cy="{p.Y(y):.1f}" r="3.2"/>')
+    for x, y in B:
+        body.append(f'<rect class="dot-warn" x="{p.X(x) - 3:.1f}" y="{p.Y(y) - 3:.1f}" width="6" height="6"/>')
+    body.append(f'<text class="t-hl" x="{p.X(c[0] - 4 * m[0]):.1f}" y="{p.Y(c[1] - 4 * m[1]) - 8:.1f}" text-anchor="start">μ₂ − μ₁</text>')
+    body.append(f'<text class="t-ink" x="{p.X(c[0] + 3.6 * u[0]) + 4:.1f}" y="{p.Y(c[1] + 3.6 * u[1]):.1f}">Fisher u</text>')
+    # 1-D projections
+    for k, (vec, cls, title) in enumerate(((m, "hl", "projected on μ₂ − μ₁: overlap"), (u, "ink", "projected on Fisher u: separated"))):
+        y0 = 70 + k * 110
+        pa, pb = A @ vec, B @ vec
+        lo, hi = min(pa.min(), pb.min()), max(pa.max(), pb.max())
+        X = lambda v: 360 + (v - lo) / (hi - lo) * 240
+        body.append(f'<text class="title" x="360" y="{y0 - 20}">{title}</text>')
+        body.append(f'<line class="{cls}" x1="360" y1="{y0}" x2="600" y2="{y0}"/>')
+        for v in pa:
+            body.append(f'<circle class="dot" cx="{X(v):.1f}" cy="{y0 - 8:.1f}" r="2.8" style="opacity:.8"/>')
+        for v in pb:
+            body.append(f'<rect class="dot-warn" x="{X(v) - 2.6:.1f}" y="{y0 + 5:.1f}" width="5.2" height="5.2" style="opacity:.85"/>')
+    return svg(620, 290, "".join(body), "LDA projection direction compared with the mean-difference direction")
+
+
 # ---------------------------------------------------------------- injection
 
 

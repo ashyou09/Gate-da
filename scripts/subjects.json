@@ -370,7 +370,8 @@
     "title": "Linear discriminant analysis",
     "priority": "med",
     "pyqs": 2,
-    "blurb": "Fisher's criterion, between- and within-class scatter, the generalized eigenvalue equation, nearest-mean classifiers."
+    "blurb": "Fisher's criterion, between- and within-class scatter, the generalized eigenvalue equation, nearest-mean classifiers.",
+    "page": "lda"
    },
    {
     "title": "Support vector machines",
