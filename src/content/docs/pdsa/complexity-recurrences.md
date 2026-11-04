@@ -3,6 +3,7 @@ title: 3. Asymptotic complexity & recurrences
 description: Big-O, Ω and Θ from definitions, counting loops, solving recurrences by unrolling, recursion trees and the Master theorem.
 sidebar:
   label: 3. Complexity & recurrences
+  order: 3
 ---
 
 <span class="tag high">★ HIGH</span> <span class="tag yr">2024 Q40</span> <span class="tag yr">2026 Q15</span> <span class="tag yr">embedded every year</span>

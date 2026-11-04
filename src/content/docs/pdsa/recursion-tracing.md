@@ -3,6 +3,7 @@ title: 2. Recursion & call counting
 description: Call trees, the runtime stack, counting activations, print order, and how GATE DA turns recursion into 2-mark NATs.
 sidebar:
   label: 2. Recursion & tracing
+  order: 2
 ---
 
 <span class="tag high">★ HIGH</span> <span class="tag yr">2024 ×2</span> <span class="tag yr">2025 ×2</span> <span class="tag yr">2026 ×2</span>

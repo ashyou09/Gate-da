@@ -3,6 +3,7 @@ title: PDSA — Overview & PYQ analysis
 description: Every Programming, Data Structures & Algorithms question from GATE DA 2024–2026, mapped to topics.
 sidebar:
   label: Overview & PYQ map
+  order: 0
 ---
 
 **Programming, Data Structures & Algorithms** carried **17, 16 and 16 marks** in 2024, 2025 and 2026. It's the most stable subject in GATE DA. If you're solid here, about 16 marks are close to guaranteed.
@@ -76,3 +77,8 @@ Almost every PDSA mark came from **tracing**: running code, a sort or a traversa
 7. Stacks, queues, deques & linked lists *(next)*
 8. Trees, BST & heaps *(next)*
 9. Divide & conquer, greedy & DP basics *(next)*
+
+## Study material in the repo
+
+- [revision-sheet.pdf](https://github.com/ashyou09/Gate-da/blob/main/subjects/pdsa/revision-sheet.pdf)
+- [question-bank.pdf](https://github.com/ashyou09/Gate-da/blob/main/subjects/pdsa/question-bank.pdf)

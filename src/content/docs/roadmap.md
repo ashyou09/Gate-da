@@ -24,5 +24,5 @@ Non-maths subjects come first, as you asked. They are ordered by how stable and 
 
 1. **Read** the concepts and formula box (40 min). Don't skip the "from zero" parts, even if they look easy.
 2. **Solve** each worked PYQ yourself *before* opening the solution (40 min).
-3. **Practice**: do the practice set at the end, then the matching section of the question bank in `maths/prob_dpp/ques bank/` (30 min).
+3. **Practice**: do the practice set at the end, then the matching section of `question-bank.pdf` in that subject's folder (`subjects/<subject>/`) (30 min).
 4. **Close the page** and rewrite the formula box from memory (10 min).

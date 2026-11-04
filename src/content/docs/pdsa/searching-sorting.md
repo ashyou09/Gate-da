@@ -3,6 +3,7 @@ title: 4. Searching & sorting
 description: Linear and binary search, selection, bubble, insertion, merge and quick sort — passes, comparisons, swaps, inversions, stability.
 sidebar:
   label: 4. Searching & sorting
+  order: 4
 ---
 
 <span class="tag high">★ HIGH</span> <span class="tag yr">2024 ×3</span> <span class="tag yr">2025 ×2</span> <span class="tag yr">2026 ×3</span>

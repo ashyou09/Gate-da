@@ -3,6 +3,7 @@ title: 1. Python semantics & code tracing
 description: Names, objects, mutability, aliasing, scope, closures, operators — the traps behind every GATE DA "what does this print?" question.
 sidebar:
   label: 1. Python semantics
+  order: 1
 ---
 
 <span class="tag high">★ HIGH</span> <span class="tag yr">2024 ×2</span> <span class="tag yr">2025 ×3</span> <span class="tag yr">2026 ×3</span>

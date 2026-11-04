@@ -3,20 +3,40 @@
 Say **"make <subject> the same way"** and follow this file exactly.
 
 ## 0. Sources (all in this repo)
-- `pyq/DA.PYQ.20{24,25,26} (1).pdf` + `pyq/DA.PYQ.Keys.*` — real questions + official keys
-- `pyq/analysis/GATE_DA_2027_Prediction_and_Pattern_Report.pdf` — marks per subject, topic confidence
-- `maths/prob_dpp/GATE_DA_2027_<Subject>_Revision_Sheet.pdf` — formula boxes
-- `maths/prob_dpp/ques bank/` — extra practice
+- `pyq/papers/GATE-DA-20{24,25,26}.pdf` + `pyq/keys/GATE-DA-20xx-key.pdf` — real questions + official keys
+- `pyq/analysis/prediction-and-pattern-report.pdf` — marks per subject, topic confidence
+- `subjects/<slug>/revision-sheet.pdf` — formula boxes
+- `subjects/<slug>/question-bank.pdf` — extra practice (books / extra notes also in that folder)
 - Reference list: https://github.com/DS-AI-GATE/dsai-gate
 - Extract text with `pdftotext -layout`.
 
-## 1. Subject hub page — `src/content/docs/<subject>/index.md`
+## Folder layout (one folder per subject, same slug everywhere)
+
+| Slug | Subject |
+|---|---|
+| `pdsa` | Programming, DS & Algorithms |
+| `machine-learning` | Machine Learning |
+| `dbms` | DBMS & Warehousing |
+| `ai` | Artificial Intelligence |
+| `probability-statistics` | Probability & Statistics |
+| `linear-algebra` | Linear Algebra |
+| `calculus-optimization` | Calculus & Optimization |
+| `general-aptitude` | General Aptitude |
+
+- Website notes: `src/content/docs/<slug>/` (hub `index.md` + one `.md` per topic)
+- Study material: `subjects/<slug>/` (PDFs + auto-generated `README.md`)
+- Subject metadata (marks, syllabus, topic plan): `scripts/subjects.json`
+- The sidebar picks up new pages automatically (`astro.config.mjs` autogenerates one group per folder).
+
+## 1. Subject hub page — `src/content/docs/<slug>/index.md`
+A starter hub (syllabus, marks, topic plan) already exists for every subject. When starting a subject, replace it with:
 1. Official syllabus quote.
 2. Table of **every PYQ from 2024–2026** for the subject: year, Q no., marks, type, topic, what it tested, official answer.
 3. Frequency table: topic → number of questions → verdict tag (`high` / `med` / `low`).
 4. Ordered list of topic pages (most frequent first).
 
-## 2. One page per topic — `src/content/docs/<subject>/<topic>.md`
+## 2. One page per topic — `src/content/docs/<slug>/<topic>.md`
+Frontmatter must include `sidebar: { label: "N. Short name", order: N }` (hub is order 0).
 Fixed order of sections:
 1. Tags: `<span class="tag high">★ HIGH</span>` + `<span class="tag yr">2025 ×2</span>`, then **Why it matters** (which PYQs came from this topic).
 2. `## Topic map` — `<div class="mindmap">` around a nested markdown list.
@@ -28,7 +48,8 @@ Fixed order of sections:
 ## 3. Quality rules
 - **Verify every answer**: run code questions in Python; recompute every number; match PYQ answers against the official key.
 - Blank line after every opening `<div …>` / `<details>` / `<summary>` line and before the closing tag, so markdown inside renders.
-- Add the new pages to the `sidebar` in `astro.config.mjs` and update the status column on `src/content/docs/index.md`.
+- Update the status column on `src/content/docs/index.md` and the root `README.md` status table.
+- Run `python3 scripts/sync_subjects.py` to refresh `subjects/<slug>/README.md`.
 - `npm run build` must pass before committing.
 
 ## 4. Commit

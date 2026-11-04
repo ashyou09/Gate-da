@@ -30,7 +30,7 @@ Useful parts of it, by subject:
 
 | Folder | What's in it |
 |---|---|
-| `pyq/` | GATE DA 2024, 2025, 2026 papers and official answer keys |
-| `pyq/analysis/` | 2027 prediction & pattern report, two predicted mock papers |
-| `maths/prob_dpp/` | Revision sheets for all 7 subjects |
-| `maths/prob_dpp/ques bank/` | Question banks for all subjects, including General Aptitude |
+| [`pyq/papers/`](https://github.com/ashyou09/Gate-da/tree/main/pyq/papers) | GATE DA 2024, 2025, 2026 question papers |
+| [`pyq/keys/`](https://github.com/ashyou09/Gate-da/tree/main/pyq/keys) | Official answer keys |
+| [`pyq/analysis/`](https://github.com/ashyou09/Gate-da/tree/main/pyq/analysis) | 2027 prediction & pattern report, two predicted mock papers |
+| [`subjects/<subject>/`](https://github.com/ashyou09/Gate-da/tree/main/subjects) | One folder per subject: `revision-sheet.pdf`, `question-bank.pdf`, books and extra notes, plus a README |

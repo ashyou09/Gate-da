@@ -27,16 +27,16 @@ Each page follows the same order, so you always know where to look:
 
 | Subject | 2024 | 2025 | 2026 | Mean | Status |
 |---|---|---|---|---|---|
-| General Aptitude | 15 | 15 | 15 | 15.0 | planned |
-| Probability & Statistics | 16 | 18 | 13 | 15.7 | planned |
-| Linear Algebra | 10 | 17 | 8 | 11.7 | planned |
-| Calculus & Optimization | 8 | 8 | 7 | 7.7 | planned |
-| **Programming, DS & Algorithms** | **17** | **16** | **16** | **16.3** | **in progress** |
-| DBMS & Warehousing | 8 | 9 | 18 | 11.7 | planned |
-| Machine Learning | 11 | 14 | 16 | 13.7 | planned |
-| Artificial Intelligence | 11 | 3 | 8 | 7.3 | planned |
+| [General Aptitude](/general-aptitude/) | 15 | 15 | 15 | 15.0 | topic plan ready |
+| [Probability & Statistics](/probability-statistics/) | 16 | 18 | 13 | 15.7 | topic plan ready |
+| [Linear Algebra](/linear-algebra/) | 10 | 17 | 8 | 11.7 | topic plan ready |
+| [Calculus & Optimization](/calculus-optimization/) | 8 | 8 | 7 | 7.7 | topic plan ready |
+| **[Programming, DS & Algorithms](/pdsa/)** | **17** | **16** | **16** | **16.3** | **4 topics written** |
+| [DBMS & Warehousing](/dbms/) | 8 | 9 | 18 | 11.7 | topic plan ready |
+| [Machine Learning](/machine-learning/) | 11 | 14 | 16 | 13.7 | topic plan ready |
+| [Artificial Intelligence](/ai/) | 11 | 3 | 8 | 7.3 | topic plan ready |
 
-*Source: the prediction report in this repo (`pyq/analysis`). Treat each cell as ±2 marks, because analysts tag some questions differently.*
+*Source: the prediction report in this repo (`pyq/analysis/prediction-and-pattern-report.pdf`). Treat each cell as ±2 marks, because analysts tag some questions differently.*
 
 :::tip[Read the volatility, not just the mean]
 AI went 11 → 3 → 8 marks and DBMS went 8 → 9 → 18. Any subject can spike, so the goal is **breadth with no holes**.

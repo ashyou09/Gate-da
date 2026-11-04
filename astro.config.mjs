@@ -4,6 +4,18 @@ import starlight from '@astrojs/starlight';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
+// [sidebar label, folder in src/content/docs] — keep in sync with scripts/subjects.json
+const subjects = [
+  ['Programming, DS & Algorithms', 'pdsa'],
+  ['Machine Learning', 'machine-learning'],
+  ['DBMS & Warehousing', 'dbms'],
+  ['Artificial Intelligence', 'ai'],
+  ['Probability & Statistics', 'probability-statistics'],
+  ['Linear Algebra', 'linear-algebra'],
+  ['Calculus & Optimization', 'calculus-optimization'],
+  ['General Aptitude', 'general-aptitude'],
+];
+
 export default defineConfig({
   markdown: {
     remarkPlugins: [remarkMath],
@@ -17,16 +29,13 @@ export default defineConfig({
       lastUpdated: false,
       sidebar: [
         { label: 'Start here', items: ['index', 'roadmap', 'references'] },
-        {
-          label: 'PDSA (Programming, DS & Algo)',
-          items: [
-            'pdsa',
-            'pdsa/python-semantics',
-            'pdsa/recursion-tracing',
-            'pdsa/complexity-recurrences',
-            'pdsa/searching-sorting',
-          ],
-        },
+        // One group per subject, in study order. Pages inside a group come from
+        // src/content/docs/<folder>/ automatically, sorted by `sidebar.order`.
+        ...subjects.map(([label, directory]) => ({
+          label,
+          collapsed: directory !== 'pdsa',
+          items: [{ autogenerate: { directory } }],
+        })),
       ],
     }),
   ],
