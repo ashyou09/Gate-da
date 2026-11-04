@@ -227,6 +227,94 @@ def gd_steps():
     return svg(610, 260, "".join(body), "Gradient descent with small and large learning rate")
 
 
+# ---------------------------------------------------------------- ridge & lasso
+
+
+def _ellipse(c, A, level, n=160):
+    L = np.linalg.cholesky(A)
+    t = np.linspace(0, 2 * np.pi, n)
+    z = np.sqrt(level) * np.stack([np.cos(t), np.sin(t)])
+    w = np.linalg.solve(L.T, z)
+    return c[0] + w[0], c[1] + w[1]
+
+
+@fig("reg-geometry", "Why lasso gives exact zeros. Contours of the RSS (ellipses) grow outward from the OLS solution ★ until they "
+     "first touch the constraint region. The L2 ball (ridge) is round, so it is touched at a generic point with both "
+     "weights non-zero, about (0.9, 0.4). The L1 ball (lasso) has corners on the axes, and the ellipse touches a corner: (1, 0), "
+     "so w₂ is exactly 0.")
+def reg_geometry():
+    c = np.array([2.0, 0.5]); A = np.array([[1, 0.4], [0.4, 1.2]])
+    body = []
+    panels = [("Ridge · ‖w‖₂ ≤ 1", "circle", 1.271, (0.905, 0.425), "≈ (0.9, 0.4)"), ("Lasso · ‖w‖₁ ≤ 1", "diamond", 1.7, (1.0, 0.0), "(1, 0)")]
+    for k, (title, shape, lvl, sol, lab) in enumerate(panels):
+        ox = 10 + k * 305
+        p = Plot(ox + 20, 30, 270, 230, (-1.5, 3.1), (-1.5, 2.4))
+        body.append(f'<rect class="grid" x="{p.X(-1.5):.1f}" y="{p.Y(2.4):.1f}" width="{p.w:.1f}" height="{p.h:.1f}" rx="6"/>')
+        body.append(f'<text class="title" x="{ox + 155}" y="16" text-anchor="middle">{title}</text>')
+        body.append(f'<line class="ax" x1="{p.X(-1.5):.1f}" y1="{p.Y(0):.1f}" x2="{p.X(3.1):.1f}" y2="{p.Y(0):.1f}"/>')
+        body.append(f'<line class="ax" x1="{p.X(0):.1f}" y1="{p.Y(-1.5):.1f}" x2="{p.X(0):.1f}" y2="{p.Y(2.4):.1f}"/>')
+        body.append(f'<text class="t-mut" x="{p.X(3.05):.1f}" y="{p.Y(0) + 14:.1f}" text-anchor="end">w₁</text>')
+        body.append(f'<text class="t-mut" x="{p.X(0) + 6:.1f}" y="{p.Y(2.3):.1f}">w₂</text>')
+        if shape == "circle":
+            body.append(f'<circle class="ink" style="fill:var(--gd-ink);fill-opacity:.14" cx="{p.X(0):.1f}" cy="{p.Y(0):.1f}" r="{p.X(1) - p.X(0):.1f}"/>')
+        else:
+            pts = " ".join(f"{p.X(a):.1f},{p.Y(b):.1f}" for a, b in [(1, 0), (0, 1), (-1, 0), (0, -1)])
+            body.append(f'<polygon class="ink" style="fill:var(--gd-ink);fill-opacity:.14" points="{pts}"/>')
+        cid = f"rgclip{k}"
+        body.append(f'<clipPath id="{cid}"><rect x="{p.X(-1.5):.1f}" y="{p.Y(2.4):.1f}" width="{p.w:.1f}" height="{p.h:.1f}"/></clipPath>')
+        body.append(f'<g clip-path="url(#{cid})">')
+        for f in (lvl, lvl * 2.0):
+            ex, ey = _ellipse(c, A, f)
+            body.append(p.path(ex, ey, "hl" if f == lvl else "mut"))
+        body.append('</g>')
+        body.append(f'<text class="t-hl" x="{p.X(c[0]) + 6:.1f}" y="{p.Y(c[1]) - 6:.1f}">★ OLS</text>')
+        body.append(f'<circle class="dot-hl" cx="{p.X(c[0]):.1f}" cy="{p.Y(c[1]):.1f}" r="3.5"/>')
+        body.append(f'<circle class="dot-warn" cx="{p.X(sol[0]):.1f}" cy="{p.Y(sol[1]):.1f}" r="5"/>')
+        if sol[1] == 0:
+            body.append(f'<text class="t-warn" x="{p.X(sol[0]) + 4:.1f}" y="{p.Y(sol[1]) + 20:.1f}" text-anchor="start">{lab}</text>')
+        else:
+            body.append(f'<text class="t-warn" x="{p.X(sol[0]) - 8:.1f}" y="{p.Y(sol[1]) - 10:.1f}" text-anchor="end">{lab}</text>')
+    return svg(620, 270, "".join(body), "Ridge and lasso constraint geometry")
+
+
+@fig("reg-paths", "Coefficient paths on the same standardised data (true weights 3, −2, 0.8, 0) as λ grows. "
+     "Ridge shrinks every weight smoothly towards 0 but none reaches it. Lasso drives weights to exactly 0 one by one; "
+     "by λ = 400 only one feature is left.")
+def reg_paths():
+    rng = np.random.default_rng(3); n, pdim = 60, 4
+    X = rng.normal(size=(n, pdim)); X = (X - X.mean(0)) / X.std(0)
+    y = X @ np.array([3, -2, 0.8, 0]) + rng.normal(0, 1, n); y = y - y.mean()
+
+    def ridge(l):
+        return np.linalg.solve(X.T @ X + l * np.eye(pdim), X.T @ y)
+
+    def lasso(l):
+        w = np.zeros(pdim)
+        for _ in range(300):
+            for j in range(pdim):
+                r = y - X @ w + X[:, j] * w[j]; rho = X[:, j] @ r
+                w[j] = np.sign(rho) * max(abs(rho) - l / 2, 0) / (X[:, j] @ X[:, j])
+        return w
+
+    lams = np.logspace(-1, 3, 70)
+    body = []
+    cls = ["ink", "warn", "hl", "mut"]
+    for k, (title, fn) in enumerate([("Ridge (L2)", ridge), ("Lasso (L1)", lasso)]):
+        ox = 10 + k * 305
+        p = Plot(ox + 34, 30, 255, 190, (-1, 3), (-2.2, 3.3))
+        W = np.array([fn(l) for l in lams])
+        body.append(f'<text class="title" x="{ox + 160}" y="16" text-anchor="middle">{title}</text>')
+        body.append(p.axes("log₁₀ λ →", "weight", xoff=30, yoff=26))
+        body.append(f'<line class="grid" x1="{p.X(-1):.1f}" y1="{p.Y(0):.1f}" x2="{p.X(3):.1f}" y2="{p.Y(0):.1f}"/>')
+        for t in (-1, 0, 1, 2, 3):
+            body.append(f'<text class="t-mut" x="{p.X(t):.1f}" y="{p.Y(-2.2) + 14:.1f}" text-anchor="middle">{t}</text>')
+        for j in range(pdim):
+            body.append(p.path(np.log10(lams), W[:, j], cls[j]))
+        for j, lab in enumerate(["w₁", "w₂", "w₃", "w₄"]):
+            body.append(f'<text class="t-mut" x="{p.X(-1) + 4:.1f}" y="{p.Y(W[0, j]) - 5:.1f}">{lab}</text>')
+    return svg(620, 262, "".join(body), "Ridge and lasso coefficient paths")
+
+
 # ---------------------------------------------------------------- injection
 
 
