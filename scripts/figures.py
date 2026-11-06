@@ -1443,6 +1443,191 @@ def sampling_conv():
     return svg(560, 270, "".join(body), "Convergence of rejection sampling")
 
 
+# ---------------------------------------------------------------- General Aptitude
+
+
+@fig("ga-tense-timeline", "2025 Q2 on a timeline. The rain started at a point in the past; the playing had started earlier and was "
+     "still going on at that moment. An action in progress up to a past moment takes the past perfect continuous: "
+     "'had been playing'.")
+def ga_tense():
+    body = ['<line class="ax" x1="30" y1="90" x2="600" y2="90"/>', '<path class="ax" d="M592,85 l8,5 l-8,5"/>']
+    body.append('<rect x="110" y="70" width="300" height="40" rx="6" style="fill:var(--gd-ink);fill-opacity:.2;stroke:var(--gd-ink)"/>')
+    body.append('<text class="t-ink" x="260" y="64" text-anchor="middle">playing tennis (ongoing)</text>')
+    for x, lab, cls in [(110, "started playing", "t-mut"), (410, "rain started", "t-warn"), (540, "now", "t-mut")]:
+        body.append(f'<line class="{"warn" if cls == "t-warn" else "ax"}" x1="{x}" y1="74" x2="{x}" y2="106"/>')
+        body.append(f'<text class="{cls}" x="{x}" y="128" text-anchor="middle">{lab}</text>')
+    body.append('<text class="title" x="260" y="160" text-anchor="middle">"We had been playing tennis when it suddenly started to rain."</text>')
+    return svg(620, 175, "".join(body), "Timeline for past perfect continuous")
+
+
+@fig("ga-degree-scale", "Degree analogies place words on an intensity scale. In 2024 Q1, sick → infirm → moribund grows from ill to "
+     "near death; silly → vain → daft grows from mildly foolish to very foolish. The blank must be the middle step "
+     "with the same meaning family, so 'vain' fits and 'vein' (a blood vessel) is a spelling trap.")
+def ga_degree():
+    rows = [["sick", "infirm", "moribund"], ["silly", "vain", "daft"]]
+    body = []
+    for r, words in enumerate(rows):
+        y = 40 + r * 70
+        body.append(f'<line class="grid" x1="80" y1="{y}" x2="560" y2="{y}"/>')
+        for i, w in enumerate(words):
+            x = 120 + i * 200
+            hot = (r == 1 and i == 1)
+            body.append(f'<rect class="{"box-ink" if hot else "box"}" x="{x - 60}" y="{y - 16}" width="120" height="32" rx="16"/>')
+            body.append(f'<text class="{"on-ink" if hot else "title"}" x="{x}" y="{y + 5}" text-anchor="middle">{w}</text>')
+            if i < 2:
+                body.append(f'<path class="ax" d="M{x + 64},{y} h70 m-6,-5 l6,5 l-6,5"/>')
+    body.append('<text class="t-mut" x="320" y="170" text-anchor="middle">increasing intensity →</text>')
+    return svg(640, 182, "".join(body), "Intensity scale for a degree analogy")
+
+
+@fig("ga-rect-percent", "Widening a rectangle by 10% (2025 Q5). The added strip has the same length L and width 0.1W, so the area "
+     "grows by exactly 0.1·LW, i.e. 10%. The perimeter grows by only 0.2W/(2L + 2W) < 10%, and the diagonal by less than 10%.")
+def ga_rect():
+    body = ['<rect class="box" x="60" y="40" width="360" height="120" style="stroke:var(--gd-ink);stroke-width:1.6"/>',
+            '<rect x="60" y="28" width="360" height="12" style="fill:var(--gd-hl-strong);fill-opacity:.7"/>',
+            '<text class="title" x="240" y="105" text-anchor="middle">area L·W</text>',
+            '<text class="t-hl" x="430" y="38">+0.1W strip → +0.1·L·W</text>',
+            '<text class="t-mut" x="240" y="180" text-anchor="middle">L</text>',
+            '<text class="t-mut" x="44" y="104" text-anchor="middle">W</text>']
+    rows = [("area", "+10%", "t-ink"), ("perimeter", "+0.2W / (2L+2W) < 10%", "t-mut"), ("diagonal", "< 10% (√(L² + 1.21W²))", "t-mut")]
+    for i, (a, b, c) in enumerate(rows):
+        body.append(f'<text class="{c}" x="450" y="{80 + i * 26}" style="font-weight:600">{a}</text>')
+        body.append(f'<text class="{c}" x="530" y="{80 + i * 26}">{b}</text>')
+    return svg(720, 195, "".join(body), "Effect of a 10 percent width increase on a rectangle")
+
+
+@fig("ga-prob-tree", "All 2³ = 8 equally likely birth orders for three children (2024 Q7). Exactly three of them (GGB, GBG, BGG) have "
+     "two girls and one boy, so the probability is 3/8 = C(3,2)/2³.")
+def ga_tree():
+    body = []
+    levels = 3
+    def node(x, y, lab, hot=False):
+        return [f'<circle class="{"box-ink" if hot else "box"}" cx="{x}" cy="{y}" r="12"/>',
+                f'<text class="{"on-ink" if hot else "title"}" x="{x}" y="{y + 4}" text-anchor="middle">{lab}</text>']
+    def rec(x, y, span, path, depth):
+        out = []
+        if depth == levels:
+            hot = path.count("G") == 2
+            out.append(f'<text class="{"t-ink" if hot else "t-mut"}" x="{x}" y="{y + 30}" text-anchor="middle" style="font-weight:{700 if hot else 400}">{path}</text>')
+            return out
+        for i, c in enumerate("GB"):
+            cx = x + (i - 0.5) * span
+            cy = y + 55
+            out.append(f'<line class="grid" x1="{x}" y1="{y + 12}" x2="{cx}" y2="{cy - 12}" style="stroke-width:1.4"/>')
+            out += rec(cx, cy, span / 2, path + c, depth + 1)
+            out += node(cx, cy, c, hot=False)
+        return out
+    body += rec(320, 20, 300, "", 0)
+    body += node(320, 20, "·")
+    body.append('<text class="t-ink" x="320" y="242" text-anchor="middle">favourable: GGB, GBG, BGG → 3 of 8</text>')
+    return svg(640, 252, "".join(body), "Probability tree for three children")
+
+
+@fig("ga-pie-q5", "The 2024 Q5 data redrawn: shares of the 1,10,000 valid votes (1,15,000 cast minus 5,000 invalid). B and C "
+     "together hold 25% + 20% = 45%, which is 49,500 votes.")
+def ga_pie():
+    shares = [("A", 40, "var(--gd-ink)"), ("B", 25, "var(--gd-hl-strong)"), ("C", 20, "var(--gd-trap)"), ("D", 15, "var(--sl-color-gray-4)")]
+    cx, cy, r = 160, 120, 95
+    body = []
+    a0 = -np.pi / 2
+    for name, pct, col in shares:
+        a1 = a0 + 2 * np.pi * pct / 100
+        x0, y0 = cx + r * np.cos(a0), cy + r * np.sin(a0)
+        x1, y1 = cx + r * np.cos(a1), cy + r * np.sin(a1)
+        large = 1 if pct > 50 else 0
+        op = ".9" if name in "BC" else ".35"
+        body.append(f'<path d="M{cx},{cy} L{x0:.1f},{y0:.1f} A{r},{r} 0 {large} 1 {x1:.1f},{y1:.1f} Z" style="fill:{col};fill-opacity:{op};stroke:var(--gd-surface);stroke-width:2"/>')
+        am = (a0 + a1) / 2
+        body.append(f'<text class="title" x="{cx + 0.62 * r * np.cos(am):.1f}" y="{cy + 0.62 * r * np.sin(am) + 5:.1f}" text-anchor="middle">{name} {pct}%</text>')
+        a0 = a1
+    rows = [("votes cast", "1,15,000"), ("invalid", "− 5,000"), ("valid", "1,10,000"), ("B + C = 45%", "0.45 × 1,10,000"), ("", "= 49,500")]
+    for i, (a, b) in enumerate(rows):
+        body.append(f'<text class="{"t-ink" if i >= 3 else "t-mut"}" x="300" y="{60 + i * 28}">{a}</text>')
+        body.append(f'<text class="{"t-ink" if i >= 3 else ""}" x="430" y="{60 + i * 28}">{b}</text>')
+    return svg(600, 240, "".join(body), "Pie chart of valid vote shares")
+
+
+@fig("ga-hist-q10", "The 2025 Q10 histogram redrawn: 100 shifts with 5, 6, 7 or 8 patients. The mean is "
+     "(5·20 + 6·40 + 7·30 + 8·10)/100 = 6.3 patients, so the average earning is 1000 × (6.3 − 0.2) = ₹6,100.")
+def ga_hist():
+    data = [(5, 20), (6, 40), (7, 30), (8, 10)]
+    p = Plot(60, 20, 380, 200, (4.4, 8.6), (0, 50))
+    body = [p.axes("patients per shift (X)", "number of shifts", xoff=32, yoff=38)]
+    for v in (10, 20, 30, 40, 50):
+        body.append(f'<line class="grid" x1="{p.X(4.4):.1f}" y1="{p.Y(v):.1f}" x2="{p.X(8.6):.1f}" y2="{p.Y(v):.1f}"/>')
+        body.append(f'<text class="t-mut" x="{p.X(4.4) - 6:.1f}" y="{p.Y(v) + 4:.1f}" text-anchor="end">{v}</text>')
+    for x, n in data:
+        body.append(f'<rect class="box-ink" x="{p.X(x) - 22:.1f}" y="{p.Y(n):.1f}" width="44" height="{p.Y(0) - p.Y(n):.1f}" rx="3" style="opacity:.85"/>')
+        body.append(f'<text class="t-ink" x="{p.X(x):.1f}" y="{p.Y(n) - 6:.1f}" text-anchor="middle">{n}</text>')
+        body.append(f'<text class="t-mut" x="{p.X(x):.1f}" y="{p.Y(0) + 15:.1f}" text-anchor="middle">{x}</text>')
+    body.append('<text class="t-ink" x="470" y="80">mean X = 6.3</text>')
+    body.append('<text class="t-mut" x="470" y="104">earning = 1000(X − 0.2)</text>')
+    body.append('<text class="t-ink" x="470" y="128">average = ₹6,100</text>')
+    return svg(640, 262, "".join(body), "Histogram of patients per shift")
+
+
+@fig("ga-venn-q4", "The rule in 2025 Q4: each region carries the sum of the numbers of the shapes that contain it "
+     "(rectangle 1, triangle 2, ellipse 3). Rectangle ∩ ellipse = 1 + 3 = 4 (given), so all three = 6 (P), "
+     "triangle ∩ ellipse = 5 (Q), rectangle ∩ triangle = 3 (R).")
+def ga_venn():
+    body = ['<rect class="box" x="40" y="60" width="250" height="150" style="fill:var(--gd-ink);fill-opacity:.06;stroke:var(--gd-ink)"/>',
+            '<polygon points="260,20 390,215 120,215" style="fill:var(--gd-hl-strong);fill-opacity:.08;stroke:var(--gd-hl-strong);stroke-width:1.6"/>',
+            '<ellipse cx="240" cy="160" rx="120" ry="70" style="fill:var(--gd-trap);fill-opacity:.06;stroke:var(--gd-trap);stroke-width:1.6"/>']
+    labels = [(70, 100, "1"), (300, 55, "2"), (240, 222, "3"), (160, 150, "4"), (245, 160, "P = 6"), (320, 160, "Q = 5"), (255, 85, "R = 3")]
+    for x, y, t in labels:
+        body.append(f'<text class="{"t-ink" if "=" in t else "title"}" x="{x}" y="{y}" text-anchor="middle" style="font-weight:700">{t}</text>')
+    rows = ["rectangle = 1, triangle = 2, ellipse = 3", "rect ∩ ellipse = 1 + 3 = 4 ✓", "P = rect ∩ tri ∩ ellipse = 6",
+            "Q = tri ∩ ellipse = 5", "R = rect ∩ tri = 3"]
+    for i, t in enumerate(rows):
+        body.append(f'<text class="{"t-mut" if i < 2 else "t-ink"}" x="410" y="{60 + i * 28}">{t}</text>')
+    return svg(700, 240, "".join(body), "Overlapping shapes with region sums")
+
+
+@fig("ga-dice-net", "Reading opposite faces from a net. In a straight column of four squares, faces two apart are opposite "
+     "(1–6 and 4–2 here). Squares attached to the column on opposite sides become the left and right faces, which are also "
+     "opposite each other (5–3). This is net (A) of 2024 Q9: its pairs 1–6, 4–2, 5–3 match the three dice views.")
+def ga_dice():
+    cells = {(0, 0): "5", (1, 0): "1", (1, 1): "4", (1, 2): "6", (1, 3): "2", (2, 3): "3"}
+    s0, x0, y0 = 40, 60, 20
+    body = []
+    for (c, r), v in cells.items():
+        body.append(f'<rect class="box" x="{x0 + c * s0}" y="{y0 + r * s0}" width="{s0}" height="{s0}" style="stroke:var(--gd-ink)"/>')
+        body.append(f'<text class="title" x="{x0 + c * s0 + s0 / 2}" y="{y0 + r * s0 + s0 / 2 + 5}" text-anchor="middle" style="font-size:15px">{v}</text>')
+    pairs = [("1 ↔ 6", "two apart in the column"), ("4 ↔ 2", "two apart in the column"), ("5 ↔ 3", "flaps on opposite sides")]
+    for i, (a, b) in enumerate(pairs):
+        body.append(f'<text class="t-ink" x="230" y="{50 + i * 34}" style="font-weight:700">{a}</text>')
+        body.append(f'<text class="t-mut" x="300" y="{50 + i * 34}">{b}</text>')
+    body.append('<text class="t-mut" x="230" y="160">views: (5,4,1), (4,6,3), (2,6,5) are</text>')
+    body.append('<text class="t-mut" x="230" y="178">each three mutually adjacent faces ✓</text>')
+    return svg(560, 200, "".join(body), "Dice net with opposite faces")
+
+
+@fig("ga-cone-kite", "Left: two identical cones sharing a base (2024 Q10). A plane through both vertices also passes through the "
+     "axis, so it cuts the shape in two generators on each cone: four equal slant edges, which form a rhombus. Right: 2026 Q10. "
+     "The inscribed angle PQR = 45° makes the central angle POR = 90°, so PR = 10√2; Q lies on the perpendicular bisector, so "
+     "OPQR is a kite with diagonals OQ = 10 and PR = 10√2, giving area ½ · 10 · 10√2 = 50√2.")
+def ga_cone_kite():
+    body = []
+    body.append('<ellipse class="grid" cx="140" cy="120" rx="80" ry="18"/>')
+    body.append('<path class="ax" d="M60,120 L140,30 L220,120 L140,210 Z"/>')
+    body.append('<polygon points="140,30 220,120 140,210 60,120" style="fill:var(--gd-ink);fill-opacity:.15;stroke:var(--gd-ink);stroke-width:2.2"/>')
+    body.append('<text class="t-ink" x="140" y="235" text-anchor="middle">cross-section: rhombus</text>')
+    cx, cy, R = 450, 120, 85
+    body.append(f'<circle class="grid" cx="{cx}" cy="{cy}" r="{R}" style="stroke:var(--sl-color-gray-3)"/>')
+    import math
+    P = (cx + R * math.cos(math.radians(225)), cy - R * math.sin(math.radians(225)))
+    Rr = (cx + R * math.cos(math.radians(-45)), cy - R * math.sin(math.radians(-45)))
+    Q = (cx, cy - R)
+    body.append(f'<polygon points="{cx},{cy} {P[0]:.1f},{P[1]:.1f} {Q[0]},{Q[1]} {Rr[0]:.1f},{Rr[1]:.1f}" style="fill:var(--gd-hl-strong);fill-opacity:.25;stroke:var(--gd-hl-strong);stroke-width:2"/>')
+    body.append(f'<line class="mut" x1="{cx}" y1="{cy}" x2="{Q[0]}" y2="{Q[1]}"/>')
+    body.append(f'<line class="mut" x1="{P[0]:.1f}" y1="{P[1]:.1f}" x2="{Rr[0]:.1f}" y2="{Rr[1]:.1f}"/>')
+    for (x, y), lab, dx, dy in [((cx, cy), "O", 10, 16), (P, "P", -14, 4), (Q, "Q", 0, -8), (Rr, "R", 14, 4)]:
+        body.append(f'<circle class="dot-ink" cx="{x:.1f}" cy="{y:.1f}" r="3.5"/>')
+        body.append(f'<text class="title" x="{x + dx:.1f}" y="{y + dy:.1f}" text-anchor="middle">{lab}</text>')
+    body.append(f'<text class="t-ink" x="{cx}" y="235" text-anchor="middle">kite OPQR: area 50√2 cm²</text>')
+    return svg(620, 250, "".join(body), "Double cone cross-section and kite in a circle")
+
+
 # ---------------------------------------------------------------- injection
 
 

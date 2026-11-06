@@ -12,36 +12,60 @@
   "syllabus": "Verbal Aptitude (grammar, vocabulary, reading comprehension, verbal analogies), Quantitative Aptitude (data interpretation, ratios, percentages, permutations & combinations, geometry, mensuration, series, logarithms), Analytical Aptitude (logic, deduction, induction, analogy, number relations) and Spatial Aptitude (transformation of shapes, paper folding, cutting, patterns).",
   "topics": [
    {
-    "title": "Verbal: grammar & vocabulary",
-    "priority": "high"
+    "title": "Grammar: tenses, prepositions, articles, agreement",
+    "priority": "high",
+    "page": "grammar",
+    "pyqs": 2,
+    "blurb": "Tense sequence (had been + -ing), prepositions of place and time, articles, subject–verb agreement, common error patterns."
    },
    {
-    "title": "Verbal: reading comprehension & critical reasoning",
-    "priority": "high"
+    "title": "Vocabulary, analogies & phrasal verbs",
+    "priority": "high",
+    "page": "vocabulary-analogies",
+    "pyqs": 4,
+    "blurb": "Word relationships (synonym, antonym, degree), analogy method, confusable words, phrasal verbs like bring up / take up / clear up."
    },
    {
-    "title": "Quant: percentages, ratios, averages, mixtures",
-    "priority": "high"
+    "title": "Reading comprehension & inference",
+    "priority": "high",
+    "page": "reading-inference",
+    "pyqs": 2,
+    "blurb": "What 'can be inferred' means, counterfactual conditionals, assumption vs conclusion, avoiding over-reach."
    },
    {
-    "title": "Quant: time-speed-work, ages, profit-loss",
-    "priority": "high"
+    "title": "Arithmetic: percentages, ratios, powers, logs & series",
+    "priority": "high",
+    "page": "arithmetic",
+    "pyqs": 7,
+    "blurb": "Percentage change, rates of return, exponents and logarithm identities, geometric series, digit puzzles."
    },
    {
-    "title": "Quant: counting & probability basics",
-    "priority": "med"
+    "title": "Counting, probability & statistics",
+    "priority": "high",
+    "page": "counting-probability",
+    "pyqs": 3,
+    "blurb": "Permutations and combinations with constraints, divisibility counting, binomial probability, mean / median / mode puzzles."
    },
    {
-    "title": "Quant: data interpretation (tables, charts)",
-    "priority": "high"
+    "title": "Data interpretation",
+    "priority": "high",
+    "page": "data-interpretation",
+    "pyqs": 3,
+    "blurb": "Pie charts, bar charts and histograms, tables, weighted averages; reading values fast and avoiding traps."
    },
    {
-    "title": "Analytical: logic, syllogisms, arrangements",
-    "priority": "high"
+    "title": "Analytical reasoning & logic puzzles",
+    "priority": "med",
+    "page": "analytical-reasoning",
+    "pyqs": 3,
+    "blurb": "Arrangement and tournament puzzles, Venn-region rules, functional reasoning, systematic case analysis."
    },
    {
-    "title": "Spatial: folding, cutting, rotation, patterns",
-    "priority": "med"
+    "title": "Spatial aptitude & geometry",
+    "priority": "high",
+    "page": "spatial-geometry",
+    "pyqs": 6,
+    "blurb": "Dice and nets, map colouring, cross-sections of solids, polygon and circle mensuration, assembling pieces."
    }
   ],
   "note": "Exactly 15 marks every year (5 one-mark + 5 two-mark). Do 30 minutes of PYQs daily alongside other subjects."
