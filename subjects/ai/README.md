@@ -19,7 +19,7 @@ Hub page: `src/content/docs/ai/index.md` (site URL `/ai/`)
 - 4. Propositional logic — `src/content/docs/ai/propositional-logic.md`
 - 5. First-order logic — `src/content/docs/ai/first-order-logic.md`
 - 6. Bayesian networks — `src/content/docs/ai/bayesian-networks.md`
-- 7. Inference: VE & sampling — `src/content/docs/ai/bn-inference.md`
+- "7. Inference: VE & sampling" — `src/content/docs/ai/bn-inference.md`
 
 ## Official syllabus
 

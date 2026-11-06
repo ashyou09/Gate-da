@@ -18,7 +18,7 @@ Same folder name (slug) everywhere: website notes in `src/content/docs/<slug>/`,
 | 5 | Probability & Statistics | [`probability-statistics`](subjects/probability-statistics) | 16 / 18 / 13 | topic plan ready |
 | 6 | Linear Algebra | [`linear-algebra`](subjects/linear-algebra) | 10 / 17 / 8 | topic plan ready |
 | 7 | Calculus & Optimization | [`calculus-optimization`](subjects/calculus-optimization) | 8 / 8 / 7 | topic plan ready |
-| 8 | General Aptitude | [`general-aptitude`](subjects/general-aptitude) | 15 / 15 / 15 | topic plan ready |
+| 8 | General Aptitude | [`general-aptitude`](subjects/general-aptitude) | 15 / 15 / 15 | complete: 8 of 8 topics, with diagrams |
 
 ## Repository layout
 
